@@ -56,17 +56,16 @@ img { max-width: 100%; }
 }
 .skip-link:focus { transform: translateY(0); }
 
-.conference-banner {
-  display: flex;
+.conference-badge {
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-  padding: 14px 24px;
-  border-bottom: 1px solid var(--line);
-  background: var(--paper-solid);
+  gap: 8px;
+  margin-bottom: 30px;
 }
-.conference-banner a { display: inline-flex; align-items: center; gap: 18px; }
-.conference-banner img { display: block; width: 100px; height: 50px; object-fit: contain; }
-.conference-banner span { font-size: 23px; font-weight: 750; letter-spacing: -0.025em; }
-.conference-banner a:focus-visible { outline: 2px solid var(--blue); outline-offset: 5px; }
+.conference-badge img { display: block; width: 132px; height: 66px; object-fit: contain; }
+.conference-year { color: #b95600; font-size: 42px; line-height: 1; font-weight: 500; letter-spacing: -0.055em; }
+.conference-badge:focus-visible { outline: 2px solid var(--blue); outline-offset: 6px; border-radius: 4px; }
 
 .site-header {
   position: sticky;
@@ -212,13 +211,13 @@ h1 span {
 }
 
 .author-block { margin: 0 auto 30px; max-width: 1000px; }
-.authors { margin-bottom: 18px; font-size: 18px; font-weight: 500; }
-.author-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 24px; }
-.author-row + .author-row { margin-top: 10px; }
+.authors { margin-bottom: 22px; font-size: 18px; line-height: 1.6; letter-spacing: -0.015em; }
+.author-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 26px; }
+.author-row + .author-row { margin-top: 8px; }
 .author-row > span { white-space: nowrap; }
-.author-row strong { font-weight: 750; }
-.author-block sup { font-size: .68em; line-height: 0; margin-left: 2px; vertical-align: super; }
-.affiliations { color: var(--ink-soft); font-size: 13px; line-height: 1.65; }
+.author-row strong { font-weight: 650; }
+.author-block sup { color: var(--muted); font-size: .65em; font-weight: 500; line-height: 0; margin-left: 3px; vertical-align: super; letter-spacing: 0; }
+.affiliations { color: var(--ink-soft); font-size: 13px; line-height: 1.8; }
 .affiliations p { margin: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 0 22px; }
 .affiliations .corresponding-authors { margin-top: 8px; font-size: 12px; }
 
