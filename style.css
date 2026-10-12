@@ -557,8 +557,8 @@ tbody .ours { background: rgba(219, 233, 251, 0.62); color: var(--blue-dark); }
   background:
     repeating-linear-gradient(135deg, transparent 0 38px, rgba(255, 255, 255, .13) 38px 39px),
     rgba(247, 250, 255, .20);
-  backdrop-filter: blur(1.5px) saturate(.92);
-  -webkit-backdrop-filter: blur(1.5px) saturate(.92);
+  backdrop-filter: blur(3px) saturate(.92);
+  -webkit-backdrop-filter: blur(3px) saturate(.92);
 }
 .construction-seal {
   height: 24px;
