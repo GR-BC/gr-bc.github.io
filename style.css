@@ -56,6 +56,18 @@ img { max-width: 100%; }
 }
 .skip-link:focus { transform: translateY(0); }
 
+.conference-banner {
+  display: flex;
+  justify-content: center;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-solid);
+}
+.conference-banner a { display: inline-flex; align-items: center; gap: 18px; }
+.conference-banner img { display: block; width: 100px; height: 50px; object-fit: contain; }
+.conference-banner span { font-size: 23px; font-weight: 750; letter-spacing: -0.025em; }
+.conference-banner a:focus-visible { outline: 2px solid var(--blue); outline-offset: 5px; }
+
 .site-header {
   position: sticky;
   top: 0;
@@ -129,7 +141,7 @@ img { max-width: 100%; }
 .hero {
   position: relative;
   min-height: min(860px, calc(100vh - 64px));
-  padding: clamp(88px, 11vw, 138px) 24px 84px;
+  padding: clamp(64px, 7vw, 88px) 24px 64px;
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -199,7 +211,16 @@ h1 span {
   font-weight: 670;
 }
 
-.authors { margin-bottom: 28px; font-size: 15px; font-weight: 750; }
+.author-block { margin: 0 auto 30px; max-width: 1000px; }
+.authors { margin-bottom: 18px; font-size: 18px; font-weight: 500; }
+.author-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 24px; }
+.author-row + .author-row { margin-top: 10px; }
+.author-row > span { white-space: nowrap; }
+.author-row strong { font-weight: 750; }
+.author-block sup { font-size: .68em; line-height: 0; margin-left: 2px; vertical-align: super; }
+.affiliations { color: var(--ink-soft); font-size: 13px; line-height: 1.65; }
+.affiliations p { margin: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 0 22px; }
+.affiliations .corresponding-authors { margin-top: 8px; font-size: 12px; }
 
 .hero-deck {
   width: min(760px, 100%);
@@ -236,6 +257,10 @@ h1 span {
 .button:hover { transform: translateY(-2px); border-color: rgba(27, 79, 156, 0.5); background: white; }
 .button-primary { border-color: var(--blue-deep); background: var(--blue-deep); color: white; }
 .button-primary:hover { border-color: var(--blue-dark); background: var(--blue-dark); }
+.resource-icon { flex-shrink: 0; width: 22px; height: 22px; }
+.button-coming-soon { cursor: default; color: var(--ink); opacity: 1; }
+.button-coming-soon:hover { transform: none; border-color: var(--line-strong); background: rgba(255, 255, 255, 0.8); }
+.coming-soon { color: var(--muted); font-weight: 500; }
 .button-quiet { border-color: transparent; background: rgba(247, 250, 255, 0.42); }
 
 .hero-data {
@@ -479,7 +504,13 @@ tbody .ours { background: rgba(219, 233, 251, 0.62); color: var(--blue-dark); }
 
 @media (max-width: 700px) {
   .section-shell, .proof-intro, .proof-grid { width: min(100% - 32px, var(--max)); }
-  .hero { min-height: 720px; padding: 80px 16px 66px; }
+  .hero { min-height: 720px; padding: 56px 16px 54px; }
+  .authors { font-size: 16px; }
+  .author-row { gap: 8px 18px; }
+  .affiliations { font-size: 12px; }
+  .affiliations p { gap: 3px 14px; }
+  .affiliations p + p { margin-top: 5px; }
+  .hero-actions { width: min(360px, 100%); margin-inline: auto; }
   h1 { font-size: clamp(43px, 12vw, 60px); }
   h1 span { margin-top: .24em; font-size: .56em; }
   .hero-actions { align-items: stretch; flex-direction: column; }

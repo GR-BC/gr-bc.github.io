@@ -28,6 +28,13 @@
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
 
+    <div class="conference-banner">
+      <a href="https://2026.corl.org/" target="_blank" rel="noopener noreferrer" aria-label="CoRL 2026 official conference website">
+        <img src="assets/corl-2026-logo.png" alt="CoRL official logo" width="1280" height="640" />
+        <span>CoRL 2026</span>
+      </a>
+    </div>
+
     <header class="site-header" aria-label="Primary navigation">
       <a class="wordmark" href="#top" aria-label="GR-BC home">
         <span class="wordmark-mark" aria-hidden="true"><i></i><i></i><i></i></span>
@@ -59,26 +66,48 @@
         </div>
 
         <div class="hero-copy">
-          <p class="eyebrow">CoRL 2026 submission · VLA post-training</p>
+          <p class="eyebrow">CoRL 2026 · VLA post-training</p>
           <h1 id="paper-title">
             Graph-Reweighted Behavior Cloning
             <span>with Human Interventions for Precise Robotic Manipulation</span>
           </h1>
-          <p class="authors">Anonymous Author(s)</p>
+          <div class="author-block">
+            <div class="authors" aria-label="Authors">
+              <div class="author-row">
+                <span>Xiaoman Li<sup>1,2</sup></span>
+                <span>Zhiqiang Yang<sup>1,3</sup></span>
+                <span>Jiayu Hu<sup>1,4</sup></span>
+                <span>Jipeng Kong<sup>1,5</sup></span>
+              </div>
+              <div class="author-row">
+                <span><strong>Yang Zhang</strong><sup>1,6</sup></span>
+                <span><strong>Jingwei Zhang</strong><sup>1,3</sup></span>
+                <span><strong>Fangzheng Yan</strong><sup>1</sup></span>
+                <span><strong>Chunhua Shen</strong><sup>2†</sup></span>
+                <span><strong>Chenjia Bai</strong><sup>1,7†</sup></span>
+              </div>
+            </div>
+            <div class="affiliations" aria-label="Author affiliations">
+              <p><span><sup>1</sup> The Institute of Artificial Intelligence, China Telecom (TeleAI)</span></p>
+              <p><span><sup>2</sup> Zhejiang University, State Key Lab of CAD &amp; Computer Graphics, China</span></p>
+              <p><span><sup>3</sup> South China University of Technology</span><span><sup>4</sup> University of Science and Technology of China</span></p>
+              <p><span><sup>5</sup> ShanghaiTech University</span><span><sup>6</sup> Tsinghua University</span><span><sup>7</sup> Gamma Robotics (γ)</span></p>
+              <p class="corresponding-authors"><sup>†</sup> Corresponding Authors</p>
+            </div>
+          </div>
           <p class="hero-deck">
             Find the action chunks that actually move the task forward — even when the data includes
             detours, failures, and human recoveries.
           </p>
           <div class="hero-actions" aria-label="Project resources">
-            <a class="button button-primary" href="assets/grbc-paper.pdf">
-              Read the paper <span aria-hidden="true">↗</span>
-            </a>
-            <a class="button" href="assets/grbc-appendix.pdf">
-              Appendix <span aria-hidden="true">↗</span>
-            </a>
-            <a class="button button-quiet" href="#film">
-              Watch the project video <span aria-hidden="true">↓</span>
-            </a>
+            <button class="button button-coming-soon" type="button" disabled>
+              <img class="resource-icon" src="assets/arxiv.svg" alt="" width="22" height="22" />
+              <span>Arxiv <span class="coming-soon">(coming soon)</span></span>
+            </button>
+            <button class="button button-coming-soon" type="button" disabled>
+              <img class="resource-icon" src="assets/github.svg" alt="" width="22" height="22" />
+              <span>Code <span class="coming-soon">(coming soon)</span></span>
+            </button>
           </div>
 
           <div class="hero-data" aria-label="Data used by GR-BC">
@@ -463,14 +492,16 @@
               <span class="kicker">Citation</span>
               <h2 id="citation-title">Cite this work.</h2>
             </div>
-            <p>The public citation can be updated here when the paper is de-anonymized.</p>
+            <p>Use the BibTeX below to cite this work.</p>
           </div>
           <div class="citation-box reveal">
             <button class="copy-button" type="button" data-copy-bibtex>Copy BibTeX</button>
-            <pre id="bibtex"><code>@inproceedings{anonymous2026grbc,
+            <pre id="bibtex"><code>@inproceedings{li2026grbc,
   title     = {Graph-Reweighted Behavior Cloning with Human Interventions
                for Precise Robotic Manipulation},
-  author    = {Anonymous Author(s)},
+  author    = {Li, Xiaoman and Yang, Zhiqiang and Hu, Jiayu and Kong, Jipeng and
+               Zhang, Yang and Zhang, Jingwei and Yan, Fangzheng and
+               Shen, Chunhua and Bai, Chenjia},
   booktitle = {Conference on Robot Learning},
   year      = {2026}
 }</code></pre>
@@ -482,7 +513,7 @@
     <footer class="site-footer">
       <div>
         <span class="footer-title">Graph-Reweighted Behavior Cloning</span>
-        <span>CoRL 2026 · Anonymous submission</span>
+        <span>CoRL 2026</span>
       </div>
       <div class="footer-links">
         <a href="assets/grbc-paper.pdf">Paper</a>
