@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f6f9fe" />
+    <title>GR-BC — Graph-Reweighted Behavior Cloning</title>
+    <meta
+      name="description"
+      content="GR-BC uses graph-retrieved progress to reweight mixed-quality robot data for precise VLA post-training."
+    />
+    <meta property="og:title" content="GR-BC — Graph-Reweighted Behavior Cloning" />
+    <meta
+      property="og:description"
+      content="Learning task-advancing action chunks from demonstrations, failures, and human interventions."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/og.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="GR-BC — Graph-Reweighted Behavior Cloning" />
+    <meta
+      name="twitter:description"
+      content="Learning task-advancing action chunks from demonstrations, failures, and human interventions."
+    />
+    <meta name="twitter:image" content="/og.jpg" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <header class="site-header" aria-label="Primary navigation">
+      <a class="wordmark" href="#top" aria-label="GR-BC home">
+        <span class="wordmark-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>GR-BC</span>
+      </a>
+      <nav class="desktop-nav" aria-label="Sections">
+        <a href="#abstract">Abstract</a>
+        <a href="#method">Approach</a>
+        <a href="#evidence">Evidence</a>
+        <a href="#results">Results</a>
+        <a href="#citation">BibTeX</a>
+      </nav>
+      <a class="header-paper" href="assets/grbc-paper.pdf">Paper <span aria-hidden="true">↗</span></a>
+    </header>
+
+    <main id="main-content">
+      <section class="hero" id="top" aria-labelledby="paper-title">
+        <div class="hero-background" aria-hidden="true">
+          <video
+            id="hero-bg-video"
+            src="assets/rgsr_graph_pipeline_bg_clean.mp4"
+            poster="assets/rgsr_graph_pipeline_bg_clean_poster.jpg"
+            autoplay
+            loop
+            muted
+            playsinline
+          ></video>
+          <div class="hero-scrim"></div>
+        </div>
+
+        <div class="hero-copy">
+          <p class="eyebrow">CoRL 2026 submission · VLA post-training</p>
+          <h1 id="paper-title">
+            Graph-Reweighted Behavior Cloning
+            <span>with Human Interventions for Precise Robotic Manipulation</span>
+          </h1>
+          <p class="authors">Anonymous Author(s)</p>
+          <p class="hero-deck">
+            Find the action chunks that actually move the task forward — even when the data includes
+            detours, failures, and human recoveries.
+          </p>
+          <div class="hero-actions" aria-label="Project resources">
+            <a class="button button-primary" href="assets/grbc-paper.pdf">
+              Read the paper <span aria-hidden="true">↗</span>
+            </a>
+            <a class="button" href="assets/grbc-appendix.pdf">
+              Appendix <span aria-hidden="true">↗</span>
+            </a>
+            <a class="button button-quiet" href="#film">
+              Watch the project video <span aria-hidden="true">↓</span>
+            </a>
+          </div>
+
+          <div class="hero-data" aria-label="Data used by GR-BC">
+            <span>Demonstrations</span>
+            <span>Interventions</span>
+            <span>Failed rollouts</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="film section-shell" id="film" aria-labelledby="film-title">
+        <div class="section-intro compact-intro reveal">
+          <div>
+            <span class="kicker">Project video</span>
+            <h2 id="film-title">GR-BC in the real world.</h2>
+          </div>
+          <p>
+            A two-minute view of precise manipulation, backbone generalization, iterative training,
+            and robustness evaluations.
+          </p>
+        </div>
+
+        <div class="film-frame reveal">
+          <div class="media-topline">
+            <span>Full project video</span>
+            <span>02:21 · sound available</span>
+          </div>
+          <video
+            src="assets/grbc-demo.mp4"
+            poster="assets/grbc-demo-poster.jpg"
+            controls
+            playsinline
+            preload="metadata"
+            aria-label="GR-BC project video showing robot manipulation experiments"
+          ></video>
+        </div>
+      </section>
+
+      <section class="proof" aria-label="Headline results">
+        <div class="proof-intro">
+          <span class="kicker">Why it matters</span>
+          <p>Mixed-quality experience becomes useful supervision, without learning another model.</p>
+        </div>
+        <dl class="proof-grid">
+          <div>
+            <dt>91%</dt>
+            <dd>average final success across the four tasks in the iterative X-VLA study</dd>
+          </div>
+          <div>
+            <dt>4</dt>
+            <dd>real-world long-horizon precise manipulation tasks</dd>
+          </div>
+          <div>
+            <dt>0</dt>
+            <dd>reward models, action critics, progress labels, or VLM annotations</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="abstract section-shell" id="abstract">
+        <div class="section-heading reveal">
+          <span class="kicker">Abstract</span>
+          <h2>Judge actions by their consequence, not the trajectory label.</h2>
+        </div>
+        <div class="abstract-copy reveal">
+          <p>
+            Long-horizon manipulation data is rarely clean. Even successful demonstrations can contain
+            hesitations, overshoots, failed attempts, and imperfect recoveries. Intervention-assisted
+            rollouts mix autonomous mistakes with delayed expert corrections, while failed episodes can
+            still contain short segments that reconnect the system to a viable path.
+          </p>
+          <p>
+            GR-BC builds a task-conditioned goal-reachability graph over this mixed-quality data. Reverse
+            graph search estimates the minimal remaining steps to success inside the dataset support, and
+            each physically executed action chunk is weighted by how much it reduces that state potential.
+            New rollouts are appended to the graph and reused in the next offline training round.
+          </p>
+        </div>
+      </section>
+
+      <section class="challenge section-band" id="challenge" aria-labelledby="challenge-title">
+        <div class="section-shell">
+          <div class="section-intro reveal">
+            <div>
+              <span class="kicker">The challenge</span>
+              <h2 id="challenge-title">Trajectory outcome is too coarse for chunk-level credit.</h2>
+            </div>
+            <p>
+              Whether an action is worth imitating depends on what it causes from the current state — not
+              whether the overall episode eventually succeeded or failed.
+            </p>
+          </div>
+
+          <div class="contrast-grid">
+            <article class="contrast-card reveal">
+              <span class="card-index">01</span>
+              <div class="trajectory-line success-line" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+              <h3>A success can contain regression.</h3>
+              <p>Uniform SFT can clone pauses, detours, and unstable corrections hidden inside a successful episode.</p>
+            </article>
+            <article class="contrast-card reveal">
+              <span class="card-index">02</span>
+              <div class="trajectory-line failure-line" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+              <h3>A failure can contain recovery.</h3>
+              <p>Discarding the whole rollout wastes valid, task-advancing chunks that reconnect to successful regions.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="method section-shell" id="method" aria-labelledby="method-title">
+        <div class="section-intro reveal">
+          <div>
+            <span class="kicker">Approach</span>
+            <h2 id="method-title">One graph. One reverse search. Better supervision.</h2>
+          </div>
+          <p>
+            GR-BC leaves the VLA architecture and supervised objective intact. The graph only decides how
+            strongly each observed action chunk should contribute to training.
+          </p>
+        </div>
+
+        <figure class="paper-figure reveal">
+          <button
+            class="figure-zoom"
+            type="button"
+            data-figure="assets/paper-figures/fig1-framework.jpg"
+            data-alt="Overview of the GR-BC framework"
+            aria-label="Open Figure 1 at full size"
+          >
+            <img
+              src="assets/paper-figures/fig1-framework.jpg"
+              alt="GR-BC framework: recoverability graph, remaining-step search, weighted VLA training, and new rollouts"
+              loading="lazy"
+            />
+            <span class="zoom-hint">Open figure</span>
+          </button>
+          <figcaption>
+            <strong>Figure 1.</strong> GR-BC constructs a goal-reachability graph, estimates remaining steps,
+            reweights action chunks, and incorporates new real-world rollouts.
+          </figcaption>
+        </figure>
+
+        <div class="method-steps">
+          <article class="method-step step-blue reveal">
+            <span class="method-letter">A</span>
+            <h3>Build the reachability graph</h3>
+            <p>
+              Multi-view MCR embeddings retrieve candidate neighbors. Mutual-view agreement, a gripper-state
+              hard filter, and locally normalized similarity edges keep connections conservative.
+            </p>
+          </article>
+          <article class="method-step step-cyan reveal">
+            <span class="method-letter">B</span>
+            <h3>Search backward from success</h3>
+            <p>
+              Reverse Dijkstra search to a virtual success sink yields the dataset-supported remaining-step
+              potential <span class="math">R<sub>rec</sub>(s)</span>, then interpolation makes it dense.
+            </p>
+          </article>
+          <article class="method-step step-teal reveal">
+            <span class="method-letter">C</span>
+            <h3>Reweight executed chunks</h3>
+            <p>
+              Net progress <span class="math">Δ<sub>t</sub></span> rewards forward consequence; regression depth
+              filters unstable chunks. Unreachable states receive zero training weight.
+            </p>
+          </article>
+        </div>
+
+        <aside class="potential-note reveal" aria-label="Important conceptual distinction">
+          <span class="note-mark" aria-hidden="true">p(s)</span>
+          <p>
+            <strong>Graph-Retrieved Progress is a state potential.</strong> It is not a per-step reward,
+            value function, Q-function, advantage estimate, or action-retrieval mechanism. GR-BC uses the
+            change in this potential to weight action chunks that were actually executed in the dataset.
+          </p>
+        </aside>
+      </section>
+
+      <section class="tasks section-band" id="tasks" aria-labelledby="tasks-title">
+        <div class="section-shell">
+          <div class="section-intro reveal">
+            <div>
+              <span class="kicker">Real-world tasks</span>
+              <h2 id="tasks-title">Precision, contact, and recovery over long horizons.</h2>
+            </div>
+            <p>
+              Four tasks cover object search, visual alignment, contact-rich execution, and recovery from
+              external disturbances or previous mistakes.
+            </p>
+          </div>
+
+          <figure class="paper-figure reveal">
+            <button
+              class="figure-zoom"
+              type="button"
+              data-figure="assets/paper-figures/fig2-tasks.jpg"
+              data-alt="Four real-world manipulation tasks evaluated in GR-BC"
+              aria-label="Open Figure 2 at full size"
+            >
+              <img
+                src="assets/paper-figures/fig2-tasks.jpg"
+                alt="Task sequences for assembly model, graphics card, screw tightening, and memory stick insertion"
+                loading="lazy"
+              />
+              <span class="zoom-hint">Open figure</span>
+            </button>
+            <figcaption>
+              <strong>Figure 2.</strong> Assembly Model, Graphics Card, Screw Tightening, and Memory Stick.
+            </figcaption>
+          </figure>
+
+          <div class="task-list" aria-label="Evaluation task list">
+            <span>Assembly Model</span>
+            <span>Graphics Card</span>
+            <span>Screw Tightening</span>
+            <span>Memory Stick</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="evidence section-shell" id="evidence" aria-labelledby="evidence-title">
+        <div class="section-intro reveal">
+          <div>
+            <span class="kicker">Progress evidence</span>
+            <h2 id="evidence-title">A progress signal that reacts to local mistakes.</h2>
+          </div>
+          <p>
+            GRP follows task completion while dropping at detours, reorientation, and slip-outs — the local
+            failures that a monotonic trajectory score can miss.
+          </p>
+        </div>
+
+        <figure class="paper-figure reveal">
+          <button
+            class="figure-zoom"
+            type="button"
+            data-figure="assets/paper-figures/fig5-progress.jpg"
+            data-alt="Progress estimation and transition weights over time"
+            aria-label="Open Figure 5 at full size"
+          >
+            <img
+              src="assets/paper-figures/fig5-progress.jpg"
+              alt="GRP progress curve compared with RoboMeter, SARM, Robo-Dopamine, and ReWiND"
+              loading="lazy"
+            />
+            <span class="zoom-hint">Open figure</span>
+          </button>
+          <figcaption>
+            <strong>Figure 5.</strong> GRP identifies task-advancing segments while exposing local regressions
+            and failed behaviors.
+          </figcaption>
+        </figure>
+
+        <dl class="metric-grid">
+          <div class="reveal"><dt>0.97</dt><dd>success–failure progress gap <span>Δ<sub>SF</sub></span></dd></div>
+          <div class="reveal"><dt>0.92</dt><dd>localized deviation detection <span>ρ<sub>dev</sub></span></dd></div>
+          <div class="reveal"><dt>30/30</dt><dd>successful episodes classified</dd></div>
+          <div class="reveal"><dt>30/30</dt><dd>failed episodes classified</dd></div>
+        </dl>
+
+        <div class="table-wrap reveal" tabindex="0" role="region" aria-label="Progress estimator comparison table">
+          <table>
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Δ<sub>SF</sub> ↑</th>
+                <th>ρ<sub>dev</sub> ↑</th>
+                <th>Failure data</th>
+                <th>Progress labels</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th>ReWiND</th><td>0.003</td><td>0.00</td><td>—</td><td>—</td></tr>
+              <tr><th>SARM</th><td>0.24</td><td>0.48</td><td>—</td><td>Required</td></tr>
+              <tr><th>Robo-Dopamine</th><td>0.29</td><td>0.59</td><td>—</td><td>Required</td></tr>
+              <tr><th>RoboMeter</th><td>0.159</td><td>0.69</td><td>Used</td><td>Required</td></tr>
+              <tr class="ours"><th>GRP (ours)</th><td>0.97</td><td>0.92</td><td>Used</td><td>None</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="results section-band" id="results" aria-labelledby="results-title">
+        <div class="section-shell">
+          <div class="results-heading reveal">
+            <div>
+              <span class="kicker">Policy improvement</span>
+              <h2 id="results-title"><span>91%</span> average final success.</h2>
+            </div>
+            <p>
+              In the iterative X-VLA evaluation, GR-BC reaches the highest final success rate on all four
+              tasks and improves more consistently than DAgger, AWR, and reward-aware BC.
+            </p>
+          </div>
+
+          <figure class="paper-figure reveal">
+            <button
+              class="figure-zoom"
+              type="button"
+              data-figure="assets/paper-figures/fig6-results.png"
+              data-alt="Policy success across tasks and offline post-training rounds"
+              aria-label="Open Figure 6 at full size"
+            >
+              <img
+                src="assets/paper-figures/fig6-results.png"
+                alt="Success rates for DAgger, AWR, RA-BC, and GR-BC on four tasks"
+                loading="lazy"
+              />
+              <span class="zoom-hint">Open figure</span>
+            </button>
+            <figcaption>
+              <strong>Figure 6.</strong> Policy improvement across offline post-training rounds with X-VLA.
+            </figcaption>
+          </figure>
+
+          <div class="result-explorer reveal" aria-labelledby="explorer-title">
+            <div class="explorer-head">
+              <div>
+                <span class="kicker">Explore the final round</span>
+                <h3 id="explorer-title">Success rate by task</h3>
+              </div>
+              <div class="task-tabs" role="tablist" aria-label="Choose evaluation task">
+                <button type="button" role="tab" aria-selected="true" data-task="assembly">Assembly</button>
+                <button type="button" role="tab" aria-selected="false" data-task="graphics">Graphics</button>
+                <button type="button" role="tab" aria-selected="false" data-task="screw">Screw</button>
+                <button type="button" role="tab" aria-selected="false" data-task="memory">Memory</button>
+              </div>
+            </div>
+            <div class="bar-chart" aria-live="polite">
+              <div class="bar-row" data-method="DAgger"><span>DAgger</span><i><b></b></i><strong>88%</strong></div>
+              <div class="bar-row" data-method="AWR"><span>AWR</span><i><b></b></i><strong>72%</strong></div>
+              <div class="bar-row" data-method="RA-BC"><span>RA-BC</span><i><b></b></i><strong>86%</strong></div>
+              <div class="bar-row ours-bar" data-method="GR-BC"><span>GR-BC</span><i><b></b></i><strong>98%</strong></div>
+            </div>
+          </div>
+
+          <details class="ablation reveal">
+            <summary>
+              <span>Graph ablation</span>
+              <strong>Why the conservative graph matters</strong>
+            </summary>
+            <div class="ablation-grid">
+              <div><strong>98.3%</strong><span>failed-rollout node reachability</span></div>
+              <div><strong>25.0%</strong><span>zero-weight chunk ratio</span></div>
+              <div><strong>0.42</strong><span>pre-intervention / normal weight</span></div>
+              <div><strong>0.0%</strong><span>gripper-mismatched edges</span></div>
+            </div>
+            <p>
+              Cross-trajectory edges recover goal-reachable states from failed rollouts. The gripper-state
+              constraint removes incompatible visual shortcuts while preserving useful recovery connections.
+            </p>
+          </details>
+        </div>
+      </section>
+
+      <section class="limitations section-shell" id="limitations" aria-labelledby="limitations-title">
+        <div class="section-intro reveal">
+          <div>
+            <span class="kicker">Limitations</span>
+            <h2 id="limitations-title">The signal is only as reliable as the graph.</h2>
+          </div>
+          <div>
+            <p>
+              Incorrect visual neighbors can create shortcut paths; conservative filters can also miss valid
+              recovery bridges. Multi-view agreement and gripper consistency reduce common errors, but they do
+              not certify physical reachability.
+            </p>
+            <p>
+              GR-BC is intentionally dataset-supported and has limited generalization to states far outside the
+              collected experience. Stronger reachability tests and broader embodiments remain future work.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="citation section-band" id="citation" aria-labelledby="citation-title">
+        <div class="section-shell">
+          <div class="section-intro compact-intro reveal">
+            <div>
+              <span class="kicker">Citation</span>
+              <h2 id="citation-title">Cite this work.</h2>
+            </div>
+            <p>The public citation can be updated here when the paper is de-anonymized.</p>
+          </div>
+          <div class="citation-box reveal">
+            <button class="copy-button" type="button" data-copy-bibtex>Copy BibTeX</button>
+            <pre id="bibtex"><code>@inproceedings{anonymous2026grbc,
+  title     = {Graph-Reweighted Behavior Cloning with Human Interventions
+               for Precise Robotic Manipulation},
+  author    = {Anonymous Author(s)},
+  booktitle = {Conference on Robot Learning},
+  year      = {2026}
+}</code></pre>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <span class="footer-title">Graph-Reweighted Behavior Cloning</span>
+        <span>CoRL 2026 · Anonymous submission</span>
+      </div>
+      <div class="footer-links">
+        <a href="assets/grbc-paper.pdf">Paper</a>
+        <a href="assets/grbc-appendix.pdf">Appendix</a>
+        <a href="#top">Back to top ↑</a>
+      </div>
+    </footer>
+
+    <button class="back-to-top" type="button" aria-label="Back to top">↑</button>
+
+    <dialog class="figure-dialog" aria-label="Expanded paper figure">
+      <button class="dialog-close" type="button" aria-label="Close expanded figure">Close ×</button>
+      <img alt="" />
+    </dialog>
+
+    <script>
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      const revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12 }
+      );
+      document.querySelectorAll(".reveal").forEach((element) => revealObserver.observe(element));
+
+      const heroVideo = document.getElementById("hero-bg-video");
+      if (heroVideo) {
+        const start = 5.2;
+        const end = 17.6;
+        heroVideo.addEventListener("loadedmetadata", () => {
+          if (heroVideo.currentTime < 0.5) heroVideo.currentTime = start;
+          if (!reduceMotion) heroVideo.play().catch(() => {});
+        });
+        heroVideo.addEventListener("timeupdate", () => {
+          if (heroVideo.currentTime >= end) heroVideo.currentTime = start;
+        });
+        if (reduceMotion) heroVideo.pause();
+      }
+
+      const benchmark = {
+        assembly: { "DAgger": 88, "AWR": 72, "RA-BC": 86, "GR-BC": 98 },
+        graphics: { "DAgger": 63, "AWR": 32, "RA-BC": 72, "GR-BC": 93 },
+        screw: { "DAgger": 56, "AWR": 37, "RA-BC": 52, "GR-BC": 89 },
+        memory: { "DAgger": 49, "AWR": 19, "RA-BC": 57, "GR-BC": 83 }
+      };
+
+      const updateChart = (task) => {
+        document.querySelectorAll(".bar-row").forEach((row) => {
+          const value = benchmark[task][row.dataset.method];
+          row.querySelector("b").style.width = `${value}%`;
+          row.querySelector("strong").textContent = `${value}%`;
+        });
+      };
+
+      document.querySelectorAll(".task-tabs button").forEach((button) => {
+        button.addEventListener("click", () => {
+          document.querySelectorAll(".task-tabs button").forEach((item) => item.setAttribute("aria-selected", "false"));
+          button.setAttribute("aria-selected", "true");
+          updateChart(button.dataset.task);
+        });
+      });
+
+      const chartObserver = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            updateChart("assembly");
+            chartObserver.disconnect();
+          }
+        },
+        { threshold: 0.3 }
+      );
+      const chart = document.querySelector(".bar-chart");
+      if (chart) chartObserver.observe(chart);
+
+      const figureDialog = document.querySelector(".figure-dialog");
+      const dialogImage = figureDialog.querySelector("img");
+      document.querySelectorAll(".figure-zoom").forEach((button) => {
+        button.addEventListener("click", () => {
+          dialogImage.src = button.dataset.figure;
+          dialogImage.alt = button.dataset.alt;
+          figureDialog.showModal();
+        });
+      });
+      document.querySelector(".dialog-close").addEventListener("click", () => figureDialog.close());
+      figureDialog.addEventListener("click", (event) => {
+        if (event.target === figureDialog) figureDialog.close();
+      });
+
+      const copyButton = document.querySelector("[data-copy-bibtex]");
+      copyButton.addEventListener("click", async () => {
+        const text = document.getElementById("bibtex").innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+          copyButton.textContent = "Copied";
+          setTimeout(() => { copyButton.textContent = "Copy BibTeX"; }, 1800);
+        } catch {
+          copyButton.textContent = "Select and copy";
+        }
+      });
+
+      const topButton = document.querySelector(".back-to-top");
+      const onScroll = () => topButton.classList.toggle("is-visible", window.scrollY > 700);
+      window.addEventListener("scroll", onScroll, { passive: true });
+      topButton.addEventListener("click", () => window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" }));
+    </script>
+  </body>
+</html>
