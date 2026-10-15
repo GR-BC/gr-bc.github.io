@@ -10,22 +10,24 @@
   const fmt = t => `${Math.floor(t/60)}:${(t%60).toFixed(2).padStart(5,'0')}`;
   const playIcon = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7 4 9 6-9 6Z" fill="currentColor"/></svg>';
   const pauseIcon = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 4v12M14 4v12" stroke="currentColor" stroke-width="3"/></svg>';
+  const motionReduced=matchMedia('(prefers-reduced-motion: reduce)');
+  let collection;
   let activePlayer = null;
   const players = [];
   async function json(url) {const r=await fetch(dataVersion?`${url}?v=${dataVersion}`:url);if(!r.ok)throw Error(`Unable to load ${url}`);return r.json();}
   class Trajectory {
     constructor(data,index,annotations) {
-      this.d=data;this.annotations=annotations||{};this.frame=0;this.camera=data.default_camera;this.playing=false;this.speed=1;this.raw=false;this.loop=false;this.event=null;this.pending=null;this.seeking=false;this.loaded=false;this.token=0;
+      this.d=data;this.annotations=annotations||{};this.frame=0;this.camera=data.default_camera;this.playing=false;this.speed=1;this.raw=false;this.loop=false;this.event=null;this.pending=null;this.seeking=false;this.loaded=false;this.token=0;this.detailsOpen=false;this.detailAnimation=null;
       this.interventionFlags=data.intervention?.flags||[];this.interventionRanges=[];
       let start=null;for(let i=0;i<=this.interventionFlags.length;i++){if(this.interventionFlags[i]===true){if(start===null)start=i;}else if(start!==null){this.interventionRanges.push([start,i]);start=null;}}
-      this.el=document.createElement('article');this.el.className='trajectory';this.el.id=`trajectory-${data.id}`;this.el.setAttribute('aria-labelledby',`${data.id}-title`);
+      this.el=document.createElement('article');this.el.className='trajectory';this.el.tabIndex=-1;this.el.id=`trajectory-${data.id}`;this.el.setAttribute('aria-labelledby',`${data.id}-title`);
       const cameras=[this.camera,...Object.keys(data.cameras).filter(c=>c!==this.camera)];
       this.el.innerHTML=`<header class="trajectory-header"><div class="trajectory-identity"><span class="trajectory-number">0${index+1}</span><div><span class="trajectory-overline">TRAJECTORY / EPISODE ${String(data.id.split('ep')[1]).padStart(3,'0')}</span><h3 id="${data.id}-title">${titles[data.id]}</h3></div></div><div class="trajectory-tags"><span><i></i>Successful rollout</span><span>${(data.duration+1/data.fps).toFixed(1)} s</span><span>${data.events.length} dips to explore</span></div></header>
       <div class="trajectory-workspace"><div class="camera-deck" aria-label="Three synchronized camera views">${cameras.map(cam=>`<button class="camera-view ${cam===this.camera?'is-main':''}" type="button" data-camera="${cam}" aria-label="Focus ${cameraNames[cam]} for ${titles[data.id]}" aria-pressed="${cam===this.camera}"><video muted playsinline preload="none" poster="${base+data.cameras[cam].poster}" data-camera="${cam}"></video><span class="camera-label">${cameraNames[cam]}<span>${cam===this.camera?'FOCUSED':'CLICK TO FOCUS'}</span></span><span class="camera-frame">FRAME 0000</span><span class="camera-intervention" aria-hidden="true">Intervention</span></button>`).join('')}<span class="camera-sync" aria-live="polite">3 VIEWS · ONE TIMELINE</span></div>
       <div class="signal-panel"><div class="signal-heading"><div><span class="trajectory-overline">FOLLOW THE CONSEQUENCE</span><h4>Every advance. Every setback.</h4></div><button class="chart-mode" type="button" aria-pressed="false" title="Toggle raw or 15-frame smoothed graph progress">Raw trace</button></div><div class="signal-metrics"><div><span class="metric-dot progress-dot"></span><span>Graph progress</span><strong data-readout="progress">0.000</strong></div><div><span class="metric-dot weight-dot"></span><span>Transition weight</span><strong data-readout="weight">0.000</strong></div></div><div class="trace-chart" role="group" aria-label="Interactive progress and weight charts. Drag to inspect a frame."></div><div class="signal-footnote"><span class="curve-mode-label">15-frame moving average</span><span class="intervention-legend" title="Recorded human intervention"><i aria-hidden="true"></i>Intervention</span><span>Drag chart ↔</span></div></div></div>
       <div class="trajectory-transport"><button class="transport-play" type="button" aria-label="Play ${titles[data.id]}">${playIcon}<span>Play</span></button><div class="frame-step"><button type="button" data-step="-1" aria-label="Previous frame for ${titles[data.id]}">−1</button><button type="button" data-step="1" aria-label="Next frame for ${titles[data.id]}">+1</button></div><div class="timeline-control"><div class="timeline-labels"><span data-readout="time">0:00.00</span><span data-readout="frame">FRAME 0000 / ${data.frame_count-1}</span><span>${fmt(data.duration)}</span></div><input class="trajectory-slider" type="range" min="0" max="${data.frame_count-1}" step="1" value="0" aria-label="Scrub ${titles[data.id]} trajectory"/><div class="timeline-events">${data.events.map(e=>`<button type="button" data-jump="${e.id}" style="left:${e.peak_frame/(data.frame_count-1)*100}%" aria-label="Jump to ${e.id} in ${titles[data.id]}">${e.id}</button>`).join('')}</div></div><label class="speed-control"><span>Speed</span><select aria-label="Playback speed for ${titles[data.id]}"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select></label></div>
-      <div class="dip-explorer"><div class="dip-selector"><span class="trajectory-overline">INSPECT A DIP</span><div class="dip-buttons">${data.events.map(e=>`<button type="button" data-jump="${e.id}" aria-pressed="false"><span>${e.id}</span><strong>−${e.smoothed_drop.toFixed(3)}</strong><small>${(e.peak_frame/data.fps).toFixed(1)} s</small></button>`).join('')}</div><div class="dip-tools"><button type="button" data-loop aria-pressed="false" disabled>Loop dip</button><button type="button" data-expand>Expand camera ↗</button></div></div><div class="dip-detail"><div class="dip-copy"><span class="dip-caption">SMALL SETBACKS, IN CONTEXT</span><h4>What changed when progress fell?</h4><p>Select a dip to compare the moments before and after it. Switch the focused camera to inspect the same motion from another view.</p></div><div class="dip-keyframes" aria-label="Before, peak, trough, and after keyframes"></div></div></div>
-      <div class="trajectory-status" role="status" aria-live="polite"></div>`;
+      <button class="dip-toggle" type="button" aria-expanded="false" aria-controls="${data.id}-details"><span><span data-detail-label>Explore dips</span><small>${data.events.length} moments · frame-by-frame analysis</small></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></button><div class="dip-panel" id="${data.id}-details" hidden inert><div class="dip-explorer"><div class="dip-selector"><span class="trajectory-overline">INSPECT A DIP</span><div class="dip-buttons">${data.events.map(e=>`<button type="button" data-jump="${e.id}" aria-pressed="false"><span>${e.id}</span><strong>−${e.smoothed_drop.toFixed(3)}</strong><small>${(e.peak_frame/data.fps).toFixed(1)} s</small></button>`).join('')}</div><div class="dip-tools"><button type="button" data-loop aria-pressed="false" disabled>Loop dip</button><button type="button" data-expand>Expand camera ↗</button></div></div><div class="dip-detail"><div class="dip-copy"><span class="dip-caption">SMALL SETBACKS, IN CONTEXT</span><h4>What changed when progress fell?</h4><p>Select a dip to compare the moments before and after it. Switch the focused camera to inspect the same motion from another view.</p></div><div class="dip-keyframes" aria-label="Before, peak, trough, and after keyframes"></div></div></div>
+      </div><div class="trajectory-status" role="status" aria-live="polite"></div>`;
       root.append(this.el);
       this.videos=[...this.el.querySelectorAll('video')];this.slider=this.el.querySelector('input');this.chart=this.el.querySelector('.trace-chart');this.master=this.videos.find(v=>v.dataset.camera===data.default_camera);
       this.videos.forEach(v=>{v.muted=true;v.addEventListener('error',()=>this.error('A camera could not load. Check your connection and retry.'));v.addEventListener('ended',()=>{if(this.playing)this.pause();});});
@@ -44,6 +46,7 @@
       return this.ready;
     }
     bind(){
+      this.el.querySelector('.dip-toggle').onclick=()=>this.setDetails(!this.detailsOpen);
       this.el.querySelector('.transport-play').onclick=()=>this.playing?this.pause():this.play();
       this.slider.addEventListener('input',()=>this.seek(+this.slider.value));
       this.el.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>this.seek(this.frame+ +b.dataset.step));
@@ -105,7 +108,22 @@
     }
     pause(){this.token++;this.playing=false;cancelAnimationFrame(this.raf);this.videos.forEach(v=>v.pause());this.el.classList.remove('is-playing');const b=this.el.querySelector('.transport-play');b.innerHTML=playIcon+'<span>Play</span>';b.setAttribute('aria-label',`Play ${titles[this.d.id]}`);}
     setCamera(cam){this.camera=cam;this.el.querySelectorAll('.camera-view').forEach(b=>{const active=b.dataset.camera===cam;b.classList.toggle('is-main',active);b.setAttribute('aria-pressed',active);b.querySelector('.camera-label span').textContent=active?'FOCUSED':'CLICK TO FOCUS';});if(this.event)this.showEvent();}
-    selectEvent(id){this.event=this.d.events.find(e=>e.id===id);this.el.querySelectorAll('.dip-buttons [data-jump]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.jump===id));this.el.querySelectorAll('[data-loop]').forEach(b=>b.disabled=false);this.showEvent();this.seek(this.event.peak_frame);}
+    selectEvent(id,jump=true){this.event=this.d.events.find(e=>e.id===id);this.el.querySelectorAll('.dip-buttons [data-jump]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.jump===id));this.el.querySelectorAll('[data-loop]').forEach(b=>b.disabled=false);this.showEvent();if(jump){this.setDetails(true);this.seek(this.event.peak_frame);}}
+    setDetails(open,{animate=true}={}) {
+      if(open===this.detailsOpen&&!this.detailAnimation)return;
+      const panel=this.el.querySelector('.dip-panel'),button=this.el.querySelector('.dip-toggle');
+      const from=panel.hidden?0:panel.getBoundingClientRect().height;
+      this.detailAnimation?.cancel();this.detailAnimation=null;this.detailsOpen=open;
+      if(open&&!this.event){const nearest=this.d.events.reduce((a,b)=>Math.abs(a.peak_frame-this.frame)<Math.abs(b.peak_frame-this.frame)?a:b);this.selectEvent(nearest.id,false);}
+      if(!open){this.loop=false;this.el.querySelector('[data-loop]').setAttribute('aria-pressed','false');}
+      button.setAttribute('aria-expanded',String(open));button.querySelector('[data-detail-label]').textContent=open?'Close dip analysis':'Explore dips';
+      panel.hidden=false;panel.inert=!open;
+      if(!animate||motionReduced.matches||typeof panel.animate!=='function'){panel.hidden=!open;return;}
+      const target=open?panel.scrollHeight:0;
+      const animation=panel.animate([{height:`${from}px`,opacity:open?0.35:1},{height:`${target}px`,opacity:open?1:0}],{duration:420,easing:'cubic-bezier(.22,.8,.25,1)',fill:'both'});
+      this.detailAnimation=animation;
+      animation.finished.then(()=>{if(this.detailAnimation!==animation)return;panel.hidden=!open;animation.cancel();this.detailAnimation=null;}).catch(()=>{});
+    }
     showEvent(){const e=this.event,a=this.annotations[e.id]||{title:'A local setback',description:'Compare the pose and contact configuration before and after the dip across all three camera views.'};
       this.el.querySelector('.dip-copy').innerHTML=`<span class="dip-caption">${e.id} · ${(e.peak_frame/this.d.fps).toFixed(2)}–${(e.trough_frame/this.d.fps).toFixed(2)} s · ${esc((a.confidence||'Visual interpretation').toUpperCase())}</span><h4>${esc(a.title)}</h4><p>${esc(a.description)}</p>${a.cameraHint?`<p class="camera-hint">${esc(a.cameraHint.replace(/cam_([0-2])/g,'Camera $1'))}</p>`:''}`;
       this.el.querySelector('.dip-keyframes').innerHTML=e.keyframes.map(k=>`<button class="keyframe-button" type="button" data-frame="${k.frame_index}" aria-label="View ${k.role} at frame ${k.frame_index}"><img loading="lazy" src="${base+k.images[this.camera]}" alt="${esc(titles[this.d.id])}: ${k.role} of ${e.id}, ${cameraNames[this.camera]}" width="480" height="360"/><span>${k.role}<small>${(k.frame_index/this.d.fps).toFixed(2)}s</small></span></button>`).join('');
@@ -113,8 +131,83 @@
     }
     async expand(){this.pause();try{await this.activate();if(this.seeking)await this.seekWork;const dialog=document.createElement('dialog');dialog.className='camera-dialog';dialog.innerHTML=`<header><div><span class="trajectory-overline">${esc(titles[this.d.id])} · FRAME ${this.frame}</span><h3>${cameraNames[this.camera]}</h3></div><button type="button" aria-label="Close expanded camera">Close ×</button></header><div class="expanded-camera ${this.interventionFlags[this.frame]===true?'is-intervention':''}"><video muted playsinline src="${base+this.d.cameras[this.camera].src}"></video><span class="camera-intervention">Intervention</span></div><p>Paused at ${fmt(this.frame/this.d.fps)} · Return to the timeline to inspect another frame.</p>`;document.body.append(dialog);dialog.showModal();const v=dialog.querySelector('video');v.addEventListener('loadedmetadata',()=>{v.currentTime=this.frame/this.d.fps;},{once:true});dialog.querySelector('button').onclick=()=>dialog.close();dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});dialog.addEventListener('close',()=>{v.pause();dialog.remove();});}catch(e){this.error('Unable to expand this camera.');}}
   }
+  // FLIP keeps the spatial relationship between the shelf and the live cards.
+  class TrajectoryCollection {
+    constructor(items) {
+      this.items=items;this.open=false;this.moving=null;
+      this.el=document.createElement('div');this.el.className='trajectory-collection';
+      root.before(this.el);
+      this.el.innerHTML=`<div class="trajectory-rack"><div class="rack-eyebrow"><span></span> THE TRAJECTORY COLLECTION <span></span></div><div class="rack-stage"><div class="rack-halo" aria-hidden="true"></div><div class="rack-back" aria-hidden="true"></div><div class="rack-cards"></div><div class="rack-front" aria-hidden="true"><span class="rack-mark">GR–BC <i></i></span><span>04 TRAJECTORIES / 12 VIEWS</span></div></div><button class="collection-expand" type="button" aria-expanded="false" aria-controls="trajectory-collection-open"><span>Expand</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v15m-6-6 6 6 6-6"/></svg></button><p class="rack-hint">Four perspectives on progress. Open the collection.</p></div><div class="collection-open" id="trajectory-collection-open" hidden><div class="collection-toolbar"><div><span class="trajectory-overline">COLLECTION / 04</span><span class="collection-toolbar-title">A closer look at every move.</span></div><button class="collection-collapse" type="button"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7h14v10H3zM6 3h8v4M7 11h6"/></svg>Back to shelf</button></div></div>`;
+      this.rack=this.el.querySelector('.trajectory-rack');this.panel=this.el.querySelector('.collection-open');
+      this.expandButton=this.el.querySelector('.collection-expand');this.collapseButton=this.el.querySelector('.collection-collapse');
+      const index=document.querySelector('.trajectory-index'),note=document.querySelector('.trajectory-method-note');
+      this.panel.append(index,root,note);
+      this.el.querySelector('.rack-cards').innerHTML=items.map((p,i)=>{
+        const d=p.d,cams=[d.default_camera,...Object.keys(d.cameras).filter(c=>c!==d.default_camera)];
+        const line=d.samples.map((s,f)=>`${f?'L':'M'}${(f/(d.frame_count-1)*250+3).toFixed(1)},${(27-s[1]*23).toFixed(1)}`).join(' ');
+        return `<button type="button" class="rack-card" data-card="${i}" style="--shift:${[-81,-27,27,81][i]}px;--lift:${[20,7,-6,-19][i]}px;--angle:${[-6,-1.5,3,7][i]}deg;--depth:${4-i}" aria-label="Expand collection: ${esc(titles[d.id])}" aria-expanded="false" aria-controls="trajectory-collection-open"><span class="rack-mini"><span class="rack-mini-header"><span class="rack-mini-number">0${i+1}</span><span>${esc(titles[d.id])}</span><span class="rack-mini-dot"></span></span><span class="rack-mini-cameras">${cams.map((cam,j)=>`<img src="${base+d.cameras[cam].poster}" alt="" width="${j?82:164}" height="${j?62:124}" loading="lazy" decoding="async"/>`).join('')}</span><svg class="rack-mini-trace" viewBox="0 0 256 32" aria-hidden="true"><path d="M3 28H253" class="rack-mini-axis"/><path d="${line}"/></svg><span class="rack-mini-footer"><span>3 SYNCHRONIZED VIEWS</span><span>${(d.duration+1/d.fps).toFixed(1)} s</span></span></span></button>`;
+      }).join('');
+      this.previews=[...this.el.querySelectorAll('.rack-card')];
+      this.previews.forEach((b,i)=>{b.onclick=()=>this.setOpen(true,{focusIndex:i});b.onpointerenter=()=>this.shiver();b.onfocus=()=>this.shiver();});
+      this.expandButton.onclick=()=>this.setOpen(true);
+      this.collapseButton.onclick=()=>this.setOpen(false);
+    }
+    shiver(){
+      if(this.open||this.moving||motionReduced.matches)return;
+      this.previews.forEach((b,i)=>{const inner=b.querySelector('.rack-mini'),angle=getComputedStyle(b).getPropertyValue('--angle').trim();inner.getAnimations().forEach(a=>a.cancel());inner.animate([{transform:`translateY(0) rotate(${angle})`},{transform:`translateY(-4px) rotate(calc(${angle} - 1deg))`,offset:.28},{transform:`translateY(-2px) rotate(calc(${angle} + .8deg))`,offset:.55},{transform:`translateY(-3px) rotate(calc(${angle} - .3deg))`,offset:.78},{transform:`translateY(0) rotate(${angle})`}],{duration:520,delay:i*35,easing:'ease-out'});});
+    }
+    async setOpen(open,{focusIndex=0,focus=true,instant=false}={}) {
+      if(this.moving)return this.moving;
+      if(open===this.open)return;
+      this.open=open;
+      this.moving=this.transition(open,{focusIndex,focus,instant}).finally(()=>{this.moving=null;});
+      return this.moving;
+    }
+    async transition(open,{focusIndex,focus,instant}) {
+      const animate=!instant&&!motionReduced.matches&&typeof this.el.animate==='function';
+      const animations=[];let shelfGhost=null;
+      this.expandButton.disabled=true;this.collapseButton.disabled=true;
+      this.el.classList.add('is-transitioning');
+      const startHeight=this.el.getBoundingClientRect().height;
+      const from=(open?this.previews:this.items.map(p=>p.el)).map(n=>n.getBoundingClientRect());
+      this.previews.forEach(b=>b.querySelector('.rack-mini').getAnimations().forEach(a=>a.cancel()));
+      this.rack.inert=true;this.panel.inert=true;
+      if(open&&animate){shelfGhost=this.rack.cloneNode(true);shelfGhost.setAttribute('aria-hidden','true');shelfGhost.inert=true;shelfGhost.style.cssText='position:absolute;inset:0 0 auto;z-index:5;pointer-events:none;';this.el.append(shelfGhost);}
+      if(!open){
+        this.items.forEach(p=>p.pause());
+        this.panel.style.cssText='position:absolute;inset:0 0 auto;';
+        this.rack.hidden=false;
+      }else{this.rack.hidden=true;this.panel.hidden=false;}
+      const endHeight=(open?this.panel:this.rack).getBoundingClientRect().height;
+      const to=(open?this.items.map(p=>p.el):this.previews).map(n=>n.getBoundingClientRect());
+      if(animate){
+        if(shelfGhost)animations.push(shelfGhost.animate([{opacity:1,transform:'none'},{opacity:0,transform:'translateY(10px) scale(.985)'}],{duration:230,easing:'ease-out',fill:'both'}));
+        if(!open)animations.push(this.rack.animate([{opacity:0},{opacity:1}],{duration:340,delay:360,fill:'both'}));
+        this.el.style.height=`${startHeight}px`;
+        animations.push(this.el.animate([{height:`${startHeight}px`},{height:`${endHeight}px`}],{duration:760,easing:'cubic-bezier(.22,.85,.25,1)',fill:'both'}));
+        this.items.forEach((p,i)=>{
+          const full=open?to[i]:from[i],small=open?from[i]:to[i];
+          const folded=`translate(${small.x-full.x}px,${small.y-full.y}px) scale(${small.width/full.width},${small.height/full.height}) rotate(${[-6,-1.5,3,7][i]}deg)`;
+          const frames=open?[{transform:folded,opacity:.45},{transform:'translate(0,-4px) scale(1.006)',opacity:1,offset:.82},{transform:'none',opacity:1}]:[{transform:'none',opacity:1},{transform:folded,opacity:0}];
+          animations.push(p.el.animate(frames,{duration:620,delay:(open?i:3-i)*40,easing:'cubic-bezier(.22,.8,.22,1)',fill:'both'}));
+        });
+        animations.push(this.panel.querySelector('.collection-toolbar').animate(open?[{opacity:0},{opacity:1}]:[{opacity:1},{opacity:0}],{duration:250,delay:open?300:0,fill:'both'}));
+        await Promise.allSettled(animations.map(a=>a.finished));
+      }
+      this.rack.hidden=open;this.panel.hidden=!open;if(!open)this.items.forEach(p=>p.setDetails(false,{animate:false}));this.rack.style.visibility='';this.panel.style.cssText='';
+      animations.forEach(a=>a.cancel());shelfGhost?.remove();this.el.style.height='';this.el.classList.remove('is-transitioning');
+      this.rack.inert=open;this.panel.inert=!open;this.expandButton.disabled=false;this.collapseButton.disabled=false;
+      this.expandButton.setAttribute('aria-expanded',String(open));
+      this.previews.forEach(b=>b.setAttribute('aria-expanded',String(open)));
+      if(!open&&location.hash.startsWith('#trajectory-'))history.replaceState(null,'','#trajectories');
+      if(focus){if(open)this.items[focusIndex].el.focus({preventScroll:true});else this.expandButton.focus({preventScroll:true});}
+    }
+  }
+
   async function init(){try{const [manifest,annotations]=await Promise.all([json(base+'manifest.json'),json(base+'annotations.json')]);const modules=await Promise.all(manifest.map(m=>json(base+m.data)));root.innerHTML='';modules.forEach((d,i)=>players.push(new Trajectory(d,i,annotations[d.id])));
-    if(location.hash.startsWith('#trajectory-'))document.getElementById(location.hash.slice(1))?.scrollIntoView({block:'start'});
+    collection=new TrajectoryCollection(players);
+    const followHash=async()=>{if(!location.hash.startsWith('#trajectory-'))return;const target=players.find(p=>`#${p.el.id}`===location.hash);if(target){await collection.setOpen(true,{focus:false,instant:true});target.el.scrollIntoView({block:'start',behavior:'instant'});}};
+    await followHash();window.addEventListener('hashchange',followHash);
     const lazy=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){players.find(p=>p.el===e.target).activate().catch(()=>{});lazy.unobserve(e.target);}}),{rootMargin:'150px'});players.forEach(p=>lazy.observe(p.el));
     const visibility=new IntersectionObserver(entries=>entries.forEach(e=>{if(!e.isIntersecting)players.find(p=>p.el===e.target).pause();}));players.forEach(p=>visibility.observe(p.el));
     document.addEventListener('visibilitychange',()=>{if(document.hidden)players.forEach(p=>p.pause());});

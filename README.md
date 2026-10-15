@@ -12,7 +12,7 @@ The four episodes come from the supplied `../progress visual/` export: screw 92,
 
 Each sample stores `[raw graph progress, 15-frame smoothed graph progress, transition weight]`. Frame `f` maps to video time `f / 30`; the final frame is `(frame_count - 1) / 30`, not container duration. The progress plot and dip values use the selected raw/smoothed series; transition weight has a separate 0–1.5 axis. No artificial ground truth or reference-method prediction is added.
 
-The desktop layout uses a 2×2 grid; narrow screens use one column. Curve zoom is not offered; scrubbing, event jumps, looping, and camera expansion remain available.
+The collection starts as four overlapping preview cards in a shelf. Hover/focus gives a brief staggered shiver; clicking a card or Expand unfolds the live cards with FLIP transforms and the native Web Animations API. Back to shelf pauses playback, preserves each timeline position, and resets the dip panels. Only poster images load while the initial shelf is closed. The open desktop layout uses a 2×2 grid; narrow screens use one column. Each card hides detailed dip analysis behind its own disclosure. Timeline dip shortcuts open that disclosure; opening it alone preserves the current video frame. Motion honors `prefers-reduced-motion`; the shelf and disclosures support keyboard controls, focus restoration, and `aria-expanded`. Direct episode anchors still open the correct card. Curve zoom is not offered; scrubbing, event jumps, looping, and camera expansion remain available.
 
 `intervention.flags` preserves the boolean `complementary_info.is_intervention` field in video-frame order, independently of the numeric samples and dip events. Pale orange bands mark those frames in the progress panel; camera badges update only after all three views have finished seeking. The source marks all 1,097 GPU frames as intervention; screw has 819/1,978, block 71/435, and RAM 731/1,396 flagged frames. These are recorded intervention labels, not inferred from progress drops.
 
@@ -24,6 +24,7 @@ The new section is outside the construction overlay. The earlier homepage body r
 
 - `node --check progress.js`
 - `git diff --check`
-- Preview event jumps, slider/curve scrubbing, frame steps, slow playback, looping, camera focus/expansion, and mobile layout.
+- Preview the shelf hover/focus motion, expand/collapse, independent dip disclosures, repeat toggles, direct anchors, and mobile layout. Check that hidden video playback pauses and timeline positions survive shelving.
+- Preview event jumps, slider/curve scrubbing, frame steps, slow playback, looping, and camera focus/expansion.
 - Refresh the `style.css?v=...` and `progress.js?v=...` versions in `index.html` from the first 12 characters of each file's SHA-256 hash after changing them.
 - Commit and push to `origin/main`; verify the GitHub Pages deployment.
