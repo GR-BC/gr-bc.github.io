@@ -26,6 +26,13 @@ for entry in manifest['modules']:
             e['keyframes'].append(k)
         events.append(e)
     compact={'id':mid,'title':d['title'],'fps':d['fps'],'default_camera':d['default_camera'],'cameras':cameras,'frame_count':d['sample_count'],'duration':d['stats']['last_frame_time_sec'],'success':d['stats']['success'],'events':events,'semantics':d['progress_semantics'],'smoothing':d['smoothing'],'smooth_window_frames':d['smooth_window_frames'], 'ground_truth_available':False,'samples':[[s['progress_dense'],s['progress_smooth_15'],s['graph_transition_weight']] for s in d['samples']]}
+    intervention_field='complementary_info.is_intervention'
+    flags=[sample.get(intervention_field) for sample in d['samples']]
+    if not all(type(flag) is bool for flag in flags):
+        raise ValueError(f'{mid}: missing or invalid intervention flags')
+    if any(sample['frame_index'] != i for i,sample in enumerate(d['samples'])):
+        raise ValueError(f'{mid}: intervention flags are not in video-frame order')
+    compact['intervention']={'source_field':intervention_field,'flags':flags}
     (target/'data.json').write_text(json.dumps(compact,separators=(',',':'))+'\n')
     entries.append({'id':mid,'title':d['title'],'data':f'{mid}/data.json','default_camera':d['default_camera'],'poster':cameras[d['default_camera']]['poster'],'frames':d['sample_count'],'duration':d['stats']['last_frame_time_sec'],'drops':len(events)})
 def convert(job):
