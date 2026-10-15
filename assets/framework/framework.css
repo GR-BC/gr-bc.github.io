@@ -1,0 +1,14 @@
+.fw-surface { position:relative; isolation:isolate; }
+.fw-artwork { display:block; width:100%; height:auto; overflow:visible; }
+.fw-artwork .fw-component { cursor:pointer; opacity:var(--fw-opacity,1); transition:opacity 180ms ease; }
+.fw-artwork .fw-component.fw-dimmed { opacity:calc(var(--fw-opacity,1)*.4); }
+.fw-artwork .fw-component.fw-related { filter:drop-shadow(0 0 2px #79b7c8); }
+.fw-artwork .fw-component:focus { outline:none; }
+.fw-artwork .fw-component:focus-visible > :first-child { filter:drop-shadow(0 0 3px #3680c9); }
+.fw-stage-light { stroke-width:2; stroke-opacity:.6; fill-opacity:.035; transition:opacity 450ms ease; }
+.fw-flow-path { stroke-width:2.5; stroke-dasharray:7 11; stroke-linecap:round; }
+.fw-flow { transition:opacity 300ms ease; }
+.fw-flow-dot { pointer-events:none; }
+.fw-selection-box { fill:none; stroke-width:1.5; stroke-dasharray:5 3; vector-effect:non-scaling-stroke; }
+.fw-motion-reduced .fw-flow-dot { display:none!important; }
+@media(prefers-reduced-motion:reduce) { .fw-artwork * { transition:none!important; } }

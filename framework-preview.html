@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="robots" content="noindex"/>
+  <title>GR-BC · Framework Studio</title>
+  <link rel="stylesheet" href="assets/framework/framework.css?v=89ea7ca8eef2"/>
+  <link rel="stylesheet" href="assets/framework/preview.css?v=06170f1f08ec"/>
+</head>
+<body>
+  <header class="studio-nav"><a href="./">GR–BC <span>/ FRAMEWORK STUDIO</span></a><a href="assets/framework/README.md">Integration notes ↗</a></header>
+  <main>
+    <section class="studio-intro"><div><span class="eyebrow">AN EDITABLE VIEW OF THE METHOD</span><h1>The framework,<br/><em>in motion.</em></h1></div><div class="intro-copy"><p>从一个组件，到完整循环。<br/>悬停探索，点击固定，再调整细节。</p><div class="intro-tags"><span>Original artwork</span><span id="component-count">Loading components…</span><span>12-second loop</span></div></div></section>
+    <section class="drawing-card" aria-label="Interactive framework preview">
+      <div class="drawing-toolbar"><div class="transport"><button id="play" type="button" disabled>Pause loop</button><label class="speed-label">速度 <select id="speed" aria-label="Animation speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select></label><button id="reset" type="button" class="quiet">Reset</button></div><label class="static-control"><input id="static-mode" type="checkbox"/>静态预览</label><div class="phase-readout"><i></i><span id="motion-status" aria-live="polite">Loading artwork</span></div></div>
+      <nav class="stage-tabs" aria-label="Framework stages"><button data-stage="A" type="button"><span>A</span>Build graph</button><i>→</i><button data-stage="B" type="button"><span>B</span>Remaining steps</button><i>→</i><button data-stage="C" type="button"><span>C</span>Weighted SFT</button><i>→</i><button data-stage="D" type="button"><span>D</span>Roll out & intervene</button><i>↺</i><button id="show-all" class="all-stages" type="button">Show all</button></nav>
+      <div class="drawing-scroll"><div id="framework-mount" aria-busy="true"><p class="loading-message">Preparing the four stages…</p></div></div>
+      <div class="drawing-footer"><span id="stage-description">The cycle is illustrative; it does not simulate experimental measurements.</span><span>Hover to explore · Click to pin</span></div>
+      <p id="load-error" role="alert" hidden></p>
+    </section>
+    <section class="workspace" aria-label="Component editor">
+      <aside class="component-browser"><div class="panel-heading"><span class="eyebrow">THE BUILDING BLOCKS</span><h2>组件目录 <small id="result-count"></small></h2></div><div class="search-tools"><input id="component-search" type="search" placeholder="搜索组件、ID 或类型" aria-label="Search components"/><select id="stage-filter" aria-label="Filter components by stage"><option value="">All stages</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div><div id="component-list" aria-label="Components"></div></aside>
+      <section class="inspector"><div class="panel-heading inspector-heading"><div><span class="eyebrow">DETAILS, UNDER YOUR CONTROL</span><h2 id="selected-title">选择一个组件</h2></div><span id="selected-stage" class="stage-badge">—</span></div><p class="inspector-help" id="selected-description">点击图中的组件，或从左侧目录选择。原始文字以轮廓保留，可与所属组件一起移动和缩放。</p><div class="component-meta"><code id="selected-id">No component selected</code><span id="selected-type"></span></div><p id="original-bounds" class="bounds-note">坐标系：1603 × 777 · 所有编辑均为相对原图的调整</p>
+        <fieldset id="edit-fields" disabled><legend>组件调整</legend><div class="edit-grid"><label>水平偏移 X<input data-property="dx" aria-label="Horizontal offset" type="number" value="0" min="-2000" max="2000" step="1"/></label><label>垂直偏移 Y<input data-property="dy" aria-label="Vertical offset" type="number" value="0" min="-2000" max="2000" step="1"/></label><label>缩放<input data-property="scale" aria-label="Component scale" type="number" value="1" min="0.05" max="10" step="0.05"/></label><label>旋转 °<input data-property="rotate" aria-label="Component rotation" type="number" value="0" min="-360" max="360" step="1"/></label><label>不透明度<input data-property="opacity" aria-label="Component opacity" type="number" value="1" min="0" max="1" step="0.05"/></label><label class="visibility-field"><input id="component-visible" type="checkbox" checked/>显示组件</label></div><div class="inspector-actions"><button id="apply-edits" type="button">应用修改</button><button id="solo" type="button">仅看所属阶段</button><button id="component-reset" type="button">还原此组件</button></div></fieldset>
+        <div class="related-block"><span class="eyebrow">CONNECTED COMPONENTS</span><div id="related-components">选择节点或连线后，可在这里跳转到关联组件。</div></div><div class="save-actions"><button id="export-layout" type="button">查看布局配置 ↗</button><button id="remount" type="button" class="quiet">重新加载组件</button></div><div id="layout-panel" hidden><label for="layout-output">复制配置，在网页挂载时作为 layout 传入。</label><textarea id="layout-output" readonly rows="8" spellcheck="false"></textarea></div><p id="edit-error" role="alert"></p>
+      </section>
+    </section>
+    <footer class="studio-footer"><span>GR-BC / INTERACTIVE FRAMEWORK KIT</span><span>Original geometry. Independent components. A continuous loop.</span></footer>
+  </main>
+  <script type="module" src="assets/framework/preview.js?v=64c114669395"></script>
+</body>
+</html>

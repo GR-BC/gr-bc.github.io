@@ -1,0 +1,4112 @@
+{
+  "version": 1,
+  "viewBox": [
+    0,
+    0,
+    1603,
+    777
+  ],
+  "sourceSha256": "85d13ccd866ba83261402a88fbca5f1d0a5cf67f2e8f1fe38647a70cd7834409",
+  "sourceBytes": 47742613,
+  "originalGeometryPreserved": true,
+  "textMode": "outlined",
+  "stages": [
+    {
+      "id": "A",
+      "label": "Goal-reachability graph",
+      "elementId": "fw-stage-a",
+      "bounds": [
+        3,
+        3,
+        1123,
+        443
+      ]
+    },
+    {
+      "id": "B",
+      "label": "Remaining steps & interpolation",
+      "elementId": "fw-stage-b",
+      "bounds": [
+        1148,
+        3,
+        442,
+        443
+      ]
+    },
+    {
+      "id": "C",
+      "label": "Consequence-based weighted SFT",
+      "elementId": "fw-stage-c",
+      "bounds": [
+        858,
+        474,
+        732,
+        298
+      ]
+    },
+    {
+      "id": "D",
+      "label": "Rollouts & human interventions",
+      "elementId": "fw-stage-d",
+      "bounds": [
+        3,
+        474,
+        812,
+        276
+      ]
+    }
+  ],
+  "components": [
+    {
+      "id": "a-frame",
+      "label": "A \u00b7 boundary",
+      "stage": "A",
+      "type": "frame",
+      "description": "A \u00b7 boundary. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-0"
+      ],
+      "related": [],
+      "bounds": [
+        3.0,
+        3.0,
+        1123.0,
+        443.0
+      ]
+    },
+    {
+      "id": "a-header",
+      "label": "A \u00b7 title & badge",
+      "stage": "A",
+      "type": "title",
+      "description": "A \u00b7 title & badge. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-41",
+        "fw-source-42",
+        "fw-source-43",
+        "fw-source-44"
+      ],
+      "related": [],
+      "bounds": [
+        11.0,
+        10.0,
+        1103.0,
+        53.0
+      ]
+    },
+    {
+      "id": "a-data-panel",
+      "label": "Mixed offline data panel",
+      "stage": "A",
+      "type": "label",
+      "description": "Mixed offline data panel. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-45-0",
+        "fw-source-45-1",
+        "fw-source-45-2",
+        "fw-source-45-18"
+      ],
+      "related": [],
+      "bounds": [
+        26.0,
+        82.0,
+        205.0,
+        319.4
+      ]
+    },
+    {
+      "id": "a-data-demo",
+      "label": "Demonstration data",
+      "stage": "A",
+      "type": "data",
+      "description": "Demonstration data. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-45-3",
+        "fw-source-45-4",
+        "fw-source-45-5",
+        "fw-source-45-6",
+        "fw-source-45-7"
+      ],
+      "related": [
+        "a-embeddings"
+      ],
+      "bounds": [
+        50.5,
+        152.5,
+        135.843,
+        61.0
+      ]
+    },
+    {
+      "id": "a-data-intervention",
+      "label": "Intervention / recovery data",
+      "stage": "A",
+      "type": "intervention",
+      "description": "Intervention / recovery data. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-45-8",
+        "fw-source-45-9",
+        "fw-source-45-10",
+        "fw-source-45-11",
+        "fw-source-45-12"
+      ],
+      "related": [
+        "a-embeddings"
+      ],
+      "bounds": [
+        50.5,
+        228.5,
+        164.5751,
+        61.0
+      ]
+    },
+    {
+      "id": "a-data-replay",
+      "label": "Replay / policy rollouts",
+      "stage": "A",
+      "type": "data",
+      "description": "Replay / policy rollouts. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-45-13",
+        "fw-source-45-14",
+        "fw-source-45-15",
+        "fw-source-45-16",
+        "fw-source-45-17"
+      ],
+      "related": [
+        "a-embeddings"
+      ],
+      "bounds": [
+        50.5,
+        304.5,
+        152.429,
+        61.0
+      ]
+    },
+    {
+      "id": "a-data-iteration",
+      "label": "Iteration data window",
+      "stage": "A",
+      "type": "data",
+      "description": "Iteration data window. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-45-19"
+      ],
+      "related": [],
+      "bounds": [
+        35.6,
+        222.6,
+        187.8,
+        151.8
+      ]
+    },
+    {
+      "id": "a-representation",
+      "label": "State representation panel",
+      "stage": "A",
+      "type": "label",
+      "description": "State representation panel. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-46-0",
+        "fw-source-46-1",
+        "fw-source-46-2"
+      ],
+      "related": [],
+      "bounds": [
+        251.0,
+        82.0,
+        210.0,
+        319.4
+      ]
+    },
+    {
+      "id": "a-embeddings",
+      "label": "Multi-view MCR embeddings",
+      "stage": "A",
+      "type": "label",
+      "description": "Multi-view MCR embeddings. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-46-3",
+        "fw-source-46-4"
+      ],
+      "related": [
+        "a-data-demo",
+        "a-data-intervention",
+        "a-data-replay",
+        "a-gripper"
+      ],
+      "bounds": [
+        279.0,
+        221.801,
+        154.0,
+        47.699
+      ]
+    },
+    {
+      "id": "a-gripper",
+      "label": "Gripper state",
+      "stage": "A",
+      "type": "gripper",
+      "description": "Gripper state. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-46-5",
+        "fw-source-46-15"
+      ],
+      "related": [
+        "a-embeddings"
+      ],
+      "bounds": [
+        305.761,
+        270.0,
+        99.559,
+        97.0
+      ]
+    },
+    {
+      "id": "a-camera-view-3",
+      "label": "MCR camera view 3",
+      "stage": "A",
+      "type": "camera",
+      "description": "MCR camera view 3. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-46-6",
+        "fw-source-46-7",
+        "fw-source-46-8"
+      ],
+      "related": [],
+      "bounds": [
+        394.5,
+        157.5,
+        56.0,
+        57.0
+      ]
+    },
+    {
+      "id": "a-camera-view-2",
+      "label": "MCR camera view 2",
+      "stage": "A",
+      "type": "camera",
+      "description": "MCR camera view 2. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-46-9",
+        "fw-source-46-10",
+        "fw-source-46-11"
+      ],
+      "related": [],
+      "bounds": [
+        330.5,
+        157.5,
+        56.0,
+        56.0
+      ]
+    },
+    {
+      "id": "a-camera-view-1",
+      "label": "MCR camera view 1",
+      "stage": "A",
+      "type": "camera",
+      "description": "MCR camera view 1. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-46-12",
+        "fw-source-46-13",
+        "fw-source-46-14"
+      ],
+      "related": [],
+      "bounds": [
+        266.5,
+        157.5,
+        56.0,
+        57.0
+      ]
+    },
+    {
+      "id": "a-state-to-graph",
+      "label": "Representation \u2192 graph",
+      "stage": "A",
+      "type": "connector",
+      "description": "Representation \u2192 graph. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-47"
+      ],
+      "related": [],
+      "bounds": [
+        455.0,
+        210.0,
+        46.0,
+        55.0
+      ]
+    },
+    {
+      "id": "a-data-to-state",
+      "label": "Data \u2192 representation",
+      "stage": "A",
+      "type": "connector",
+      "description": "Data \u2192 representation. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-48",
+        "fw-source-49",
+        "fw-source-255"
+      ],
+      "related": [],
+      "bounds": [
+        221.0,
+        226.0,
+        38.0,
+        45.0
+      ]
+    },
+    {
+      "id": "a-graph-title",
+      "label": "Goal-reachability graph label",
+      "stage": "A",
+      "type": "label",
+      "description": "Goal-reachability graph label. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-50",
+        "fw-source-51"
+      ],
+      "related": [],
+      "bounds": [
+        509.0,
+        98.0,
+        177.0,
+        36.0
+      ]
+    },
+    {
+      "id": "a-highlight-route-01",
+      "label": "Highlighted graph route 01",
+      "stage": "A",
+      "type": "highlight-route",
+      "description": "Highlighted graph route 01. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-52"
+      ],
+      "related": [],
+      "bounds": [
+        773.3801,
+        218.3658,
+        49.7159,
+        44.2173
+      ]
+    },
+    {
+      "id": "a-highlight-route-02",
+      "label": "Highlighted graph route 02",
+      "stage": "A",
+      "type": "highlight-route",
+      "description": "Highlighted graph route 02. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-53"
+      ],
+      "related": [],
+      "bounds": [
+        836.1445,
+        220.044,
+        44.5045,
+        43.495
+      ]
+    },
+    {
+      "id": "a-highlight-route-03",
+      "label": "Highlighted graph route 03",
+      "stage": "A",
+      "type": "highlight-route",
+      "description": "Highlighted graph route 03. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-54"
+      ],
+      "related": [],
+      "bounds": [
+        789.2412,
+        184.658,
+        57.9057,
+        13.1649
+      ]
+    },
+    {
+      "id": "a-node-demo-01",
+      "label": "Demo graph node 01",
+      "stage": "A",
+      "type": "node-demo",
+      "description": "Demo graph node 01. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-55"
+      ],
+      "related": [
+        "a-temporal-edge-09",
+        "a-temporal-edge-15",
+        "a-similarity-edge-01"
+      ],
+      "bounds": [
+        660.488,
+        158.16,
+        24.312,
+        23.553
+      ]
+    },
+    {
+      "id": "a-temporal-edge-01",
+      "label": "Temporal edge 01",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 01. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-56"
+      ],
+      "related": [
+        "a-node-replay-02",
+        "a-node-intervention-02"
+      ],
+      "bounds": [
+        835.943,
+        221.081,
+        43.326,
+        42.026
+      ]
+    },
+    {
+      "id": "a-temporal-edge-02",
+      "label": "Temporal edge 02",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 02. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-57"
+      ],
+      "related": [
+        "a-node-replay-02",
+        "a-node-intervention-01"
+      ],
+      "bounds": [
+        774.899,
+        220.493,
+        45.587,
+        39.708
+      ]
+    },
+    {
+      "id": "a-temporal-edge-03",
+      "label": "Temporal edge 03",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 03. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-58"
+      ],
+      "related": [
+        "a-node-replay-08",
+        "a-node-replay-03"
+      ],
+      "bounds": [
+        740.729,
+        270.645,
+        54.43,
+        10.743
+      ]
+    },
+    {
+      "id": "a-temporal-edge-04",
+      "label": "Temporal edge 04",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 04. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-59"
+      ],
+      "related": [
+        "a-node-replay-08",
+        "a-node-replay-07"
+      ],
+      "bounds": [
+        813.91,
+        279.552,
+        58.61,
+        18.401
+      ]
+    },
+    {
+      "id": "a-temporal-edge-05",
+      "label": "Temporal edge 05",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 05. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-60"
+      ],
+      "related": [
+        "a-node-replay-01",
+        "a-node-intervention-01"
+      ],
+      "bounds": [
+        701.717,
+        221.081,
+        51.601,
+        31.916
+      ]
+    },
+    {
+      "id": "a-temporal-edge-06",
+      "label": "Temporal edge 06",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 06. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-61"
+      ],
+      "related": [
+        "a-node-replay-03",
+        "a-node-intervention-03"
+      ],
+      "bounds": [
+        667.113,
+        276.04,
+        51.596,
+        27.658
+      ]
+    },
+    {
+      "id": "a-temporal-edge-07",
+      "label": "Temporal edge 07",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 07. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-62"
+      ],
+      "related": [
+        "a-node-demo-11",
+        "a-node-demo-07"
+      ],
+      "bounds": [
+        789.654,
+        185.237,
+        60.433,
+        9.227
+      ]
+    },
+    {
+      "id": "a-temporal-edge-08",
+      "label": "Temporal edge 08",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 08. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-63"
+      ],
+      "related": [
+        "a-node-demo-07",
+        "a-node-demo-06"
+      ],
+      "bounds": [
+        709.08,
+        192.83,
+        56.696,
+        17.178
+      ]
+    },
+    {
+      "id": "a-temporal-edge-09",
+      "label": "Temporal edge 09",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 09. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-64"
+      ],
+      "related": [
+        "a-node-demo-10",
+        "a-node-demo-01"
+      ],
+      "bounds": [
+        679.184,
+        118.394,
+        43.327,
+        42.027
+      ]
+    },
+    {
+      "id": "a-temporal-edge-10",
+      "label": "Temporal edge 10",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 10. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-65"
+      ],
+      "related": [
+        "a-node-demo-09",
+        "a-node-demo-10"
+      ],
+      "bounds": [
+        740.525,
+        83.4785,
+        56.366,
+        24.0525
+      ]
+    },
+    {
+      "id": "a-temporal-edge-11",
+      "label": "Temporal edge 11",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 11. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-66"
+      ],
+      "related": [
+        "a-node-demo-12",
+        "a-node-demo-09"
+      ],
+      "bounds": [
+        818.191,
+        76.2866,
+        60.464,
+        9.2375
+      ]
+    },
+    {
+      "id": "a-node-demo-02",
+      "label": "Demo graph node 02",
+      "stage": "A",
+      "type": "node-demo",
+      "description": "Demo graph node 02. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-67"
+      ],
+      "related": [
+        "a-temporal-edge-15",
+        "a-similarity-edge-06",
+        "a-similarity-edge-08"
+      ],
+      "bounds": [
+        604.406,
+        188.99,
+        20.335,
+        22.554
+      ]
+    },
+    {
+      "id": "a-node-demo-03",
+      "label": "Demo graph node 03",
+      "stage": "A",
+      "type": "node-demo",
+      "description": "Demo graph node 03. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-68"
+      ],
+      "related": [
+        "a-temporal-edge-12",
+        "a-similarity-edge-09",
+        "a-similarity-edge-10"
+      ],
+      "bounds": [
+        625.252,
+        255.429,
+        23.312,
+        22.554
+      ]
+    },
+    {
+      "id": "a-node-demo-04",
+      "label": "Demo graph node 04",
+      "stage": "A",
+      "type": "node-demo",
+      "description": "Demo graph node 04. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-69"
+      ],
+      "related": [
+        "a-temporal-edge-17",
+        "a-similarity-edge-07"
+      ],
+      "bounds": [
+        546.335,
+        222.21,
+        21.824,
+        22.554
+      ]
+    },
+    {
+      "id": "a-node-demo-05",
+      "label": "Demo graph node 05",
+      "stage": "A",
+      "type": "node-demo",
+      "description": "Demo graph node 05. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-70"
+      ],
+      "related": [
+        "a-temporal-edge-17"
+      ],
+      "bounds": [
+        525.0,
+        178.0,
+        21.824,
+        22.554
+      ]
+    },
+    {
+      "id": "a-node-demo-06",
+      "label": "Demo graph node 06",
+      "stage": "A",
+      "type": "node-demo",
+      "description": "Demo graph node 06. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-71"
+      ],
+      "related": [
+        "a-temporal-edge-08",
+        "a-temporal-edge-12",
+        "a-similarity-edge-01",
+        "a-similarity-edge-03",
+        "a-similarity-edge-08"
+      ],
+      "bounds": [
+        686.301,
+        201.989,
+        23.312,
+        22.554
+      ]
+    },
+    {
+      "id": "a-node-demo-07",
+      "label": "Demo graph node 07",
+      "stage": "A",
+      "type": "node-demo",
+      "description": "Demo graph node 07. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-72"
+      ],
+      "related": [
+        "a-temporal-edge-07",
+        "a-temporal-edge-08",
+        "a-similarity-edge-05"
+      ],
+      "bounds": [
+        765.0,
+        180.0,
+        23.312,
+        22.554
+      ]
+    },
+    {
+      "id": "a-node-demo-08",
+      "label": "Demo graph node 08",
+      "stage": "A",
+      "type": "node-demo",
+      "description": "Demo graph node 08. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-73"
+      ],
+      "related": [
+        "a-temporal-edge-24",
+        "a-temporal-edge-25",
+        "a-similarity-edge-17"
+      ],
+      "bounds": [
+        952.0,
+        100.0,
+        23.312,
+        22.554
+      ]
+    },
+    {
+      "id": "a-node-demo-09",
+      "label": "Demo graph node 09",
+      "stage": "A",
+      "type": "node-demo",
+      "description": "Demo graph node 09. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-74"
+      ],
+      "related": [
+        "a-temporal-edge-10",
+        "a-temporal-edge-11"
+      ],
+      "bounds": [
+        796.0,
+        72.0,
+        23.312,
+        22.5537
+      ]
+    },
+    {
+      "id": "a-node-demo-10",
+      "label": "Demo graph node 10",
+      "stage": "A",
+      "type": "node-demo",
+      "description": "Demo graph node 10. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-75"
+      ],
+      "related": [
+        "a-temporal-edge-09",
+        "a-temporal-edge-10"
+      ],
+      "bounds": [
+        720.0,
+        102.0,
+        23.312,
+        22.554
+      ]
+    },
+    {
+      "id": "a-node-demo-11",
+      "label": "Demo graph node 11",
+      "stage": "A",
+      "type": "node-demo",
+      "description": "Demo graph node 11. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-76"
+      ],
+      "related": [
+        "a-temporal-edge-07",
+        "a-temporal-edge-26",
+        "a-similarity-edge-19"
+      ],
+      "bounds": [
+        849.0,
+        178.0,
+        23.312,
+        22.554
+      ]
+    },
+    {
+      "id": "a-temporal-edge-12",
+      "label": "Temporal edge 12",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 12. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-77"
+      ],
+      "related": [
+        "a-node-demo-03",
+        "a-node-demo-06"
+      ],
+      "bounds": [
+        644.575,
+        219.106,
+        43.327,
+        42.027
+      ]
+    },
+    {
+      "id": "a-node-replay-01",
+      "label": "Replay graph node 01",
+      "stage": "A",
+      "type": "node-replay",
+      "description": "Replay graph node 01. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-78"
+      ],
+      "related": [
+        "a-temporal-edge-05",
+        "a-temporal-edge-13",
+        "a-similarity-edge-10"
+      ],
+      "bounds": [
+        681.834,
+        246.763,
+        23.312,
+        22.554
+      ]
+    },
+    {
+      "id": "a-node-replay-02",
+      "label": "Replay graph node 02",
+      "stage": "A",
+      "type": "node-replay",
+      "description": "Replay graph node 02. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-79"
+      ],
+      "related": [
+        "a-temporal-edge-01",
+        "a-temporal-edge-02",
+        "a-similarity-edge-04"
+      ],
+      "bounds": [
+        818.822,
+        255.429,
+        21.824,
+        22.554
+      ]
+    },
+    {
+      "id": "a-node-replay-03",
+      "label": "Replay graph node 03",
+      "stage": "A",
+      "type": "node-replay",
+      "description": "Replay graph node 03. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-80"
+      ],
+      "related": [
+        "a-temporal-edge-03",
+        "a-temporal-edge-06",
+        "a-similarity-edge-02"
+      ],
+      "bounds": [
+        717.57,
+        259.762,
+        21.824,
+        21.11
+      ]
+    },
+    {
+      "id": "a-node-intervention-01",
+      "label": "Intervention graph node 01",
+      "stage": "A",
+      "type": "node-intervention",
+      "description": "Intervention graph node 01. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-81"
+      ],
+      "related": [
+        "a-temporal-edge-02",
+        "a-temporal-edge-05",
+        "a-similarity-edge-02",
+        "a-similarity-edge-03",
+        "a-similarity-edge-05"
+      ],
+      "bounds": [
+        753.306,
+        206.322,
+        21.824,
+        21.11
+      ]
+    },
+    {
+      "id": "a-node-replay-04",
+      "label": "Replay graph node 04",
+      "stage": "A",
+      "type": "node-replay",
+      "description": "Replay graph node 04. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-82"
+      ],
+      "related": [
+        "a-temporal-edge-13",
+        "a-temporal-edge-16",
+        "a-similarity-edge-06",
+        "a-similarity-edge-07"
+      ],
+      "bounds": [
+        599.939,
+        227.987,
+        23.312,
+        22.554
+      ]
+    },
+    {
+      "id": "a-node-replay-05",
+      "label": "Replay graph node 05",
+      "stage": "A",
+      "type": "node-replay",
+      "description": "Replay graph node 05. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-83"
+      ],
+      "related": [
+        "a-temporal-edge-14"
+      ],
+      "bounds": [
+        562.714,
+        303.092,
+        21.824,
+        21.11
+      ]
+    },
+    {
+      "id": "a-node-replay-06",
+      "label": "Replay graph node 06",
+      "stage": "A",
+      "type": "node-replay",
+      "description": "Replay graph node 06. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-84"
+      ],
+      "related": [
+        "a-temporal-edge-16"
+      ],
+      "bounds": [
+        528.467,
+        262.651,
+        21.824,
+        22.554
+      ]
+    },
+    {
+      "id": "a-temporal-edge-13",
+      "label": "Temporal edge 13",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 13. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-85"
+      ],
+      "related": [
+        "a-node-replay-01",
+        "a-node-replay-04"
+      ],
+      "bounds": [
+        624.542,
+        238.093,
+        57.87,
+        20.556
+      ]
+    },
+    {
+      "id": "a-temporal-edge-14",
+      "label": "Temporal edge 14",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 14. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-86"
+      ],
+      "related": [
+        "a-node-intervention-03",
+        "a-node-replay-05"
+      ],
+      "bounds": [
+        585.012,
+        302.333,
+        60.755,
+        11.364
+      ]
+    },
+    {
+      "id": "a-temporal-edge-15",
+      "label": "Temporal edge 15",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 15. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-87"
+      ],
+      "related": [
+        "a-node-demo-01",
+        "a-node-demo-02"
+      ],
+      "bounds": [
+        624.449,
+        174.742,
+        40.114,
+        19.416
+      ]
+    },
+    {
+      "id": "a-temporal-edge-16",
+      "label": "Temporal edge 16",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 16. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-88"
+      ],
+      "related": [
+        "a-node-replay-06",
+        "a-node-replay-04"
+      ],
+      "bounds": [
+        549.098,
+        244.178,
+        53.299,
+        27.231
+      ]
+    },
+    {
+      "id": "a-temporal-edge-17",
+      "label": "Temporal edge 17",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 17. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-89"
+      ],
+      "related": [
+        "a-node-demo-05",
+        "a-node-demo-04"
+      ],
+      "bounds": [
+        547.343,
+        190.919,
+        77.448,
+        74.975
+      ]
+    },
+    {
+      "id": "a-similarity-edge-01",
+      "label": "Similarity edge 01",
+      "stage": "A",
+      "type": "similarity-edge",
+      "description": "Similarity edge 01. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-90"
+      ],
+      "related": [
+        "a-node-demo-06",
+        "a-node-demo-01"
+      ],
+      "bounds": [
+        618.265,
+        178.525,
+        100.183,
+        88.016
+      ]
+    },
+    {
+      "id": "a-similarity-edge-02",
+      "label": "Similarity edge 02",
+      "stage": "A",
+      "type": "similarity-edge",
+      "description": "Similarity edge 02. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-91"
+      ],
+      "related": [
+        "a-node-replay-03",
+        "a-node-intervention-01"
+      ],
+      "bounds": [
+        734.644,
+        225.906,
+        22.557,
+        35.769
+      ]
+    },
+    {
+      "id": "a-similarity-edge-03",
+      "label": "Similarity edge 03",
+      "stage": "A",
+      "type": "similarity-edge",
+      "description": "Similarity edge 03. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-92"
+      ],
+      "related": [
+        "a-node-demo-06",
+        "a-node-intervention-01"
+      ],
+      "bounds": [
+        708.969,
+        214.357,
+        43.867,
+        1.599
+      ]
+    },
+    {
+      "id": "a-similarity-edge-04",
+      "label": "Similarity edge 04",
+      "stage": "A",
+      "type": "similarity-edge",
+      "description": "Similarity edge 04. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-93"
+      ],
+      "related": [
+        "a-node-replay-08",
+        "a-node-replay-02"
+      ],
+      "bounds": [
+        814.389,
+        272.392,
+        6.722,
+        5.216
+      ]
+    },
+    {
+      "id": "a-similarity-edge-05",
+      "label": "Similarity edge 05",
+      "stage": "A",
+      "type": "similarity-edge",
+      "description": "Similarity edge 05. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-94"
+      ],
+      "related": [
+        "a-node-intervention-01",
+        "a-node-demo-07"
+      ],
+      "bounds": [
+        768.551,
+        202.211,
+        3.957,
+        5.156
+      ]
+    },
+    {
+      "id": "a-similarity-edge-06",
+      "label": "Similarity edge 06",
+      "stage": "A",
+      "type": "similarity-edge",
+      "description": "Similarity edge 06. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-95"
+      ],
+      "related": [
+        "a-node-demo-02",
+        "a-node-replay-04"
+      ],
+      "bounds": [
+        612.794,
+        211.39,
+        1.601,
+        15.415
+      ]
+    },
+    {
+      "id": "a-similarity-edge-07",
+      "label": "Similarity edge 07",
+      "stage": "A",
+      "type": "similarity-edge",
+      "description": "Similarity edge 07. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-96"
+      ],
+      "related": [
+        "a-node-replay-04",
+        "a-node-demo-04"
+      ],
+      "bounds": [
+        568.593,
+        230.018,
+        32.702,
+        7.797
+      ]
+    },
+    {
+      "id": "a-similarity-edge-08",
+      "label": "Similarity edge 08",
+      "stage": "A",
+      "type": "similarity-edge",
+      "description": "Similarity edge 08. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-97"
+      ],
+      "related": [
+        "a-node-demo-02",
+        "a-node-demo-06"
+      ],
+      "bounds": [
+        624.904,
+        202.4,
+        61.867,
+        10.702
+      ]
+    },
+    {
+      "id": "a-similarity-edge-09",
+      "label": "Similarity edge 09",
+      "stage": "A",
+      "type": "similarity-edge",
+      "description": "Similarity edge 09. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-98"
+      ],
+      "related": [
+        "a-node-intervention-03",
+        "a-node-demo-03"
+      ],
+      "bounds": [
+        642.035,
+        275.299,
+        13.354,
+        23.872
+      ]
+    },
+    {
+      "id": "a-similarity-edge-10",
+      "label": "Similarity edge 10",
+      "stage": "A",
+      "type": "similarity-edge",
+      "description": "Similarity edge 10. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-99"
+      ],
+      "related": [
+        "a-node-demo-03",
+        "a-node-replay-01"
+      ],
+      "bounds": [
+        648.502,
+        257.613,
+        33.267,
+        10.861
+      ]
+    },
+    {
+      "id": "a-legend",
+      "label": "Graph legend & edge cost",
+      "stage": "A",
+      "type": "legend",
+      "description": "Graph legend & edge cost. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-100",
+        "fw-source-101",
+        "fw-source-102",
+        "fw-source-103",
+        "fw-source-104",
+        "fw-source-105",
+        "fw-source-106",
+        "fw-source-107",
+        "fw-source-108",
+        "fw-source-109",
+        "fw-source-110",
+        "fw-source-111",
+        "fw-source-112",
+        "fw-source-113",
+        "fw-source-114",
+        "fw-source-115",
+        "fw-source-116",
+        "fw-source-117",
+        "fw-source-118",
+        "fw-source-119",
+        "fw-source-120",
+        "fw-source-121",
+        "fw-source-122",
+        "fw-source-123",
+        "fw-source-124",
+        "fw-source-125",
+        "fw-source-126",
+        "fw-source-127",
+        "fw-source-128",
+        "fw-source-129",
+        "fw-source-167"
+      ],
+      "related": [],
+      "bounds": [
+        520.0,
+        336.0,
+        553.0,
+        95.0
+      ]
+    },
+    {
+      "id": "a-failure-label",
+      "label": "Failure label",
+      "stage": "A",
+      "type": "label",
+      "description": "Failure label. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-130"
+      ],
+      "related": [],
+      "bounds": [
+        1044.23,
+        306.5,
+        20.44,
+        10.679
+      ]
+    },
+    {
+      "id": "a-highlight-route-04",
+      "label": "Highlighted graph route 04",
+      "stage": "A",
+      "type": "highlight-route",
+      "description": "Highlighted graph route 04. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-131"
+      ],
+      "related": [],
+      "bounds": [
+        894.2139,
+        183.9341,
+        59.3976,
+        26.1669
+      ]
+    },
+    {
+      "id": "a-highlight-route-05",
+      "label": "Highlighted graph route 05",
+      "stage": "A",
+      "type": "highlight-route",
+      "description": "Highlighted graph route 05. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-132"
+      ],
+      "related": [],
+      "bounds": [
+        944.8402,
+        157.9364,
+        59.3998,
+        28.3329
+      ]
+    },
+    {
+      "id": "a-highlight-route-06",
+      "label": "Highlighted graph route 06",
+      "stage": "A",
+      "type": "highlight-route",
+      "description": "Highlighted graph route 06. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-133"
+      ],
+      "related": [],
+      "bounds": [
+        869.6453,
+        160.1026,
+        59.3973,
+        29.7777
+      ]
+    },
+    {
+      "id": "a-node-demo-12",
+      "label": "Demo graph node 12",
+      "stage": "A",
+      "type": "node-demo",
+      "description": "Demo graph node 12. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-134"
+      ],
+      "related": [
+        "a-temporal-edge-11",
+        "a-temporal-edge-25"
+      ],
+      "bounds": [
+        876.893,
+        72.0,
+        23.312,
+        22.5537
+      ]
+    },
+    {
+      "id": "a-goal",
+      "label": "Goal / success sink",
+      "stage": "A",
+      "type": "goal",
+      "description": "Goal / success sink. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-135",
+        "fw-source-165",
+        "fw-source-166"
+      ],
+      "related": [
+        "a-similarity-edge-11",
+        "a-similarity-edge-12",
+        "a-similarity-edge-14"
+      ],
+      "bounds": [
+        1083.36,
+        163.881,
+        33.64,
+        36.609
+      ]
+    },
+    {
+      "id": "a-temporal-edge-18",
+      "label": "Temporal edge 18",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 18. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-136"
+      ],
+      "related": [
+        "a-node-intervention-04",
+        "a-node-intervention-02"
+      ],
+      "bounds": [
+        895.297,
+        185.591,
+        57.643,
+        21.147
+      ]
+    },
+    {
+      "id": "a-temporal-edge-19",
+      "label": "Temporal edge 19",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 19. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-137"
+      ],
+      "related": [
+        "a-node-replay-07",
+        "a-node-replay-09"
+      ],
+      "bounds": [
+        892.168,
+        269.454,
+        55.592,
+        25.562
+      ]
+    },
+    {
+      "id": "a-temporal-edge-20",
+      "label": "Temporal edge 20",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 20. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-138"
+      ],
+      "related": [
+        "a-node-replay-07",
+        "a-node-replay-09"
+      ],
+      "bounds": [
+        892.168,
+        269.454,
+        55.592,
+        25.562
+      ]
+    },
+    {
+      "id": "a-temporal-edge-21",
+      "label": "Temporal edge 21",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 21. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-139"
+      ],
+      "related": [
+        "a-node-intervention-05",
+        "a-node-intervention-04"
+      ],
+      "bounds": [
+        974.443,
+        188.868,
+        47.687,
+        37.291
+      ]
+    },
+    {
+      "id": "a-temporal-edge-22",
+      "label": "Temporal edge 22",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 22. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-140"
+      ],
+      "related": [
+        "a-node-replay-09",
+        "a-node-failure-01"
+      ],
+      "bounds": [
+        968.336,
+        267.858,
+        47.694,
+        37.291
+      ]
+    },
+    {
+      "id": "a-temporal-edge-23",
+      "label": "Temporal edge 23",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 23. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-141"
+      ],
+      "related": [
+        "a-node-demo-15",
+        "a-node-demo-14"
+      ],
+      "bounds": [
+        946.161,
+        161.093,
+        56.859,
+        22.994
+      ]
+    },
+    {
+      "id": "a-temporal-edge-24",
+      "label": "Temporal edge 24",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 24. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-142"
+      ],
+      "related": [
+        "a-node-demo-13",
+        "a-node-demo-08"
+      ],
+      "bounds": [
+        970.314,
+        119.805,
+        43.836,
+        41.526
+      ]
+    },
+    {
+      "id": "a-temporal-edge-25",
+      "label": "Temporal edge 25",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 25. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-143"
+      ],
+      "related": [
+        "a-node-demo-08",
+        "a-node-demo-12"
+      ],
+      "bounds": [
+        899.281,
+        82.1274,
+        55.142,
+        26.3716
+      ]
+    },
+    {
+      "id": "a-node-demo-13",
+      "label": "Demo graph node 13",
+      "stage": "A",
+      "type": "node-demo",
+      "description": "Demo graph node 13. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-144"
+      ],
+      "related": [
+        "a-temporal-edge-24",
+        "a-similarity-edge-11",
+        "a-similarity-edge-13",
+        "a-similarity-edge-15"
+      ],
+      "bounds": [
+        1013.88,
+        155.771,
+        20.34,
+        21.109
+      ]
+    },
+    {
+      "id": "a-node-demo-14",
+      "label": "Demo graph node 14",
+      "stage": "A",
+      "type": "node-demo",
+      "description": "Demo graph node 14. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-145"
+      ],
+      "related": [
+        "a-temporal-edge-23",
+        "a-similarity-edge-12",
+        "a-similarity-edge-15",
+        "a-similarity-edge-18"
+      ],
+      "bounds": [
+        1000.48,
+        178.88,
+        21.82,
+        21.11
+      ]
+    },
+    {
+      "id": "a-node-replay-07",
+      "label": "Replay graph node 07",
+      "stage": "A",
+      "type": "node-replay",
+      "description": "Replay graph node 07. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-146"
+      ],
+      "related": [
+        "a-temporal-edge-04",
+        "a-temporal-edge-19",
+        "a-temporal-edge-20"
+      ],
+      "bounds": [
+        872.426,
+        287.205,
+        21.824,
+        22.553
+      ]
+    },
+    {
+      "id": "a-node-replay-08",
+      "label": "Replay graph node 08",
+      "stage": "A",
+      "type": "node-replay",
+      "description": "Replay graph node 08. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-147"
+      ],
+      "related": [
+        "a-temporal-edge-03",
+        "a-temporal-edge-04",
+        "a-similarity-edge-04"
+      ],
+      "bounds": [
+        795.0,
+        269.0,
+        21.824,
+        22.554
+      ]
+    },
+    {
+      "id": "a-node-replay-09",
+      "label": "Replay graph node 09",
+      "stage": "A",
+      "type": "node-replay",
+      "description": "Replay graph node 09. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-148"
+      ],
+      "related": [
+        "a-temporal-edge-19",
+        "a-temporal-edge-20",
+        "a-temporal-edge-22"
+      ],
+      "bounds": [
+        947.0,
+        257.0,
+        21.824,
+        22.554
+      ]
+    },
+    {
+      "id": "a-similarity-edge-11",
+      "label": "Similarity edge 11",
+      "stage": "A",
+      "type": "similarity-edge",
+      "description": "Similarity edge 11. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-149"
+      ],
+      "related": [
+        "a-node-demo-13",
+        "a-goal"
+      ],
+      "bounds": [
+        1034.1167,
+        166.9731,
+        48.2791,
+        7.2848
+      ]
+    },
+    {
+      "id": "a-similarity-edge-12",
+      "label": "Similarity edge 12",
+      "stage": "A",
+      "type": "similarity-edge",
+      "description": "Similarity edge 12. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-150"
+      ],
+      "related": [
+        "a-node-demo-14",
+        "a-goal"
+      ],
+      "bounds": [
+        1023.82,
+        187.549,
+        55.98,
+        1.6
+      ]
+    },
+    {
+      "id": "a-similarity-edge-13",
+      "label": "Similarity edge 13",
+      "stage": "A",
+      "type": "similarity-edge",
+      "description": "Similarity edge 13. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-151"
+      ],
+      "related": [
+        "a-node-intervention-04",
+        "a-node-demo-13"
+      ],
+      "bounds": [
+        972.6693,
+        167.0018,
+        38.6807,
+        11.8485
+      ]
+    },
+    {
+      "id": "a-similarity-edge-14",
+      "label": "Similarity edge 14",
+      "stage": "A",
+      "type": "similarity-edge",
+      "description": "Similarity edge 14. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-152"
+      ],
+      "related": [
+        "a-node-intervention-05",
+        "a-goal"
+      ],
+      "bounds": [
+        1039.6488,
+        202.6474,
+        40.7308,
+        26.177
+      ]
+    },
+    {
+      "id": "a-node-failure-01",
+      "label": "Failure graph node 01",
+      "stage": "A",
+      "type": "node-failure",
+      "description": "Failure graph node 01. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-153"
+      ],
+      "related": [
+        "a-temporal-edge-22"
+      ],
+      "bounds": [
+        1015.37,
+        301.648,
+        20.33,
+        21.109
+      ]
+    },
+    {
+      "id": "a-similarity-edge-15",
+      "label": "Similarity edge 15",
+      "stage": "A",
+      "type": "similarity-edge",
+      "description": "Similarity edge 15. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-154"
+      ],
+      "related": [
+        "a-node-demo-13",
+        "a-node-demo-14"
+      ],
+      "bounds": [
+        1014.79,
+        174.535,
+        4.29,
+        4.669
+      ]
+    },
+    {
+      "id": "a-similarity-edge-16",
+      "label": "Similarity edge 16",
+      "stage": "A",
+      "type": "similarity-edge",
+      "description": "Similarity edge 16. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-155"
+      ],
+      "related": [
+        "a-node-intervention-04",
+        "a-node-demo-15"
+      ],
+      "bounds": [
+        942.539,
+        166.633,
+        13.187,
+        14.107
+      ]
+    },
+    {
+      "id": "a-node-intervention-02",
+      "label": "Intervention graph node 02",
+      "stage": "A",
+      "type": "node-intervention",
+      "description": "Intervention graph node 02. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-156"
+      ],
+      "related": [
+        "a-temporal-edge-01",
+        "a-temporal-edge-18",
+        "a-similarity-edge-19"
+      ],
+      "bounds": [
+        875.404,
+        201.989,
+        23.312,
+        22.554
+      ]
+    },
+    {
+      "id": "a-node-intervention-03",
+      "label": "Intervention graph node 03",
+      "stage": "A",
+      "type": "node-intervention",
+      "description": "Intervention graph node 03. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-157"
+      ],
+      "related": [
+        "a-temporal-edge-06",
+        "a-temporal-edge-14",
+        "a-similarity-edge-09"
+      ],
+      "bounds": [
+        644.0,
+        296.0,
+        23.312,
+        22.554
+      ]
+    },
+    {
+      "id": "a-node-intervention-04",
+      "label": "Intervention graph node 04",
+      "stage": "A",
+      "type": "node-intervention",
+      "description": "Intervention graph node 04. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-158"
+      ],
+      "related": [
+        "a-temporal-edge-18",
+        "a-temporal-edge-21",
+        "a-similarity-edge-13",
+        "a-similarity-edge-16",
+        "a-similarity-edge-18"
+      ],
+      "bounds": [
+        952.832,
+        174.547,
+        20.335,
+        21.109
+      ]
+    },
+    {
+      "id": "a-node-intervention-05",
+      "label": "Intervention graph node 05",
+      "stage": "A",
+      "type": "node-intervention",
+      "description": "Intervention graph node 05. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-159"
+      ],
+      "related": [
+        "a-temporal-edge-21",
+        "a-similarity-edge-14"
+      ],
+      "bounds": [
+        1016.86,
+        222.21,
+        23.31,
+        22.554
+      ]
+    },
+    {
+      "id": "a-node-demo-15",
+      "label": "Demo graph node 15",
+      "stage": "A",
+      "type": "node-demo",
+      "description": "Demo graph node 15. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-160"
+      ],
+      "related": [
+        "a-temporal-edge-23",
+        "a-similarity-edge-16",
+        "a-temporal-edge-26",
+        "a-similarity-edge-17"
+      ],
+      "bounds": [
+        926.03,
+        145.661,
+        21.824,
+        22.553
+      ]
+    },
+    {
+      "id": "a-temporal-edge-26",
+      "label": "Temporal edge 26",
+      "stage": "A",
+      "type": "temporal-edge",
+      "description": "Temporal edge 26. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-161"
+      ],
+      "related": [
+        "a-node-demo-11",
+        "a-node-demo-15"
+      ],
+      "bounds": [
+        870.828,
+        162.357,
+        56.629,
+        23.501
+      ]
+    },
+    {
+      "id": "a-similarity-edge-17",
+      "label": "Similarity edge 17",
+      "stage": "A",
+      "type": "similarity-edge",
+      "description": "Similarity edge 17. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-162"
+      ],
+      "related": [
+        "a-node-demo-08",
+        "a-node-demo-15"
+      ],
+      "bounds": [
+        942.913,
+        121.276,
+        14.004,
+        24.792
+      ]
+    },
+    {
+      "id": "a-similarity-edge-18",
+      "label": "Similarity edge 18",
+      "stage": "A",
+      "type": "similarity-edge",
+      "description": "Similarity edge 18. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-163"
+      ],
+      "related": [
+        "a-node-demo-14",
+        "a-node-intervention-04"
+      ],
+      "bounds": [
+        975.324,
+        184.613,
+        24.976,
+        5.795
+      ]
+    },
+    {
+      "id": "a-similarity-edge-19",
+      "label": "Similarity edge 19",
+      "stage": "A",
+      "type": "similarity-edge",
+      "description": "Similarity edge 19. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-164"
+      ],
+      "related": [
+        "a-node-demo-11",
+        "a-node-intervention-02"
+      ],
+      "bounds": [
+        869.996,
+        196.255,
+        8.134,
+        8.873
+      ]
+    },
+    {
+      "id": "loop-a-b-demo",
+      "label": "A \u2192 B \u00b7 demo trajectory",
+      "stage": "A",
+      "type": "connector",
+      "description": "A \u2192 B \u00b7 demo trajectory. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-222"
+      ],
+      "related": [],
+      "bounds": [
+        983.8414,
+        105.378,
+        242.1586,
+        68.0746
+      ]
+    },
+    {
+      "id": "loop-a-b-replay",
+      "label": "A \u2192 B \u00b7 replay trajectory",
+      "stage": "A",
+      "type": "connector",
+      "description": "A \u2192 B \u00b7 replay trajectory. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-254"
+      ],
+      "related": [],
+      "bounds": [
+        928.0,
+        196.0,
+        298.0,
+        67.682
+      ]
+    },
+    {
+      "id": "loop-a-b",
+      "label": "A \u2192 B \u00b7 remaining-step estimation",
+      "stage": "A",
+      "type": "connector",
+      "description": "A \u2192 B \u00b7 remaining-step estimation. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-256"
+      ],
+      "related": [],
+      "bounds": [
+        1111.0,
+        315.0,
+        61.0,
+        72.0
+      ]
+    },
+    {
+      "id": "b-frame",
+      "label": "B \u00b7 boundary",
+      "stage": "B",
+      "type": "frame",
+      "description": "B \u00b7 boundary. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-3"
+      ],
+      "related": [],
+      "bounds": [
+        1148.0,
+        3.0,
+        442.0,
+        443.0
+      ]
+    },
+    {
+      "id": "b-labels",
+      "label": "Trajectory & interpolation labels",
+      "stage": "B",
+      "type": "label",
+      "description": "Trajectory & interpolation labels. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-170",
+        "fw-source-171",
+        "fw-source-172",
+        "fw-source-173",
+        "fw-source-174",
+        "fw-source-181",
+        "fw-source-182",
+        "fw-source-215",
+        "fw-source-216",
+        "fw-source-217",
+        "fw-source-218",
+        "fw-source-219",
+        "fw-source-220",
+        "fw-source-221",
+        "fw-source-227",
+        "fw-source-250",
+        "fw-source-251",
+        "fw-source-252",
+        "fw-source-253"
+      ],
+      "related": [],
+      "bounds": [
+        1181.0,
+        70.0,
+        382.41,
+        355.17
+      ]
+    },
+    {
+      "id": "b-trajectory-demo",
+      "label": "Demonstration trajectory strip",
+      "stage": "B",
+      "type": "trajectory",
+      "description": "Demonstration trajectory strip. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-175",
+        "fw-source-176",
+        "fw-source-177",
+        "fw-source-178",
+        "fw-source-179",
+        "fw-source-180"
+      ],
+      "related": [],
+      "bounds": [
+        1232.0,
+        105.0,
+        280.62,
+        70.0
+      ]
+    },
+    {
+      "id": "b-remaining-axes",
+      "label": "Remaining-step axes",
+      "stage": "B",
+      "type": "axis",
+      "description": "Remaining-step axes. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-183",
+        "fw-source-184"
+      ],
+      "related": [],
+      "bounds": [
+        1190.88,
+        286.537,
+        372.4,
+        128.572
+      ]
+    },
+    {
+      "id": "b-remaining-curve",
+      "label": "Remaining steps \u00b7 connecting curve",
+      "stage": "B",
+      "type": "curve",
+      "description": "Remaining steps \u00b7 connecting curve. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-185",
+        "fw-source-186",
+        "fw-source-187",
+        "fw-source-188",
+        "fw-source-189",
+        "fw-source-190",
+        "fw-source-191"
+      ],
+      "related": [],
+      "bounds": [
+        1231.18,
+        312.486,
+        266.09,
+        71.308
+      ]
+    },
+    {
+      "id": "b-remaining-point-01",
+      "label": "Remaining-step sample 01",
+      "stage": "B",
+      "type": "remaining-point",
+      "description": "Remaining-step sample 01. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-192"
+      ],
+      "related": [],
+      "bounds": [
+        1332.68,
+        344.742,
+        15.48,
+        15.618
+      ]
+    },
+    {
+      "id": "b-remaining-point-02",
+      "label": "Remaining-step sample 02",
+      "stage": "B",
+      "type": "remaining-point",
+      "description": "Remaining-step sample 02. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-193"
+      ],
+      "related": [],
+      "bounds": [
+        1490.08,
+        375.895,
+        15.48,
+        15.618
+      ]
+    },
+    {
+      "id": "b-remaining-point-03",
+      "label": "Remaining-step sample 03",
+      "stage": "B",
+      "type": "remaining-point",
+      "description": "Remaining-step sample 03. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-194"
+      ],
+      "related": [],
+      "bounds": [
+        1448.89,
+        365.51,
+        15.48,
+        15.618
+      ]
+    },
+    {
+      "id": "b-remaining-point-04",
+      "label": "Remaining-step sample 04",
+      "stage": "B",
+      "type": "remaining-point",
+      "description": "Remaining-step sample 04. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-195"
+      ],
+      "related": [],
+      "bounds": [
+        1395.94,
+        353.643,
+        15.48,
+        15.618
+      ]
+    },
+    {
+      "id": "b-remaining-point-05",
+      "label": "Remaining-step sample 05",
+      "stage": "B",
+      "type": "remaining-point",
+      "description": "Remaining-step sample 05. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-196"
+      ],
+      "related": [],
+      "bounds": [
+        1216.47,
+        301.721,
+        15.48,
+        15.618
+      ]
+    },
+    {
+      "id": "b-remaining-point-06",
+      "label": "Remaining-step sample 06",
+      "stage": "B",
+      "type": "remaining-point",
+      "description": "Remaining-step sample 06. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-197"
+      ],
+      "related": [],
+      "bounds": [
+        1282.67,
+        322.49,
+        9.6,
+        9.684
+      ]
+    },
+    {
+      "id": "b-remaining-point-07",
+      "label": "Remaining-step sample 07",
+      "stage": "B",
+      "type": "remaining-point",
+      "description": "Remaining-step sample 07. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-198"
+      ],
+      "related": [],
+      "bounds": [
+        1472.43,
+        372.927,
+        9.6,
+        9.685
+      ]
+    },
+    {
+      "id": "b-remaining-point-08",
+      "label": "Remaining-step sample 08",
+      "stage": "B",
+      "type": "remaining-point",
+      "description": "Remaining-step sample 08. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-199"
+      ],
+      "related": [],
+      "bounds": [
+        1353.28,
+        337.324,
+        9.59,
+        9.685
+      ]
+    },
+    {
+      "id": "b-remaining-point-09",
+      "label": "Remaining-step sample 09",
+      "stage": "B",
+      "type": "remaining-point",
+      "description": "Remaining-step sample 09. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-200"
+      ],
+      "related": [],
+      "bounds": [
+        1319.44,
+        331.391,
+        9.6,
+        9.684
+      ]
+    },
+    {
+      "id": "b-remaining-point-10",
+      "label": "Remaining-step sample 10",
+      "stage": "B",
+      "type": "remaining-point",
+      "description": "Remaining-step sample 10. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-201"
+      ],
+      "related": [],
+      "bounds": [
+        1238.54,
+        313.589,
+        9.6,
+        9.684
+      ]
+    },
+    {
+      "id": "b-remaining-point-11",
+      "label": "Remaining-step sample 11",
+      "stage": "B",
+      "type": "remaining-point",
+      "description": "Remaining-step sample 11. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-202"
+      ],
+      "related": [],
+      "bounds": [
+        1423.63,
+        359.35,
+        12.3,
+        13.3
+      ]
+    },
+    {
+      "id": "b-remaining-point-12",
+      "label": "Remaining-step sample 12",
+      "stage": "B",
+      "type": "remaining-point",
+      "description": "Remaining-step sample 12. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-203"
+      ],
+      "related": [],
+      "bounds": [
+        1385.64,
+        341.775,
+        9.6,
+        9.684
+      ]
+    },
+    {
+      "id": "b-remaining-point-13",
+      "label": "Remaining-step sample 13",
+      "stage": "B",
+      "type": "remaining-point",
+      "description": "Remaining-step sample 13. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-204"
+      ],
+      "related": [],
+      "bounds": [
+        1367.99,
+        322.49,
+        15.48,
+        15.618
+      ]
+    },
+    {
+      "id": "b-remaining-point-14",
+      "label": "Remaining-step sample 14",
+      "stage": "B",
+      "type": "remaining-point",
+      "description": "Remaining-step sample 14. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-205"
+      ],
+      "related": [],
+      "bounds": [
+        1301.79,
+        313.589,
+        15.48,
+        15.618
+      ]
+    },
+    {
+      "id": "b-remaining-point-15",
+      "label": "Remaining-step sample 15",
+      "stage": "B",
+      "type": "remaining-point",
+      "description": "Remaining-step sample 15. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-206"
+      ],
+      "related": [],
+      "bounds": [
+        1254.72,
+        322.49,
+        15.48,
+        15.618
+      ]
+    },
+    {
+      "id": "b-training-span-01",
+      "label": "Policy / intervention interval 01",
+      "stage": "B",
+      "type": "training-span",
+      "description": "Policy / intervention interval 01. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-207"
+      ],
+      "related": [],
+      "bounds": [
+        1198.47,
+        393.346,
+        120.623,
+        14.8346
+      ]
+    },
+    {
+      "id": "b-training-span-02",
+      "label": "Policy / intervention interval 02",
+      "stage": "B",
+      "type": "training-span",
+      "description": "Policy / intervention interval 02. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-208"
+      ],
+      "related": [],
+      "bounds": [
+        1361.75,
+        393.346,
+        23.5362,
+        14.8346
+      ]
+    },
+    {
+      "id": "b-training-span-03",
+      "label": "Policy / intervention interval 03",
+      "stage": "B",
+      "type": "training-span",
+      "description": "Policy / intervention interval 03. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-209"
+      ],
+      "related": [],
+      "bounds": [
+        1319.09,
+        393.346,
+        42.6594,
+        14.8346
+      ]
+    },
+    {
+      "id": "b-training-span-04",
+      "label": "Policy / intervention interval 04",
+      "stage": "B",
+      "type": "training-span",
+      "description": "Policy / intervention interval 04. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-210"
+      ],
+      "related": [],
+      "bounds": [
+        1385.29,
+        393.346,
+        141.217,
+        14.8346
+      ]
+    },
+    {
+      "id": "b-state-legend",
+      "label": "Policy / intervention legend",
+      "stage": "B",
+      "type": "legend",
+      "description": "Policy / intervention legend. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-211",
+        "fw-source-212",
+        "fw-source-213",
+        "fw-source-214"
+      ],
+      "related": [],
+      "bounds": [
+        1246.75,
+        415.84,
+        234.31,
+        20.278
+      ]
+    },
+    {
+      "id": "b-header",
+      "label": "B \u00b7 title & badge",
+      "stage": "B",
+      "type": "title",
+      "description": "B \u00b7 title & badge. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-223",
+        "fw-source-224",
+        "fw-source-225",
+        "fw-source-226"
+      ],
+      "related": [],
+      "bounds": [
+        1163.0,
+        15.0,
+        416.0,
+        49.0
+      ]
+    },
+    {
+      "id": "b-trajectory-mixed",
+      "label": "Mixed trajectory strip",
+      "stage": "B",
+      "type": "trajectory",
+      "description": "Mixed trajectory strip. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-228",
+        "fw-source-229",
+        "fw-source-230",
+        "fw-source-231",
+        "fw-source-232",
+        "fw-source-233",
+        "fw-source-234",
+        "fw-source-235",
+        "fw-source-236",
+        "fw-source-242"
+      ],
+      "related": [],
+      "bounds": [
+        1234.0,
+        181.0,
+        280.62,
+        70.0
+      ]
+    },
+    {
+      "id": "b-trajectory-mixed-frame-4",
+      "label": "Mixed trajectory \u00b7 frame 4",
+      "stage": "B",
+      "type": "camera",
+      "description": "Mixed trajectory \u00b7 frame 4. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-237",
+        "fw-source-238",
+        "fw-source-239"
+      ],
+      "related": [],
+      "bounds": [
+        1446.51,
+        189.5,
+        53.0,
+        53.0
+      ]
+    },
+    {
+      "id": "b-trajectory-mixed-frame-1",
+      "label": "Mixed trajectory \u00b7 frame 1",
+      "stage": "B",
+      "type": "camera",
+      "description": "Mixed trajectory \u00b7 frame 1. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-240"
+      ],
+      "related": [],
+      "bounds": [
+        1244.51,
+        189.5,
+        53.0,
+        53.0
+      ]
+    },
+    {
+      "id": "b-trajectory-mixed-frame-2",
+      "label": "Mixed trajectory \u00b7 frame 2",
+      "stage": "B",
+      "type": "camera",
+      "description": "Mixed trajectory \u00b7 frame 2. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-241"
+      ],
+      "related": [],
+      "bounds": [
+        1312.51,
+        189.5,
+        53.0,
+        53.0
+      ]
+    },
+    {
+      "id": "b-trajectory-mixed-frame-3",
+      "label": "Mixed trajectory \u00b7 frame 3",
+      "stage": "B",
+      "type": "camera",
+      "description": "Mixed trajectory \u00b7 frame 3. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-243"
+      ],
+      "related": [],
+      "bounds": [
+        1379.5,
+        189.5,
+        53.0,
+        53.0
+      ]
+    },
+    {
+      "id": "b-trajectory-demo-frame-3",
+      "label": "Demo trajectory \u00b7 frame 3",
+      "stage": "B",
+      "type": "camera",
+      "description": "Demo trajectory \u00b7 frame 3. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-244",
+        "fw-source-245",
+        "fw-source-246"
+      ],
+      "related": [],
+      "bounds": [
+        1380.5,
+        112.5,
+        53.0,
+        53.0
+      ]
+    },
+    {
+      "id": "b-trajectory-demo-frame-4",
+      "label": "Demo trajectory \u00b7 frame 4",
+      "stage": "B",
+      "type": "camera",
+      "description": "Demo trajectory \u00b7 frame 4. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-247"
+      ],
+      "related": [],
+      "bounds": [
+        1447.5,
+        112.5,
+        53.0,
+        53.0
+      ]
+    },
+    {
+      "id": "b-trajectory-demo-frame-2",
+      "label": "Demo trajectory \u00b7 frame 2",
+      "stage": "B",
+      "type": "camera",
+      "description": "Demo trajectory \u00b7 frame 2. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-248"
+      ],
+      "related": [],
+      "bounds": [
+        1312.5,
+        112.5,
+        53.0,
+        53.0
+      ]
+    },
+    {
+      "id": "b-trajectory-demo-frame-1",
+      "label": "Demo trajectory \u00b7 frame 1",
+      "stage": "B",
+      "type": "camera",
+      "description": "Demo trajectory \u00b7 frame 1. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-249"
+      ],
+      "related": [],
+      "bounds": [
+        1245.5,
+        112.5,
+        53.0,
+        53.0
+      ]
+    },
+    {
+      "id": "loop-b-c",
+      "label": "B \u2192 C \u00b7 training supervision",
+      "stage": "B",
+      "type": "connector",
+      "description": "B \u2192 C \u00b7 training supervision. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-257"
+      ],
+      "related": [],
+      "bounds": [
+        1349.0,
+        454.0,
+        55.0,
+        46.0
+      ]
+    },
+    {
+      "id": "c-frame",
+      "label": "C \u00b7 boundary",
+      "stage": "C",
+      "type": "frame",
+      "description": "C \u00b7 boundary. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-2"
+      ],
+      "related": [],
+      "bounds": [
+        858.0,
+        474.0,
+        732.0,
+        298.0
+      ]
+    },
+    {
+      "id": "c-header",
+      "label": "C \u00b7 title & badge",
+      "stage": "C",
+      "type": "title",
+      "description": "C \u00b7 title & badge. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-0",
+        "fw-source-169-1",
+        "fw-source-169-2",
+        "fw-source-169-3"
+      ],
+      "related": [],
+      "bounds": [
+        869.0,
+        483.0,
+        710.0,
+        53.0
+      ]
+    },
+    {
+      "id": "c-labels",
+      "label": "Training labels & separators",
+      "stage": "C",
+      "type": "label",
+      "description": "Training labels & separators. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-4",
+        "fw-source-169-5",
+        "fw-source-169-6",
+        "fw-source-169-7",
+        "fw-source-169-8",
+        "fw-source-169-9",
+        "fw-source-169-10",
+        "fw-source-169-82"
+      ],
+      "related": [],
+      "bounds": [
+        933.0,
+        540.0,
+        648.55,
+        196.541
+      ]
+    },
+    {
+      "id": "c-weight-1245",
+      "label": "Training weight at x=1245",
+      "stage": "C",
+      "type": "weight",
+      "description": "Training weight at x=1245. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-11",
+        "fw-source-169-12"
+      ],
+      "related": [],
+      "bounds": [
+        1245.32,
+        603.667,
+        17.0323,
+        128.0
+      ]
+    },
+    {
+      "id": "c-weight-1228",
+      "label": "Training weight at x=1228",
+      "stage": "C",
+      "type": "weight",
+      "description": "Training weight at x=1228. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-13",
+        "fw-source-169-14"
+      ],
+      "related": [],
+      "bounds": [
+        1228.29,
+        595.667,
+        17.0323,
+        137.333
+      ]
+    },
+    {
+      "id": "c-weight-1329",
+      "label": "Training weight at x=1329",
+      "stage": "C",
+      "type": "weight",
+      "description": "Training weight at x=1329. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-15"
+      ],
+      "related": [],
+      "bounds": [
+        1329.06,
+        595.667,
+        17.0323,
+        136.0
+      ]
+    },
+    {
+      "id": "c-weight-1312",
+      "label": "Training weight at x=1312",
+      "stage": "C",
+      "type": "weight",
+      "description": "Training weight at x=1312. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-16",
+        "fw-source-169-17"
+      ],
+      "related": [],
+      "bounds": [
+        1312.03,
+        589.0,
+        17.0323,
+        144.0
+      ]
+    },
+    {
+      "id": "c-weight-1380",
+      "label": "Training weight at x=1380",
+      "stage": "C",
+      "type": "weight",
+      "description": "Training weight at x=1380. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-18",
+        "fw-source-169-19"
+      ],
+      "related": [],
+      "bounds": [
+        1380.16,
+        590.333,
+        17.0323,
+        142.667
+      ]
+    },
+    {
+      "id": "c-weight-1445",
+      "label": "Training weight at x=1445",
+      "stage": "C",
+      "type": "weight",
+      "description": "Training weight at x=1445. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-20",
+        "fw-source-169-21"
+      ],
+      "related": [],
+      "bounds": [
+        1445.45,
+        590.333,
+        17.0323,
+        142.667
+      ]
+    },
+    {
+      "id": "c-weight-1413",
+      "label": "Training weight at x=1413",
+      "stage": "C",
+      "type": "weight",
+      "description": "Training weight at x=1413. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-22",
+        "fw-source-169-23"
+      ],
+      "related": [],
+      "bounds": [
+        1412.81,
+        594.333,
+        17.0323,
+        137.333
+      ]
+    },
+    {
+      "id": "c-weight-1397",
+      "label": "Training weight at x=1397",
+      "stage": "C",
+      "type": "weight",
+      "description": "Training weight at x=1397. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-24",
+        "fw-source-169-25"
+      ],
+      "related": [],
+      "bounds": [
+        1397.19,
+        595.667,
+        15.6129,
+        136.0
+      ]
+    },
+    {
+      "id": "c-weight-1430",
+      "label": "Training weight at x=1430",
+      "stage": "C",
+      "type": "weight",
+      "description": "Training weight at x=1430. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-26",
+        "fw-source-169-27"
+      ],
+      "related": [],
+      "bounds": [
+        1429.84,
+        621.0,
+        15.6129,
+        112.0
+      ]
+    },
+    {
+      "id": "c-weight-1461",
+      "label": "Training weight at x=1461",
+      "stage": "C",
+      "type": "weight",
+      "description": "Training weight at x=1461. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-28",
+        "fw-source-169-29"
+      ],
+      "related": [],
+      "bounds": [
+        1461.06,
+        586.333,
+        15.6129,
+        146.667
+      ]
+    },
+    {
+      "id": "c-weight-1278",
+      "label": "Training weight at x=1278",
+      "stage": "C",
+      "type": "weight",
+      "description": "Training weight at x=1278. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-30",
+        "fw-source-169-31"
+      ],
+      "related": [],
+      "bounds": [
+        1277.97,
+        733.0,
+        17.0323,
+        20.0
+      ]
+    },
+    {
+      "id": "c-weight-1346",
+      "label": "Training weight at x=1346",
+      "stage": "C",
+      "type": "weight",
+      "description": "Training weight at x=1346. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-32",
+        "fw-source-169-33"
+      ],
+      "related": [],
+      "bounds": [
+        1346.1,
+        734.3333,
+        17.0323,
+        26.6667
+      ]
+    },
+    {
+      "id": "c-weight-1295",
+      "label": "Training weight at x=1295",
+      "stage": "C",
+      "type": "weight",
+      "description": "Training weight at x=1295. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-34",
+        "fw-source-169-35"
+      ],
+      "related": [],
+      "bounds": [
+        1295.0,
+        731.6663,
+        17.0323,
+        10.6667
+      ]
+    },
+    {
+      "id": "c-weight-1363",
+      "label": "Training weight at x=1363",
+      "stage": "C",
+      "type": "weight",
+      "description": "Training weight at x=1363. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-36",
+        "fw-source-169-37"
+      ],
+      "related": [],
+      "bounds": [
+        1363.13,
+        735.6663,
+        17.0323,
+        10.6667
+      ]
+    },
+    {
+      "id": "c-weight-1262",
+      "label": "Training weight at x=1262",
+      "stage": "C",
+      "type": "weight",
+      "description": "Training weight at x=1262. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-38",
+        "fw-source-169-39"
+      ],
+      "related": [],
+      "bounds": [
+        1262.35,
+        590.333,
+        15.6129,
+        141.333
+      ]
+    },
+    {
+      "id": "c-chart-axes",
+      "label": "Weight / progress axes",
+      "stage": "C",
+      "type": "axis",
+      "description": "Weight / progress axes. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-40",
+        "fw-source-169-41",
+        "fw-source-169-42",
+        "fw-source-169-78",
+        "fw-source-169-79",
+        "fw-source-169-80",
+        "fw-source-169-81"
+      ],
+      "related": [],
+      "bounds": [
+        1204.85,
+        555.667,
+        346.92,
+        186.308
+      ]
+    },
+    {
+      "id": "c-progress-point-01",
+      "label": "Reweighted trajectory sample 01",
+      "stage": "C",
+      "type": "progress-point",
+      "description": "Reweighted trajectory sample 01. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-43"
+      ],
+      "related": [],
+      "bounds": [
+        1357.95,
+        672.167,
+        10.36,
+        9.667
+      ]
+    },
+    {
+      "id": "c-progress-point-02",
+      "label": "Reweighted trajectory sample 02",
+      "stage": "C",
+      "type": "progress-point",
+      "description": "Reweighted trajectory sample 02. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-44"
+      ],
+      "related": [],
+      "bounds": [
+        1472.92,
+        596.167,
+        10.35,
+        9.667
+      ]
+    },
+    {
+      "id": "c-progress-point-03",
+      "label": "Reweighted trajectory sample 03",
+      "stage": "C",
+      "type": "progress-point",
+      "description": "Reweighted trajectory sample 03. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-45"
+      ],
+      "related": [],
+      "bounds": [
+        1373.56,
+        678.833,
+        10.36,
+        9.667
+      ]
+    },
+    {
+      "id": "c-progress-point-04",
+      "label": "Reweighted trajectory sample 04",
+      "stage": "C",
+      "type": "progress-point",
+      "description": "Reweighted trajectory sample 04. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-46"
+      ],
+      "related": [],
+      "bounds": [
+        1318.21,
+        684.167,
+        10.35,
+        9.667
+      ]
+    },
+    {
+      "id": "c-progress-point-05",
+      "label": "Reweighted trajectory sample 05",
+      "stage": "C",
+      "type": "progress-point",
+      "description": "Reweighted trajectory sample 05. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-47"
+      ],
+      "related": [],
+      "bounds": [
+        1386.34,
+        665.5,
+        10.35,
+        9.667
+      ]
+    },
+    {
+      "id": "c-progress-point-06",
+      "label": "Reweighted trajectory sample 06",
+      "stage": "C",
+      "type": "progress-point",
+      "description": "Reweighted trajectory sample 06. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-48"
+      ],
+      "related": [],
+      "bounds": [
+        1460.15,
+        609.5,
+        10.35,
+        9.667
+      ]
+    },
+    {
+      "id": "c-progress-point-07",
+      "label": "Reweighted trajectory sample 07",
+      "stage": "C",
+      "type": "progress-point",
+      "description": "Reweighted trajectory sample 07. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-49"
+      ],
+      "related": [],
+      "bounds": [
+        1434.6,
+        636.167,
+        10.35,
+        9.667
+      ]
+    },
+    {
+      "id": "c-progress-point-08",
+      "label": "Reweighted trajectory sample 08",
+      "stage": "C",
+      "type": "progress-point",
+      "description": "Reweighted trajectory sample 08. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-50"
+      ],
+      "related": [],
+      "bounds": [
+        1450.21,
+        624.167,
+        10.35,
+        9.667
+      ]
+    },
+    {
+      "id": "c-progress-point-09",
+      "label": "Reweighted trajectory sample 09",
+      "stage": "C",
+      "type": "progress-point",
+      "description": "Reweighted trajectory sample 09. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-51"
+      ],
+      "related": [],
+      "bounds": [
+        1416.15,
+        640.167,
+        10.35,
+        9.667
+      ]
+    },
+    {
+      "id": "c-progress-point-10",
+      "label": "Reweighted trajectory sample 10",
+      "stage": "C",
+      "type": "progress-point",
+      "description": "Reweighted trajectory sample 10. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-52"
+      ],
+      "related": [],
+      "bounds": [
+        1401.95,
+        654.833,
+        10.36,
+        9.667
+      ]
+    },
+    {
+      "id": "c-progress-point-11",
+      "label": "Reweighted trajectory sample 11",
+      "stage": "C",
+      "type": "progress-point",
+      "description": "Reweighted trajectory sample 11. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-53"
+      ],
+      "related": [],
+      "bounds": [
+        1329.56,
+        672.167,
+        10.36,
+        9.667
+      ]
+    },
+    {
+      "id": "c-progress-point-12",
+      "label": "Reweighted trajectory sample 12",
+      "stage": "C",
+      "type": "progress-point",
+      "description": "Reweighted trajectory sample 12. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-54"
+      ],
+      "related": [],
+      "bounds": [
+        1343.76,
+        661.5,
+        10.35,
+        9.667
+      ]
+    },
+    {
+      "id": "c-progress-point-13",
+      "label": "Reweighted trajectory sample 13",
+      "stage": "C",
+      "type": "progress-point",
+      "description": "Reweighted trajectory sample 13. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-55"
+      ],
+      "related": [],
+      "bounds": [
+        1306.85,
+        698.833,
+        10.36,
+        9.667
+      ]
+    },
+    {
+      "id": "c-progress-point-14",
+      "label": "Reweighted trajectory sample 14",
+      "stage": "C",
+      "type": "progress-point",
+      "description": "Reweighted trajectory sample 14. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-56"
+      ],
+      "related": [],
+      "bounds": [
+        1289.82,
+        693.5,
+        10.36,
+        9.667
+      ]
+    },
+    {
+      "id": "c-progress-point-15",
+      "label": "Reweighted trajectory sample 15",
+      "stage": "C",
+      "type": "progress-point",
+      "description": "Reweighted trajectory sample 15. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-57"
+      ],
+      "related": [],
+      "bounds": [
+        1274.21,
+        682.833,
+        10.35,
+        9.667
+      ]
+    },
+    {
+      "id": "c-progress-point-16",
+      "label": "Reweighted trajectory sample 16",
+      "stage": "C",
+      "type": "progress-point",
+      "description": "Reweighted trajectory sample 16. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-58"
+      ],
+      "related": [],
+      "bounds": [
+        1260.02,
+        693.5,
+        10.35,
+        9.667
+      ]
+    },
+    {
+      "id": "c-progress-point-17",
+      "label": "Reweighted trajectory sample 17",
+      "stage": "C",
+      "type": "progress-point",
+      "description": "Reweighted trajectory sample 17. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-59"
+      ],
+      "related": [],
+      "bounds": [
+        1245.82,
+        701.5,
+        10.36,
+        9.667
+      ]
+    },
+    {
+      "id": "c-progress-point-18",
+      "label": "Reweighted trajectory sample 18",
+      "stage": "C",
+      "type": "progress-point",
+      "description": "Reweighted trajectory sample 18. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-60"
+      ],
+      "related": [],
+      "bounds": [
+        1231.63,
+        709.5,
+        10.35,
+        9.667
+      ]
+    },
+    {
+      "id": "c-progress-curve",
+      "label": "Trajectory progress \u00b7 connecting curve",
+      "stage": "C",
+      "type": "curve",
+      "description": "Trajectory progress \u00b7 connecting curve. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-61",
+        "fw-source-169-62",
+        "fw-source-169-63",
+        "fw-source-169-64",
+        "fw-source-169-65",
+        "fw-source-169-66",
+        "fw-source-169-67",
+        "fw-source-169-68",
+        "fw-source-169-69",
+        "fw-source-169-70",
+        "fw-source-169-71",
+        "fw-source-169-72",
+        "fw-source-169-73",
+        "fw-source-169-74",
+        "fw-source-169-75",
+        "fw-source-169-76",
+        "fw-source-169-77"
+      ],
+      "related": [],
+      "bounds": [
+        1240.59,
+        603.818,
+        234.51,
+        109.331
+      ]
+    },
+    {
+      "id": "c-training-input",
+      "label": "Weighted trajectories \u2192 VLA",
+      "stage": "C",
+      "type": "connector",
+      "description": "Weighted trajectories \u2192 VLA. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-83"
+      ],
+      "related": [],
+      "bounds": [
+        1115.0,
+        610.0,
+        52.0,
+        62.0
+      ]
+    },
+    {
+      "id": "c-vla",
+      "label": "VLA behavior cloning",
+      "stage": "C",
+      "type": "model",
+      "description": "VLA behavior cloning. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-84-0",
+        "fw-source-169-84-1"
+      ],
+      "related": [
+        "c-objective"
+      ],
+      "bounds": [
+        935.0,
+        559.276,
+        162.0,
+        127.724
+      ]
+    },
+    {
+      "id": "c-objective",
+      "label": "GR-BC training objective",
+      "stage": "C",
+      "type": "formula",
+      "description": "GR-BC training objective. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-84-2",
+        "fw-source-169-84-3",
+        "fw-source-169-84-4",
+        "fw-source-169-84-5",
+        "fw-source-169-84-6",
+        "fw-source-169-84-7",
+        "fw-source-169-84-8",
+        "fw-source-169-84-9",
+        "fw-source-169-84-10",
+        "fw-source-169-84-11",
+        "fw-source-169-84-12",
+        "fw-source-169-84-13",
+        "fw-source-169-84-14",
+        "fw-source-169-84-15",
+        "fw-source-169-84-16",
+        "fw-source-169-84-17",
+        "fw-source-169-84-18",
+        "fw-source-169-84-19"
+      ],
+      "related": [
+        "c-vla"
+      ],
+      "bounds": [
+        893.5,
+        699.5,
+        233.0,
+        35.0
+      ]
+    },
+    {
+      "id": "loop-c-d",
+      "label": "C \u2192 D \u00b7 real-world execution",
+      "stage": "C",
+      "type": "connector",
+      "description": "C \u2192 D \u00b7 real-world execution. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-169-85"
+      ],
+      "related": [],
+      "bounds": [
+        800.0,
+        595.0,
+        65.0,
+        77.0
+      ]
+    },
+    {
+      "id": "d-frame",
+      "label": "D \u00b7 boundary",
+      "stage": "D",
+      "type": "frame",
+      "description": "D \u00b7 boundary. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-1"
+      ],
+      "related": [],
+      "bounds": [
+        3.0,
+        474.0,
+        812.0,
+        276.0
+      ]
+    },
+    {
+      "id": "d-header",
+      "label": "D \u00b7 title & badge",
+      "stage": "D",
+      "type": "title",
+      "description": "D \u00b7 title & badge. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-4",
+        "fw-source-5",
+        "fw-source-6",
+        "fw-source-7"
+      ],
+      "related": [],
+      "bounds": [
+        14.0,
+        482.0,
+        790.0,
+        53.0
+      ]
+    },
+    {
+      "id": "d-labels",
+      "label": "Rollout labels & separators",
+      "stage": "D",
+      "type": "label",
+      "description": "Rollout labels & separators. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-8",
+        "fw-source-9",
+        "fw-source-10",
+        "fw-source-11",
+        "fw-source-12",
+        "fw-source-13",
+        "fw-source-14",
+        "fw-source-31",
+        "fw-source-32"
+      ],
+      "related": [],
+      "bounds": [
+        54.0,
+        541.0,
+        724.0,
+        170.198
+      ]
+    },
+    {
+      "id": "d-action-03-17",
+      "label": "Policy action chunk",
+      "stage": "D",
+      "type": "action",
+      "description": "Policy action chunk. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-15-0",
+        "fw-source-15-1"
+      ],
+      "related": [],
+      "bounds": [
+        99.0,
+        631.0,
+        28.0,
+        28.0
+      ]
+    },
+    {
+      "id": "d-action-06-17",
+      "label": "Policy action chunk",
+      "stage": "D",
+      "type": "action",
+      "description": "Policy action chunk. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-16-0",
+        "fw-source-16-1"
+      ],
+      "related": [],
+      "bounds": [
+        201.0,
+        631.0,
+        28.0,
+        28.0
+      ]
+    },
+    {
+      "id": "d-action-07-17",
+      "label": "Intervention action chunk",
+      "stage": "D",
+      "type": "action",
+      "description": "Intervention action chunk. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-17-0",
+        "fw-source-17-1"
+      ],
+      "related": [],
+      "bounds": [
+        254.0,
+        631.0,
+        28.0,
+        28.0
+      ]
+    },
+    {
+      "id": "d-action-07-16",
+      "label": "Policy action chunk",
+      "stage": "D",
+      "type": "action",
+      "description": "Policy action chunk. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-18-0",
+        "fw-source-18-1"
+      ],
+      "related": [],
+      "bounds": [
+        254.0,
+        593.0,
+        28.0,
+        28.0
+      ]
+    },
+    {
+      "id": "d-action-04-16",
+      "label": "Policy action chunk",
+      "stage": "D",
+      "type": "action",
+      "description": "Policy action chunk. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-19-0",
+        "fw-source-19-1"
+      ],
+      "related": [],
+      "bounds": [
+        133.0,
+        593.0,
+        28.0,
+        28.0
+      ]
+    },
+    {
+      "id": "d-action-05-17",
+      "label": "Policy action chunk",
+      "stage": "D",
+      "type": "action",
+      "description": "Policy action chunk. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-20-0",
+        "fw-source-20-1"
+      ],
+      "related": [],
+      "bounds": [
+        167.0,
+        631.0,
+        28.0,
+        28.0
+      ]
+    },
+    {
+      "id": "d-action-02-17",
+      "label": "Policy action chunk",
+      "stage": "D",
+      "type": "action",
+      "description": "Policy action chunk. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-21-0",
+        "fw-source-21-1"
+      ],
+      "related": [],
+      "bounds": [
+        65.0,
+        631.0,
+        28.0,
+        28.0
+      ]
+    },
+    {
+      "id": "d-action-02-16",
+      "label": "Policy action chunk",
+      "stage": "D",
+      "type": "action",
+      "description": "Policy action chunk. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-22-0",
+        "fw-source-22-1"
+      ],
+      "related": [],
+      "bounds": [
+        65.0,
+        593.0,
+        28.0,
+        28.0
+      ]
+    },
+    {
+      "id": "d-action-05-16",
+      "label": "Intervention action chunk",
+      "stage": "D",
+      "type": "action",
+      "description": "Intervention action chunk. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-23",
+        "fw-source-24"
+      ],
+      "related": [],
+      "bounds": [
+        167.0,
+        593.0,
+        28.0,
+        28.0
+      ]
+    },
+    {
+      "id": "d-action-03-16",
+      "label": "Intervention action chunk",
+      "stage": "D",
+      "type": "action",
+      "description": "Intervention action chunk. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-25",
+        "fw-source-26"
+      ],
+      "related": [],
+      "bounds": [
+        99.0,
+        593.0,
+        28.0,
+        28.0
+      ]
+    },
+    {
+      "id": "d-action-04-17",
+      "label": "Intervention action chunk",
+      "stage": "D",
+      "type": "action",
+      "description": "Intervention action chunk. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-27",
+        "fw-source-28"
+      ],
+      "related": [],
+      "bounds": [
+        133.0,
+        631.0,
+        28.0,
+        28.0
+      ]
+    },
+    {
+      "id": "d-action-06-16",
+      "label": "Intervention action chunk",
+      "stage": "D",
+      "type": "action",
+      "description": "Intervention action chunk. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-29",
+        "fw-source-30"
+      ],
+      "related": [],
+      "bounds": [
+        201.0,
+        593.0,
+        28.0,
+        28.0
+      ]
+    },
+    {
+      "id": "d-human-operator",
+      "label": "Human operator",
+      "stage": "D",
+      "type": "operator",
+      "description": "Human operator. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-33"
+      ],
+      "related": [
+        "d-intervention-device"
+      ],
+      "bounds": [
+        288.0,
+        676.0,
+        56.0,
+        56.0
+      ]
+    },
+    {
+      "id": "d-feedback",
+      "label": "Human feedback arrows",
+      "stage": "D",
+      "type": "connector",
+      "description": "Human feedback arrows. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-34",
+        "fw-source-39"
+      ],
+      "related": [],
+      "bounds": [
+        139.5,
+        668.0,
+        437.0,
+        52.299
+      ]
+    },
+    {
+      "id": "d-rollout-camera-1",
+      "label": "Real-world rollout frame 1",
+      "stage": "D",
+      "type": "camera",
+      "description": "Real-world rollout frame 1. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-35"
+      ],
+      "related": [],
+      "bounds": [
+        369.0,
+        584.0,
+        128.0,
+        87.0
+      ]
+    },
+    {
+      "id": "d-rollout-camera-2",
+      "label": "Real-world rollout frame 2",
+      "stage": "D",
+      "type": "camera",
+      "description": "Real-world rollout frame 2. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-36",
+        "fw-source-37"
+      ],
+      "related": [],
+      "bounds": [
+        509.0,
+        584.0,
+        128.0,
+        87.0
+      ]
+    },
+    {
+      "id": "d-rollout-camera-3",
+      "label": "Real-world rollout frame 3",
+      "stage": "D",
+      "type": "camera",
+      "description": "Real-world rollout frame 3. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-38"
+      ],
+      "related": [],
+      "bounds": [
+        649.0,
+        584.0,
+        128.0,
+        87.0
+      ]
+    },
+    {
+      "id": "d-intervention-device",
+      "label": "Human intervention device",
+      "stage": "D",
+      "type": "intervention",
+      "description": "Human intervention device. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-40"
+      ],
+      "related": [
+        "d-human-operator"
+      ],
+      "bounds": [
+        603.0,
+        639.0,
+        32.0,
+        29.0
+      ]
+    },
+    {
+      "id": "loop-d-a",
+      "label": "D \u2192 A \u00b7 return to the dataset",
+      "stage": "D",
+      "type": "connector",
+      "description": "D \u2192 A \u00b7 return to the dataset. Original artwork preserved; flow animation is illustrative.",
+      "elementIds": [
+        "fw-source-168"
+      ],
+      "related": [],
+      "bounds": [
+        81.0,
+        403.0,
+        72.0,
+        60.0
+      ]
+    }
+  ],
+  "assets": [
+    {
+      "id": "image0_661_4",
+      "path": "media/image-00-9887c61d.webp",
+      "sourceWidth": 1024,
+      "sourceHeight": 1024,
+      "bytes": 23878
+    },
+    {
+      "id": "image1_661_4",
+      "path": "media/image-01-b6f28906.webp",
+      "sourceWidth": 1535,
+      "sourceHeight": 1025,
+      "bytes": 135042
+    },
+    {
+      "id": "image2_661_4",
+      "path": "media/image-02-297e4b60.webp",
+      "sourceWidth": 1558,
+      "sourceHeight": 1009,
+      "bytes": 130074
+    },
+    {
+      "id": "image3_661_4",
+      "path": "media/image-03-40bd36ed.webp",
+      "sourceWidth": 1557,
+      "sourceHeight": 1010,
+      "bytes": 120406
+    },
+    {
+      "id": "image4_661_4",
+      "path": "media/image-04-67ce66d4.webp",
+      "sourceWidth": 470,
+      "sourceHeight": 437,
+      "bytes": 18150
+    },
+    {
+      "id": "image5_661_4",
+      "path": "media/image-05-379395ed.webp",
+      "sourceWidth": 1448,
+      "sourceHeight": 1086,
+      "bytes": 88442
+    },
+    {
+      "id": "image6_661_4",
+      "path": "media/image-06-d43189fc.webp",
+      "sourceWidth": 1448,
+      "sourceHeight": 1086,
+      "bytes": 146644
+    },
+    {
+      "id": "image7_661_4",
+      "path": "media/image-07-4e0ab101.webp",
+      "sourceWidth": 976,
+      "sourceHeight": 709,
+      "bytes": 133262
+    },
+    {
+      "id": "image8_661_4",
+      "path": "media/image-08-b3dc0ed0.webp",
+      "sourceWidth": 1024,
+      "sourceHeight": 1024,
+      "bytes": 22360
+    },
+    {
+      "id": "image9_661_4",
+      "path": "media/image-09-7a3270c6.webp",
+      "sourceWidth": 356,
+      "sourceHeight": 422,
+      "bytes": 5418
+    },
+    {
+      "id": "image10_661_4",
+      "path": "media/image-10-8e3396c8.webp",
+      "sourceWidth": 1024,
+      "sourceHeight": 1536,
+      "bytes": 62418
+    },
+    {
+      "id": "image11_661_4",
+      "path": "media/image-11-49b0ccf2.webp",
+      "sourceWidth": 1254,
+      "sourceHeight": 1254,
+      "bytes": 229474
+    },
+    {
+      "id": "image12_661_4",
+      "path": "media/image-12-f67c8000.webp",
+      "sourceWidth": 1254,
+      "sourceHeight": 1254,
+      "bytes": 239928
+    },
+    {
+      "id": "image13_661_4",
+      "path": "media/image-13-e400fbfd.webp",
+      "sourceWidth": 1254,
+      "sourceHeight": 1254,
+      "bytes": 272382
+    },
+    {
+      "id": "image14_661_4",
+      "path": "media/image-14-d26ad8ac.webp",
+      "sourceWidth": 1254,
+      "sourceHeight": 1254,
+      "bytes": 250508
+    },
+    {
+      "id": "image15_661_4",
+      "path": "media/image-15-afb7409b.webp",
+      "sourceWidth": 1254,
+      "sourceHeight": 1254,
+      "bytes": 246790
+    },
+    {
+      "id": "image16_661_4",
+      "path": "media/image-16-594671f6.webp",
+      "sourceWidth": 1254,
+      "sourceHeight": 1254,
+      "bytes": 242104
+    }
+  ],
+  "sourceDrawableCount": 404
+}
