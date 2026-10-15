@@ -131,7 +131,7 @@
     }
     async expand(){this.pause();try{await this.activate();if(this.seeking)await this.seekWork;const dialog=document.createElement('dialog');dialog.className='camera-dialog';dialog.innerHTML=`<header><div><span class="trajectory-overline">${esc(titles[this.d.id])} · FRAME ${this.frame}</span><h3>${cameraNames[this.camera]}</h3></div><button type="button" aria-label="Close expanded camera">Close ×</button></header><div class="expanded-camera ${this.interventionFlags[this.frame]===true?'is-intervention':''}"><video muted playsinline src="${base+this.d.cameras[this.camera].src}"></video><span class="camera-intervention">Intervention</span></div><p>Paused at ${fmt(this.frame/this.d.fps)} · Return to the timeline to inspect another frame.</p>`;document.body.append(dialog);dialog.showModal();const v=dialog.querySelector('video');v.addEventListener('loadedmetadata',()=>{v.currentTime=this.frame/this.d.fps;},{once:true});dialog.querySelector('button').onclick=()=>dialog.close();dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});dialog.addEventListener('close',()=>{v.pause();dialog.remove();});}catch(e){this.error('Unable to expand this camera.');}}
   }
-  // FLIP keeps the spatial relationship between the shelf and the live cards.
+  // Shared camera frames and curves travel between measured shelf/grid positions.
   class TrajectoryCollection {
     constructor(items) {
       this.items=items;this.open=false;this.moving=null;
@@ -145,7 +145,7 @@
       this.el.querySelector('.rack-cards').innerHTML=items.map((p,i)=>{
         const d=p.d,cams=[d.default_camera,...Object.keys(d.cameras).filter(c=>c!==d.default_camera)];
         const line=d.samples.map((s,f)=>`${f?'L':'M'}${(f/(d.frame_count-1)*250+3).toFixed(1)},${(27-s[1]*23).toFixed(1)}`).join(' ');
-        return `<button type="button" class="rack-card" data-card="${i}" style="--shift:${[-81,-27,27,81][i]}px;--lift:${[20,7,-6,-19][i]}px;--angle:${[-6,-1.5,3,7][i]}deg;--depth:${4-i}" aria-label="Expand collection: ${esc(titles[d.id])}" aria-expanded="false" aria-controls="trajectory-collection-open"><span class="rack-mini"><span class="rack-mini-header"><span class="rack-mini-number">0${i+1}</span><span>${esc(titles[d.id])}</span><span class="rack-mini-dot"></span></span><span class="rack-mini-cameras">${cams.map((cam,j)=>`<img src="${base+d.cameras[cam].poster}" alt="" width="${j?82:164}" height="${j?62:124}" loading="lazy" decoding="async"/>`).join('')}</span><svg class="rack-mini-trace" viewBox="0 0 256 32" aria-hidden="true"><path d="M3 28H253" class="rack-mini-axis"/><path d="${line}"/></svg><span class="rack-mini-footer"><span>3 SYNCHRONIZED VIEWS</span><span>${(d.duration+1/d.fps).toFixed(1)} s</span></span></span></button>`;
+        return `<button type="button" class="rack-card" data-card="${i}" style="--slot:${i-1.5};--lift:${[20,7,-6,-19][i]}px;--angle:${[-5,-1.5,2,5][i]}deg;--depth:${4-i}" aria-label="Expand collection: ${esc(titles[d.id])}" aria-expanded="false" aria-controls="trajectory-collection-open"><span class="rack-mini"><span class="rack-mini-header"><span class="rack-mini-number">0${i+1}</span><span>${esc(titles[d.id])}</span><span class="rack-mini-dot"></span></span><span class="rack-mini-cameras">${cams.map((cam,j)=>`<img src="${base+d.cameras[cam].poster}" alt="" data-preview-camera="${cam}" width="${j?104:208}" height="${j?72:149}" loading="lazy" decoding="async"/>`).join('')}</span><svg class="rack-mini-trace" viewBox="0 0 256 32" preserveAspectRatio="none" aria-hidden="true"><path d="M3 28H253" class="rack-mini-axis"/><path d="${line}"/></svg><span class="rack-mini-footer"><span>3 SYNCHRONIZED VIEWS</span><span>${(d.duration+1/d.fps).toFixed(1)} s</span></span></span></button>`;
       }).join('');
       this.previews=[...this.el.querySelectorAll('.rack-card')];
       this.previews.forEach((b,i)=>{b.onclick=()=>this.setOpen(true,{focusIndex:i});b.onpointerenter=()=>this.shiver();b.onfocus=()=>this.shiver();});
@@ -163,44 +163,121 @@
       this.moving=this.transition(open,{focusIndex,focus,instant}).finally(()=>{this.moving=null;});
       return this.moving;
     }
+    async refreshPreviews() {
+      await Promise.allSettled(this.items.map(async(p,i)=>{
+        p.pause();
+        if(p.seeking)await p.seekWork;
+        const preview=this.previews[i],deck=preview.querySelector('.rack-mini-cameras');
+        const cameras=[p.camera,...p.videos.map(v=>v.dataset.camera).filter(c=>c!==p.camera)];
+        cameras.forEach(cam=>{
+          const img=deck.querySelector(`[data-preview-camera="${cam}"]`),video=p.videos.find(v=>v.dataset.camera===cam);
+          if(video.readyState>=2&&video.videoWidth){
+            // Capture only on shelving; the temporary stills keep the transition frame-aligned.
+            try{const canvas=document.createElement('canvas');canvas.width=640;canvas.height=Math.round(640*video.videoHeight/video.videoWidth);canvas.getContext('2d').drawImage(video,0,0,canvas.width,canvas.height);img.src=canvas.toDataURL('image/jpeg',.85);}catch{/* Keep the poster if a frame is unavailable. */}
+          }
+          deck.append(img);
+        });
+        preview.querySelector('.rack-mini-trace path:last-child').setAttribute('d',p.d.samples.map((v,f)=>`${f?'L':'M'}${(f/(p.d.frame_count-1)*250+3).toFixed(1)},${(27-v[p.raw?0:1]*23).toFixed(1)}`).join(' '));
+        await Promise.allSettled([...deck.querySelectorAll('img')].map(img=>img.decode()));
+      }));
+    }
+    measureCard(index,small) {
+      const p=this.items[index],card=small?this.previews[index].querySelector('.rack-mini'):p.el;
+      // Measure in the card's own coordinate system, before applying its shelf rotation.
+      const saved=card.style.transform;if(small)card.style.transform='none';
+      const rect=card.getBoundingClientRect();
+      const local=node=>{const r=node.getBoundingClientRect();return {x:r.x-rect.x,y:r.y-rect.y,width:r.width,height:r.height};};
+      const trace=local(card.querySelector(small?'.rack-mini-trace':'.trace-chart'));
+      const result={rect,angle:small?parseFloat(getComputedStyle(this.previews[index]).getPropertyValue('--angle')):0,
+        number:local(card.querySelector(small?'.rack-mini-number':'.trajectory-number')),
+        title:local(card.querySelector(small?'.rack-mini-header > span:nth-child(2)':'.trajectory-header h3')),
+        cameras:Object.fromEntries([...card.querySelectorAll(small?'[data-preview-camera]':'.camera-view')].map(n=>[small?n.dataset.previewCamera:n.dataset.camera,local(n)])),
+        trace:small?{x:trace.x+trace.width*3/256,y:trace.y+trace.height*4/32,width:trace.width*250/256,height:trace.height*23/32}:{x:trace.x+trace.width*44/680,y:trace.y+trace.height*28/338,width:trace.width*616/680,height:trace.height*140/338}};
+      if(small)card.style.transform=saved;
+      return result;
+    }
+    morphCard(index,small,full,origin,open,animations,ghosts) {
+      const p=this.items[index],preview=this.previews[index],ghost=document.createElement('div');
+      ghost.className='collection-morph-card';ghost.setAttribute('aria-hidden','true');ghost.inert=true;
+      ghost.style.zIndex=String(14-index);this.el.append(ghost);ghosts.push(ghost);
+      const duration=1440,delay=(open?index:3-index)*65,easing='cubic-bezier(.4,0,.2,1)';
+      const run=(node,frames,options={})=>{const a=node.animate(frames,{duration,delay,easing,fill:'both',...options});animations.push(a);};
+      const frame=(state,lift=0)=>({transform:`translate(${state.rect.x-origin.x}px,${state.rect.y-origin.y+lift}px) rotate(${state.angle}deg)`,width:`${state.rect.width}px`,height:`${state.rect.height}px`,borderRadius:`${state===small?15:22}px`});
+      const lifted={...frame(small,-14),transform:`translate(${small.rect.x-origin.x}px,${small.rect.y-origin.y-14}px) rotate(${small.angle*.55}deg)`};
+      const travel=[{...frame(small),offset:0},{...lifted,offset:.14},{...frame(full),offset:1}];
+      run(ghost,open?travel:travel.slice().reverse().map(f=>({...f,offset:1-f.offset})));
+      // Move each visual independently, so the cameras keep their layout instead of
+      // stretching the entire live card (including the controls) from a thumbnail.
+      const shared=(node,a,b,resize=false)=>{
+        ghost.append(node);node.classList.add('morph-part');node.style.width=`${b.width}px`;node.style.height=`${b.height}px`;
+        const at=r=>resize?{transform:`translate(${r.x}px,${r.y}px)`,width:`${r.width}px`,height:`${r.height}px`}:{transform:`translate(${r.x}px,${r.y}px) scale(${r.width/b.width},${r.height/b.height})`};
+        const frames=[{...at(a),offset:0},{...at(a),offset:.14},{...at(b),offset:1}];
+        run(node,open?frames:frames.slice().reverse().map(f=>({...f,offset:1-f.offset})));
+      };
+      const typography=(node,source,target)=>{
+        const a=getComputedStyle(source),b=getComputedStyle(target);
+        const from={fontSize:a.fontSize,lineHeight:a.lineHeight,letterSpacing:a.letterSpacing},to={fontSize:b.fontSize,lineHeight:b.lineHeight,letterSpacing:b.letterSpacing};
+        const frames=[{...from,offset:0},{...from,offset:.14},{...to,offset:1}];
+        run(node,open?frames:frames.slice().reverse().map(f=>({...f,offset:1-f.offset})));
+      };
+      const number=p.el.querySelector('.trajectory-number').cloneNode(true);shared(number,small.number,full.number,true);typography(number,preview.querySelector('.rack-mini-number'),p.el.querySelector('.trajectory-number'));
+      const title=p.el.querySelector('.trajectory-header h3').cloneNode(true);title.removeAttribute('id');title.className='morph-title';shared(title,small.title,full.title,true);typography(title,preview.querySelector('.rack-mini-header > span:nth-child(2)'),p.el.querySelector('.trajectory-header h3'));
+      preview.querySelectorAll('[data-preview-camera]').forEach(img=>{
+        const clone=img.cloneNode(true);clone.className='morph-camera';clone.removeAttribute('loading');clone.removeAttribute('data-preview-camera');shared(clone,small.cameras[img.dataset.previewCamera],full.cameras[img.dataset.previewCamera],true);
+      });
+      const trace=preview.querySelector('.rack-mini-trace').cloneNode(true);trace.removeAttribute('class');trace.classList.add('morph-trace');trace.setAttribute('viewBox','3 4 250 23');trace.querySelector('.rack-mini-axis').remove();shared(trace,small.trace,full.trace);
+      run(trace.querySelector('path'),open?[{stroke:'#5686ca',strokeWidth:1.6},{stroke:'#2f6fd5',strokeWidth:2.5}]:[{stroke:'#2f6fd5',strokeWidth:2.5},{stroke:'#5686ca',strokeWidth:1.6}]);
+      // Settle the shared visuals before crossfading the live controls and labels.
+      if(open)run(ghost,[{opacity:1},{opacity:0}],{duration:240,delay:delay+duration-160,easing:'ease-in-out'});
+      else run(ghost,[{opacity:0,offset:0},{opacity:1,offset:.14},{opacity:1,offset:.84},{opacity:0,offset:1}],{duration:duration+80,easing:'linear'});
+      if(open)run(p.el,[{opacity:0},{opacity:1}],{duration:240,delay:delay+duration-160,easing:'ease-in-out'});
+      else{
+        run(p.el,[{opacity:1},{opacity:0}],{duration:220,delay:0,easing:'ease-in-out'});
+        run(preview,[{opacity:0},{opacity:1}],{duration:240,delay:delay+duration-160,easing:'ease-in-out'});
+      }
+    }
     async transition(open,{focusIndex,focus,instant}) {
       const animate=!instant&&!motionReduced.matches&&typeof this.el.animate==='function';
-      const animations=[];let shelfGhost=null;
+      const animations=[],ghosts=[];
       this.expandButton.disabled=true;this.collapseButton.disabled=true;
+      this.rack.inert=true;this.panel.inert=true;
+      if(!open)await this.refreshPreviews();
+      this.previews.forEach(b=>b.querySelector('.rack-mini').getAnimations().forEach(a=>a.cancel()));
       this.el.classList.add('is-transitioning');
       const startHeight=this.el.getBoundingClientRect().height;
-      const from=(open?this.previews:this.items.map(p=>p.el)).map(n=>n.getBoundingClientRect());
-      this.previews.forEach(b=>b.querySelector('.rack-mini').getAnimations().forEach(a=>a.cancel()));
-      this.rack.inert=true;this.panel.inert=true;
-      if(open&&animate){shelfGhost=this.rack.cloneNode(true);shelfGhost.setAttribute('aria-hidden','true');shelfGhost.inert=true;shelfGhost.style.cssText='position:absolute;inset:0 0 auto;z-index:5;pointer-events:none;';this.el.append(shelfGhost);}
-      if(!open){
-        this.items.forEach(p=>p.pause());
-        this.panel.style.cssText='position:absolute;inset:0 0 auto;';
-        this.rack.hidden=false;
-      }else{this.rack.hidden=true;this.panel.hidden=false;}
-      const endHeight=(open?this.panel:this.rack).getBoundingClientRect().height;
-      const to=(open?this.items.map(p=>p.el):this.previews).map(n=>n.getBoundingClientRect());
-      if(animate){
-        if(shelfGhost)animations.push(shelfGhost.animate([{opacity:1,transform:'none'},{opacity:0,transform:'translateY(10px) scale(.985)'}],{duration:230,easing:'ease-out',fill:'both'}));
-        if(!open)animations.push(this.rack.animate([{opacity:0},{opacity:1}],{duration:340,delay:360,fill:'both'}));
-        this.el.style.height=`${startHeight}px`;
-        animations.push(this.el.animate([{height:`${startHeight}px`},{height:`${endHeight}px`}],{duration:760,easing:'cubic-bezier(.22,.85,.25,1)',fill:'both'}));
-        this.items.forEach((p,i)=>{
-          const full=open?to[i]:from[i],small=open?from[i]:to[i];
-          const folded=`translate(${small.x-full.x}px,${small.y-full.y}px) scale(${small.width/full.width},${small.height/full.height}) rotate(${[-6,-1.5,3,7][i]}deg)`;
-          const frames=open?[{transform:folded,opacity:.45},{transform:'translate(0,-4px) scale(1.006)',opacity:1,offset:.82},{transform:'none',opacity:1}]:[{transform:'none',opacity:1},{transform:folded,opacity:0}];
-          animations.push(p.el.animate(frames,{duration:620,delay:(open?i:3-i)*40,easing:'cubic-bezier(.22,.8,.22,1)',fill:'both'}));
-        });
-        animations.push(this.panel.querySelector('.collection-toolbar').animate(open?[{opacity:0},{opacity:1}]:[{opacity:1},{opacity:0}],{duration:250,delay:open?300:0,fill:'both'}));
-        await Promise.allSettled(animations.map(a=>a.finished));
+      const before=animate?this.items.map((_,i)=>this.measureCard(i,open)):[];
+      try{
+        let shelfGhost;
+        if(open&&animate){
+          shelfGhost=this.rack.cloneNode(true);shelfGhost.classList.add('rack-ghost');shelfGhost.setAttribute('aria-hidden','true');shelfGhost.inert=true;
+          shelfGhost.querySelector('.rack-cards').style.visibility='hidden';this.el.append(shelfGhost);ghosts.push(shelfGhost);
+        }
+        if(!open){this.panel.style.cssText='position:absolute;inset:0 0 auto;';this.rack.hidden=false;}
+        else{this.rack.hidden=true;this.panel.hidden=false;}
+        const endHeight=(open?this.panel:this.rack).getBoundingClientRect().height;
+        if(animate){
+          const after=this.items.map((_,i)=>this.measureCard(i,!open)),origin=this.el.getBoundingClientRect();
+          const run=(node,frames,options)=>animations.push(node.animate(frames,{fill:'both',...options}));
+          this.el.style.height=`${startHeight}px`;
+          run(this.el,[{height:`${startHeight}px`},{height:`${endHeight}px`}],{duration:1715,easing:'cubic-bezier(.4,0,.2,1)'});
+          if(shelfGhost)run(shelfGhost,[{opacity:1},{opacity:0}],{duration:650,delay:120,easing:'ease-in-out'});
+          if(!open)run(this.rack,[{opacity:0},{opacity:1}],{duration:550,delay:1050,easing:'ease-in-out'});
+          this.items.forEach((_,i)=>this.morphCard(i,open?before[i]:after[i],open?after[i]:before[i],origin,open,animations,ghosts));
+          for(const node of [this.panel.querySelector('.collection-toolbar'),this.panel.querySelector('.trajectory-index'),this.panel.querySelector('.trajectory-method-note')]){
+            run(node,open?[{opacity:0,transform:'translateY(6px)'},{opacity:1,transform:'none'}]:[{opacity:1},{opacity:0}],{duration:400,delay:open?1130:0,easing:'ease-in-out'});
+          }
+          await Promise.allSettled(animations.map(a=>a.finished));
+        }
+      }finally{
+        this.rack.hidden=open;this.panel.hidden=!open;
+        if(!open)this.items.forEach(p=>p.setDetails(false,{animate:false}));
+        this.panel.style.cssText='';animations.forEach(a=>a.cancel());ghosts.forEach(n=>n.remove());
+        this.el.style.height='';this.el.classList.remove('is-transitioning');
+        this.rack.inert=open;this.panel.inert=!open;this.expandButton.disabled=false;this.collapseButton.disabled=false;
+        this.expandButton.setAttribute('aria-expanded',String(open));this.previews.forEach(b=>b.setAttribute('aria-expanded',String(open)));
+        if(!open&&location.hash.startsWith('#trajectory-'))history.replaceState(null,'','#trajectories');
+        if(focus){if(open)this.items[focusIndex].el.focus({preventScroll:true});else this.expandButton.focus({preventScroll:true});}
       }
-      this.rack.hidden=open;this.panel.hidden=!open;if(!open)this.items.forEach(p=>p.setDetails(false,{animate:false}));this.rack.style.visibility='';this.panel.style.cssText='';
-      animations.forEach(a=>a.cancel());shelfGhost?.remove();this.el.style.height='';this.el.classList.remove('is-transitioning');
-      this.rack.inert=open;this.panel.inert=!open;this.expandButton.disabled=false;this.collapseButton.disabled=false;
-      this.expandButton.setAttribute('aria-expanded',String(open));
-      this.previews.forEach(b=>b.setAttribute('aria-expanded',String(open)));
-      if(!open&&location.hash.startsWith('#trajectory-'))history.replaceState(null,'','#trajectories');
-      if(focus){if(open)this.items[focusIndex].el.focus({preventScroll:true});else this.expandButton.focus({preventScroll:true});}
     }
   }
 
