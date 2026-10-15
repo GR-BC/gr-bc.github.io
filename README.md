@@ -2,6 +2,14 @@
 
 Static GitHub Pages website. The interactive trajectory section is implemented in `progress.js`, with styles in `style.css` and frame-aligned media in `assets/progress/`.
 
+The homepage opens with the project demo, then the animated framework. Abstract and task context follow; the four-trajectory collection and progress comparison appear afterward, with headline and policy results later on the page. Navigation follows that reading order.
+
+## Embedded experiment figures
+
+`assets/homepage-modules.js` mounts the same native components used by `experiment-motion.html` and `progress-comparison.html`. The progress comparison replaces Figure 5; the four-task animated result panel replaces Figure 6 and the old task-tab bar chart. Method highlighting, detail-frame links, percentage bubbles, replay, keyboard controls, and reduced motion remain available. The homepage supplies section headings instead of repeating the experiment preview's heading. Static paper figures remain visible without JavaScript or if a module fails to load.
+
+Run `python3 scripts/version-homepage-modules.py` after editing either module or the homepage stylesheet. It refreshes the stylesheet, module, configuration, and preview cache versions. Verify both modules inside the homepage, including their mobile scroll areas, as well as the standalone pages. Source-fidelity checks: `python3 scripts/check-experiment.py` and `python3 scripts/check-progress-comparison.py` (the latter uses the supplied `~/Downloads/Frame 21.svg` by default).
+
 ## Preview
 
 Run `node scripts/serve-preview.mjs` and open `http://127.0.0.1:8765/#trajectories`. The preview supports HTTP byte ranges for MP4 seeking. Use HTTP rather than opening `index.html` directly: the interactive section loads JSON.

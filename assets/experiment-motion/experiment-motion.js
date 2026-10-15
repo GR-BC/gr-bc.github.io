@@ -1,5 +1,5 @@
 /** GR-BC experiment figure. Native SVG + Web Animations; no runtime dependencies. */
-const RELEASE = '20261015-1';
+const RELEASE = '28951c2c8a42';
 const asset = file => new URL(`${file}?v=${RELEASE}`, import.meta.url).href;
 const mounted = new WeakMap();
 let instance = 0;
@@ -60,7 +60,7 @@ export async function mountExperimentMotion(target, options = {}) {
     clearSelection() { pinned = null; show(null); },
     destroy() {
       if (destroyed) return;
-      destroyed = true; abort.abort(); observer?.disconnect(); allAnimations().forEach(a => a.cancel()); states.forEach(s => s.detailAnimation?.cancel()); root.remove();
+      destroyed = true; abort.abort(); observer?.disconnect(); allAnimations().forEach(a => a.cancel()); states.forEach(s => s.valueAnimations?.forEach(a => a.cancel())); root.remove();
       if (mounted.get(host) === api) mounted.delete(host);
     }
   };
@@ -143,7 +143,13 @@ export async function mountExperimentMotion(target, options = {}) {
     root.dataset.emState = reduced() ? 'static' : paused ? 'paused' : states.every(s => s.finished) ? 'complete' : 'growing';
     qs(root, '.em-state-label').textContent = reduced() ? 'Reduced motion' : paused ? 'Paused' : states.every(s => s.finished || !s.visible) ? 'Explore the results' : 'Results taking shape';
   }
+  const sameSelection = (a, b) => a?.method === b?.method && a?.task === b?.task;
+  function updateHover(selection) {
+    // Respond in the same pointer event; visual transitions provide the softness.
+    if (!destroyed && !pinned && !sameSelection(active, selection)) show(selection);
+  }
   function show(selection) {
+    const previous = active;
     active = selection;
     const selected = selection?.method;
     root.classList.toggle('em-has-selection', Boolean(selected));
@@ -158,11 +164,20 @@ export async function mountExperimentMotion(target, options = {}) {
       const open = Boolean(selected && selection.task === state.task.id);
       const detail = qs(state.el, '.em-detail');
       state.el.classList.toggle('em-detail-open', open); detail.setAttribute('aria-hidden', String(!open));
-      if (!open) continue;
+      if (!open) {
+        state.valueAnimations?.forEach(a => a.cancel());
+        continue;
+      }
       const method = data.methods.find(m => m.id === selected);
       const value = state.task.finalSuccess[selected];
       detail.style.setProperty('--em-accent', method.color);
-      qs(detail, '.em-detail-value').textContent = value;
+      const digits = qs(detail, '.em-detail-value');
+      const oldDigits = qs(detail, '.em-detail-previous');
+      const oldValue = digits.textContent;
+      const oldOpacity = Number.parseFloat(getComputedStyle(digits).opacity);
+      state.valueAnimations?.forEach(a => a.cancel());
+      oldDigits.textContent = oldValue;
+      digits.textContent = value;
       qs(detail, '.em-detail-context').textContent = `${method.label} · final success`;
       const hit = qs(state.el, `.em-bar-hit[data-em-method="${selected}"]`);
       const bar = qs(state.el, `.em-method-piece[data-em-method="${selected}"][data-em-part="bar"]`);
@@ -174,13 +189,20 @@ export async function mountExperimentMotion(target, options = {}) {
       const finalTop = svgRect.top + (bar.firstElementChild.getBBox().y - view.y) * svgRect.height / view.height;
       detail.style.left = `${Math.max(9, Math.min(cardRect.width - 81, hitRect.left + hitRect.width / 2 - cardRect.left - 36))}px`;
       detail.style.top = `${Math.max(43, finalTop - cardRect.top - 54)}px`;
-      if (!reduced()) {
-        state.detailAnimation?.cancel();
-        state.detailAnimation = detail.animate([
-          { opacity: 0, transform: 'translateY(16px) scale(.94)', easing: 'cubic-bezier(.18,.8,.25,1)' },
-          { opacity: 1, transform: 'translateY(-3px) scale(1.015)', offset: .72 },
-          { opacity: 1, transform: 'none' }
-        ], { duration: 430, easing: 'ease-out' });
+      // Keep the same bubble alive between columns. Only its digits crossfade;
+      // position, highlight and the small entrance spring transition independently.
+      if (!reduced() && !sameSelection(previous, selection)) {
+        state.valueAnimations = [
+          oldDigits.animate([
+            { opacity: previous?.task === state.task.id ? oldOpacity : 0, transform: 'translateY(0)' },
+            { opacity: 0, transform: 'translateY(-5px)' }
+          ], { duration: 160, easing: 'ease-out' }),
+          digits.animate([
+            { opacity: 0, transform: 'translateY(6px) scale(.96)', easing: 'cubic-bezier(.18,.75,.25,1)' },
+            { opacity: 1, transform: 'translateY(-1px) scale(1.025)', offset: .75 },
+            { opacity: 1, transform: 'none' }
+          ], { duration: 360, easing: 'ease-out' })
+        ];
       }
     }
     options.onSelect?.(selection ? { ...selection, value: selection.task ? data.tasks.find(t => t.id === selection.task).finalSuccess[selected] : null } : null);
@@ -202,6 +224,20 @@ export async function mountExperimentMotion(target, options = {}) {
       const card = qs(root, `.em-task[data-em-task="${task.id}"]`);
       const svg = new DOMParser().parseFromString(svgs[index], 'image/svg+xml').documentElement;
       namespace(svg, `${uid}-${task.id}`); qs(card, '.em-plot').append(document.importNode(svg, true));
+      // Hover opacity belongs to a separate wrapper, so it never overrides the
+      // entrance's animated opacity or snaps when those animations finish.
+      for (const piece of qsa(card, '.em-method-piece')) {
+        const wrapper = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        wrapper.classList.add('em-method-hover'); wrapper.dataset.emMethod = piece.dataset.emMethod;
+        wrapper.dataset.emPart = piece.dataset.emPart;
+        const [x, y] = piece.dataset.emOrigin.split(' ');
+        wrapper.style.transformBox = 'view-box'; wrapper.style.transformOrigin = `${x}px ${y}px`;
+        piece.before(wrapper); wrapper.append(piece);
+      }
+      const digits = qs(card, '.em-detail-value');
+      const oldDigits = document.createElement('span'); oldDigits.className = 'em-detail-previous'; oldDigits.setAttribute('aria-hidden', 'true');
+      const number = document.createElement('span'); number.className = 'em-detail-number';
+      digits.before(number); number.append(oldDigits, digits);
       for (const hit of qsa(card, '.em-bar-hit')) hit.setAttribute('aria-describedby', `${uid}-${task.id}-detail`);
       return { el: card, task, animations: [], visible: false, started: false, finished: false };
     });
@@ -219,27 +255,27 @@ export async function mountExperimentMotion(target, options = {}) {
       const node = target.closest('[data-em-method]'); if (!node || !root.contains(node)) return null;
       return { method: node.dataset.emMethod, task: node.closest('.em-task')?.dataset.emTask || null };
     };
-    const same = (a,b) => a?.method === b?.method && a?.task === b?.task;
     listen(root, 'pointerover', event => {
       if (event.pointerType === 'touch' || pinned) return;
-      const next = selectionFor(event.target); if (next && !same(active, next)) show(next);
+      const next = selectionFor(event.target); if (next) updateHover(next);
     });
     listen(root, 'pointerout', event => {
       if (pinned || event.pointerType === 'touch') return;
       const next = event.relatedTarget instanceof Element ? selectionFor(event.relatedTarget) : null;
-      if (!same(active, next)) show(next);
+      updateHover(next);
     });
     listen(root, 'focusin', event => {
-      const next = selectionFor(event.target); if (next && !pinned && !same(active,next)) show(next);
+      const next = selectionFor(event.target);
+      if (next) updateHover(next);
     });
     listen(root, 'focusout', event => {
-      if (!pinned && !(event.relatedTarget instanceof Element && root.contains(event.relatedTarget))) show(null);
+      if (!pinned && !(event.relatedTarget instanceof Element && selectionFor(event.relatedTarget))) updateHover(null);
     });
     listen(root, 'click', event => {
       const action = event.target.closest('[data-em-action]')?.dataset.emAction;
       if (action === 'replay') { api.replay(); return; }
       const next = selectionFor(event.target);
-      if (next) { pinned = same(pinned,next) ? null : next; show(pinned); }
+      if (next) { pinned = sameSelection(pinned, next) ? null : next; show(pinned); }
       else api.clearSelection();
     });
     listen(root, 'keydown', event => {

@@ -2,7 +2,7 @@
 
 Standalone preview: https://gr-bc.github.io/experiment-motion.html
 
-The preview's **Copy embed code** button copies a ready-to-paste native component. No build step, React, chart library, or external CDN is required. The main homepage is not modified by this package.
+The preview's **Copy embed code** button copies a ready-to-paste native component. No build step, React, chart library, or external CDN is required. The homepage mounts this component in its Policy improvement section via `assets/homepage-modules.js`, with `intro: false` to use the existing section heading.
 
 ## Embed in this repository
 

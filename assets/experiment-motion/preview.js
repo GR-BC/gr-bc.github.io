@@ -1,10 +1,10 @@
-import { mountExperimentMotion } from './experiment-motion.js?v=20261015-1';
+import { mountExperimentMotion } from './experiment-motion.js?v=cd01621ded04';
 const embed = new URLSearchParams(location.search).has('embed');
 if (embed) document.body.classList.add('is-embed');
 const code = `<div id="grbc-experiment-results"></div>
 <script type="module">
   import { mountExperimentMotion } from
-    'https://gr-bc.github.io/assets/experiment-motion/experiment-motion.js?v=20261015-1';
+    'https://gr-bc.github.io/assets/experiment-motion/experiment-motion.js?v=cd01621ded04';
   const experiment = await mountExperimentMotion(
     document.querySelector('#grbc-experiment-results')
   );

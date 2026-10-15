@@ -23,9 +23,10 @@
       content="Learning task-advancing action chunks from demonstrations, failures, and human interventions."
     />
     <meta name="twitter:image" content="/og.jpg" />
-    <link rel="stylesheet" href="style.css?v=e7a92dee95e3" />
+    <link rel="stylesheet" href="style.css?v=571f6ac87cf4" />
     <link rel="stylesheet" href="assets/framework/framework.css?v=89ea7ca8eef2" />
     <link rel="stylesheet" href="assets/framework/homepage.css?v=98054b761b74" />
+    <link rel="stylesheet" href="assets/progress-comparison/comparison.css?v=c5fcda11f31a" />
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -36,7 +37,7 @@
         <span>GR-BC</span>
       </a>
       <nav class="desktop-nav" aria-label="Sections">
-        <a href="#abstract">Abstract</a>
+        <a href="#film">Demo</a>
         <a href="#method">Approach</a>
         <a href="#trajectories">Trajectories</a>
         <a href="#results">Results</a>
@@ -116,22 +117,6 @@
         </div>
       </section>
 
-      <section class="trajectory-section" id="trajectories" aria-labelledby="trajectory-title">
-        <div class="trajectory-intro">
-          <div><span class="kicker">INTERACTIVE TRAJECTORIES</span><h2 id="trajectory-title">Progress, under<br /><em>the microscope.</em></h2></div>
-          <p>A successful trajectory is rarely a straight line. Open the collection, follow four real-world rollouts from three synchronized cameras, and unfold the details of every setback.</p>
-        </div>
-        <nav class="trajectory-index" aria-label="Choose a trajectory">
-          <a href="#trajectory-screw_ep092"><span>01</span>Screw tightening</a>
-          <a href="#trajectory-gpu_ep044"><span>02</span>Graphics card</a>
-          <a href="#trajectory-block_ep075"><span>03</span>Block assembly</a>
-          <a href="#trajectory-ram_ep006"><span>04</span>Memory stick</a>
-        </nav>
-        <div id="trajectory-modules"><p class="trajectory-loading">Loading the trajectory observatory…</p></div>
-        <noscript><p>Please enable JavaScript to explore the synchronized camera views and progress traces.</p></noscript>
-        <p class="trajectory-method-note"><strong>Reading the signal.</strong> Graph progress is a graph-derived estimate, not human-annotated ground truth. The default curve uses a centered 15-frame moving average; select Raw trace to inspect the original values. Dip values follow the selected curve. Transition weights use their own 0–1.5 scale. Pale orange marks recorded human-intervention frames; the rose-tinted dip windows follow the supplied event annotations. Captions describe visible motion and possible interpretations, rather than verified causes of the progress change.</p>
-      </section>
-
       <section class="film section-shell" id="film" aria-labelledby="film-title">
         <div class="section-intro compact-intro reveal">
           <div>
@@ -157,78 +142,6 @@
             preload="metadata"
             aria-label="GR-BC project video showing robot manipulation experiments"
           ></video>
-        </div>
-      </section>
-
-      <section class="proof" aria-label="Headline results">
-        <div class="proof-intro">
-          <span class="kicker">Why it matters</span>
-          <p>Mixed-quality experience becomes useful supervision, without learning another model.</p>
-        </div>
-        <dl class="proof-grid">
-          <div>
-            <dt>91%</dt>
-            <dd>average final success across the four tasks in the iterative X-VLA study</dd>
-          </div>
-          <div>
-            <dt>4</dt>
-            <dd>real-world long-horizon precise manipulation tasks</dd>
-          </div>
-          <div>
-            <dt>0</dt>
-            <dd>reward models, action critics, progress labels, or VLM annotations</dd>
-          </div>
-        </dl>
-      </section>
-
-      <section class="abstract section-shell" id="abstract">
-        <div class="section-heading reveal">
-          <span class="kicker">Abstract</span>
-          <h2>Judge actions by their consequence, not the trajectory label.</h2>
-        </div>
-        <div class="abstract-copy reveal">
-          <p>
-            Long-horizon manipulation data is rarely clean. Even successful demonstrations can contain
-            hesitations, overshoots, failed attempts, and imperfect recoveries. Intervention-assisted
-            rollouts mix autonomous mistakes with delayed expert corrections, while failed episodes can
-            still contain short segments that reconnect the system to a viable path.
-          </p>
-          <p>
-            GR-BC builds a task-conditioned goal-reachability graph over this mixed-quality data. Reverse
-            graph search estimates the minimal remaining steps to success inside the dataset support, and
-            each physically executed action chunk is weighted by how much it reduces that state potential.
-            New rollouts are appended to the graph and reused in the next offline training round.
-          </p>
-        </div>
-      </section>
-
-      <section class="challenge section-band" id="challenge" aria-labelledby="challenge-title">
-        <div class="section-shell">
-          <div class="section-intro reveal">
-            <div>
-              <span class="kicker">The challenge</span>
-              <h2 id="challenge-title">Trajectory outcome is too coarse for chunk-level credit.</h2>
-            </div>
-            <p>
-              Whether an action is worth imitating depends on what it causes from the current state — not
-              whether the overall episode eventually succeeded or failed.
-            </p>
-          </div>
-
-          <div class="contrast-grid">
-            <article class="contrast-card reveal">
-              <span class="card-index">01</span>
-              <div class="trajectory-line success-line" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-              <h3>A success can contain regression.</h3>
-              <p>Uniform SFT can clone pauses, detours, and unstable corrections hidden inside a successful episode.</p>
-            </article>
-            <article class="contrast-card reveal">
-              <span class="card-index">02</span>
-              <div class="trajectory-line failure-line" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-              <h3>A failure can contain recovery.</h3>
-              <p>Discarding the whole rollout wastes valid, task-advancing chunks that reconnect to successful regions.</p>
-            </article>
-          </div>
         </div>
       </section>
 
@@ -294,6 +207,57 @@
         </aside>
       </section>
 
+      <section class="abstract section-shell" id="abstract">
+        <div class="section-heading reveal">
+          <span class="kicker">Abstract</span>
+          <h2>Judge actions by their consequence, not the trajectory label.</h2>
+        </div>
+        <div class="abstract-copy reveal">
+          <p>
+            Long-horizon manipulation data is rarely clean. Even successful demonstrations can contain
+            hesitations, overshoots, failed attempts, and imperfect recoveries. Intervention-assisted
+            rollouts mix autonomous mistakes with delayed expert corrections, while failed episodes can
+            still contain short segments that reconnect the system to a viable path.
+          </p>
+          <p>
+            GR-BC builds a task-conditioned goal-reachability graph over this mixed-quality data. Reverse
+            graph search estimates the minimal remaining steps to success inside the dataset support, and
+            each physically executed action chunk is weighted by how much it reduces that state potential.
+            New rollouts are appended to the graph and reused in the next offline training round.
+          </p>
+        </div>
+      </section>
+
+      <section class="challenge section-band" id="challenge" aria-labelledby="challenge-title">
+        <div class="section-shell">
+          <div class="section-intro reveal">
+            <div>
+              <span class="kicker">The challenge</span>
+              <h2 id="challenge-title">Trajectory outcome is too coarse for chunk-level credit.</h2>
+            </div>
+            <p>
+              Whether an action is worth imitating depends on what it causes from the current state — not
+              whether the overall episode eventually succeeded or failed.
+            </p>
+          </div>
+
+          <div class="contrast-grid">
+            <article class="contrast-card reveal">
+              <span class="card-index">01</span>
+              <div class="trajectory-line success-line" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+              <h3>A success can contain regression.</h3>
+              <p>Uniform SFT can clone pauses, detours, and unstable corrections hidden inside a successful episode.</p>
+            </article>
+            <article class="contrast-card reveal">
+              <span class="card-index">02</span>
+              <div class="trajectory-line failure-line" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+              <h3>A failure can contain recovery.</h3>
+              <p>Discarding the whole rollout wastes valid, task-advancing chunks that reconnect to successful regions.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
       <section class="tasks section-band" id="tasks" aria-labelledby="tasks-title">
         <div class="section-shell">
           <div class="section-intro reveal">
@@ -336,6 +300,22 @@
         </div>
       </section>
 
+      <section class="trajectory-section" id="trajectories" aria-labelledby="trajectory-title">
+        <div class="trajectory-intro">
+          <div><span class="kicker">INTERACTIVE TRAJECTORIES</span><h2 id="trajectory-title">Progress, under<br /><em>the microscope.</em></h2></div>
+          <p>A successful trajectory is rarely a straight line. Open the collection, follow four real-world rollouts from three synchronized cameras, and unfold the details of every setback.</p>
+        </div>
+        <nav class="trajectory-index" aria-label="Choose a trajectory">
+          <a href="#trajectory-screw_ep092"><span>01</span>Screw tightening</a>
+          <a href="#trajectory-gpu_ep044"><span>02</span>Graphics card</a>
+          <a href="#trajectory-block_ep075"><span>03</span>Block assembly</a>
+          <a href="#trajectory-ram_ep006"><span>04</span>Memory stick</a>
+        </nav>
+        <div id="trajectory-modules"><p class="trajectory-loading">Loading the trajectory observatory…</p></div>
+        <noscript><p>Please enable JavaScript to explore the synchronized camera views and progress traces.</p></noscript>
+        <p class="trajectory-method-note"><strong>Reading the signal.</strong> Graph progress is a graph-derived estimate, not human-annotated ground truth. The default curve uses a centered 15-frame moving average; select Raw trace to inspect the original values. Dip values follow the selected curve. Transition weights use their own 0–1.5 scale. Pale orange marks recorded human-intervention frames; the rose-tinted dip windows follow the supplied event annotations. Captions describe visible motion and possible interpretations, rather than verified causes of the progress change.</p>
+      </section>
+
       <section class="evidence section-shell" id="evidence" aria-labelledby="evidence-title">
         <div class="section-intro reveal">
           <div>
@@ -348,26 +328,18 @@
           </p>
         </div>
 
-        <figure class="paper-figure reveal">
-          <button
-            class="figure-zoom"
-            type="button"
-            data-figure="assets/paper-figures/fig5-progress.jpg"
-            data-alt="Progress estimation and transition weights over time"
-            aria-label="Open Figure 5 at full size"
-          >
-            <img
-              src="assets/paper-figures/fig5-progress.jpg"
-              alt="GRP progress curve compared with RoboMeter, SARM, Robo-Dopamine, and ReWiND"
-              loading="lazy"
-            />
-            <span class="zoom-hint">Open figure</span>
-          </button>
-          <figcaption>
-            <strong>Figure 5.</strong> GRP identifies task-advancing segments while exposing local regressions
-            and failed behaviors.
-          </figcaption>
-        </figure>
+        <div class="homepage-module" data-homepage-module="comparison">
+          <div data-module-host></div>
+          <figure class="paper-figure homepage-module-fallback">
+            <button class="figure-zoom" type="button" data-figure="assets/paper-figures/fig5-progress.jpg"
+              data-alt="Progress estimation and transition weights over time" aria-label="Open the static progress comparison">
+              <img src="assets/paper-figures/fig5-progress.jpg" width="1120" height="504" loading="lazy"
+                alt="GRP progress curve compared with RoboMeter, SARM, Robo-Dopamine, and ReWiND" />
+              <span class="zoom-hint">Open figure</span>
+            </button>
+            <figcaption>Five progress estimators, with GRP highlighting local regressions.</figcaption>
+          </figure>
+        </div>
 
         <dl class="metric-grid">
           <div class="reveal"><dt>0.97</dt><dd>success–failure progress gap <span>Δ<sub>SF</sub></span></dd></div>
@@ -398,6 +370,27 @@
         </div>
       </section>
 
+      <section class="proof" id="highlights" aria-label="Headline results">
+        <div class="proof-intro">
+          <span class="kicker">Why it matters</span>
+          <p>Mixed-quality experience becomes useful supervision, without learning another model.</p>
+        </div>
+        <dl class="proof-grid">
+          <div>
+            <dt>91%</dt>
+            <dd>average final success across the four tasks in the iterative X-VLA study</dd>
+          </div>
+          <div>
+            <dt>4</dt>
+            <dd>real-world long-horizon precise manipulation tasks</dd>
+          </div>
+          <div>
+            <dt>0</dt>
+            <dd>reward models, action critics, progress labels, or VLM annotations</dd>
+          </div>
+        </dl>
+      </section>
+
       <section class="results section-band" id="results" aria-labelledby="results-title">
         <div class="section-shell">
           <div class="results-heading reveal">
@@ -411,45 +404,17 @@
             </p>
           </div>
 
-          <figure class="paper-figure reveal">
-            <button
-              class="figure-zoom"
-              type="button"
-              data-figure="assets/paper-figures/fig6-results.png"
-              data-alt="Policy success across tasks and offline post-training rounds"
-              aria-label="Open Figure 6 at full size"
-            >
-              <img
-                src="assets/paper-figures/fig6-results.png"
-                alt="Success rates for DAgger, AWR, RA-BC, and GR-BC on four tasks"
-                loading="lazy"
-              />
-              <span class="zoom-hint">Open figure</span>
-            </button>
-            <figcaption>
-              <strong>Figure 6.</strong> Policy improvement across offline post-training rounds with X-VLA.
-            </figcaption>
-          </figure>
-
-          <div class="result-explorer reveal" aria-labelledby="explorer-title">
-            <div class="explorer-head">
-              <div>
-                <span class="kicker">Explore the final round</span>
-                <h3 id="explorer-title">Success rate by task</h3>
-              </div>
-              <div class="task-tabs" role="tablist" aria-label="Choose evaluation task">
-                <button type="button" role="tab" aria-selected="true" data-task="assembly">Assembly</button>
-                <button type="button" role="tab" aria-selected="false" data-task="graphics">Graphics</button>
-                <button type="button" role="tab" aria-selected="false" data-task="screw">Screw</button>
-                <button type="button" role="tab" aria-selected="false" data-task="memory">Memory</button>
-              </div>
-            </div>
-            <div class="bar-chart" aria-live="polite">
-              <div class="bar-row" data-method="DAgger"><span>DAgger</span><i><b></b></i><strong>88%</strong></div>
-              <div class="bar-row" data-method="AWR"><span>AWR</span><i><b></b></i><strong>72%</strong></div>
-              <div class="bar-row" data-method="RA-BC"><span>RA-BC</span><i><b></b></i><strong>86%</strong></div>
-              <div class="bar-row ours-bar" data-method="GR-BC"><span>GR-BC</span><i><b></b></i><strong>98%</strong></div>
-            </div>
+          <div class="homepage-module homepage-experiments" data-homepage-module="experiments">
+            <div data-module-host></div>
+            <figure class="paper-figure homepage-module-fallback">
+              <button class="figure-zoom" type="button" data-figure="assets/paper-figures/fig6-results.png"
+                data-alt="Policy success across tasks and offline post-training rounds" aria-label="Open the static policy results">
+                <img src="assets/paper-figures/fig6-results.png" width="1120" height="397" loading="lazy"
+                  alt="Success rates for DAgger, AWR, RA-BC, and GR-BC on four tasks" />
+                <span class="zoom-hint">Open figure</span>
+              </button>
+              <figcaption>Policy improvement across offline post-training rounds with X-VLA.</figcaption>
+            </figure>
           </div>
 
           <details class="ablation reveal">
@@ -536,6 +501,7 @@
     </dialog>
 
     <script type="module" src="assets/framework/homepage.js?v=f763972040b1"></script>
+    <script type="module" src="assets/homepage-modules.js?v=64b8e466d66f"></script>
     <script src="progress.js?v=faf9eb44d4fc" defer></script>
     <script>
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -566,41 +532,6 @@
         });
         if (reduceMotion) heroVideo.pause();
       }
-
-      const benchmark = {
-        assembly: { "DAgger": 88, "AWR": 72, "RA-BC": 86, "GR-BC": 98 },
-        graphics: { "DAgger": 63, "AWR": 32, "RA-BC": 72, "GR-BC": 93 },
-        screw: { "DAgger": 56, "AWR": 37, "RA-BC": 52, "GR-BC": 89 },
-        memory: { "DAgger": 49, "AWR": 19, "RA-BC": 57, "GR-BC": 83 }
-      };
-
-      const updateChart = (task) => {
-        document.querySelectorAll(".bar-row").forEach((row) => {
-          const value = benchmark[task][row.dataset.method];
-          row.querySelector("b").style.width = `${value}%`;
-          row.querySelector("strong").textContent = `${value}%`;
-        });
-      };
-
-      document.querySelectorAll(".task-tabs button").forEach((button) => {
-        button.addEventListener("click", () => {
-          document.querySelectorAll(".task-tabs button").forEach((item) => item.setAttribute("aria-selected", "false"));
-          button.setAttribute("aria-selected", "true");
-          updateChart(button.dataset.task);
-        });
-      });
-
-      const chartObserver = new IntersectionObserver(
-        (entries) => {
-          if (entries[0].isIntersecting) {
-            updateChart("assembly");
-            chartObserver.disconnect();
-          }
-        },
-        { threshold: 0.3 }
-      );
-      const chart = document.querySelector(".bar-chart");
-      if (chart) chartObserver.observe(chart);
 
       const figureDialog = document.querySelector(".figure-dialog");
       const dialogImage = figureDialog.querySelector("img");

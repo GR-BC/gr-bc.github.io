@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore five progress estimators along one robot trajectory, with interactive curve highlighting and annotated detail frames.">
+  <title>Progress, in perspective. · GR-BC</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="assets/progress-comparison/comparison.css?v=c5fcda11f31a">
+  <link rel="stylesheet" href="assets/progress-comparison/preview.css?v=57f01895ef66">
+  <script type="module" src="assets/progress-comparison/preview.js?v=47d128db8cc3"></script>
+</head>
+<body>
+  <div class="preview-shell">
+    <header class="preview-header">
+      <a href="./" class="preview-brand" aria-label="GR-BC homepage"><span class="preview-brand-mark" aria-hidden="true">◌</span> GR-BC <span class="preview-divider">/</span> Interaction studies</a>
+      <button type="button" class="preview-embed-button" data-copy-embed><span aria-hidden="true">⟨/⟩</span> Copy embed</button>
+    </header>
+    <main>
+      <div class="preview-intro">
+        <p class="preview-kicker">EXPERIMENT  /  PROGRESS ESTIMATION</p>
+        <h1>Progress, in <em>perspective.</em></h1>
+        <p>Follow the trajectory. Isolate a method. Look closer at the moments that matter.</p>
+      </div>
+      <div id="progress-comparison"></div>
+      <div class="preview-foot"><p>Five original curves. A more tactile way to explore them.</p><div><button type="button" class="preview-motion" aria-pressed="false">Reduce motion</button><a href="assets/progress-comparison/README.md">Integration guide ↗</a></div></div>
+      <details class="preview-integration">
+        <summary>Bring this interaction to your homepage <span>+</span></summary>
+        <div class="preview-code-content"><p>Paste this snippet where the experiment should appear. The component brings its own styles and starts when it enters the viewport.</p><pre><code id="embed-code"></code></pre><button type="button" data-copy-embed>Copy snippet</button><p class="preview-integration-note">Independent assets · No build step · Respects reduced motion</p></div>
+      </details>
+      <p class="preview-toast" role="status" aria-live="polite"></p>
+    </main>
+  </div>
+  <noscript><p>This interactive figure requires JavaScript. <a href="assets/progress-comparison/plot.svg">View the static curves</a>.</p></noscript>
+</body>
+</html>
