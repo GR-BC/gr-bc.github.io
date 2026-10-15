@@ -57,6 +57,7 @@ class FrameworkController {
     this.surface=document.createElement('div');this.surface.className='fw-surface';this.surface.append(this.svg);container.append(this.surface);
     const on=(target,type,fn)=>target.addEventListener(type,fn,{signal:this.signal});
     const componentAt=target=>target instanceof Element?target.closest('[data-component]')?.dataset.component:null;
+    if(options.interactive!==false){
     on(this.svg,'pointerover',e=>{const id=componentAt(e.target);if(id&&id!==this.hovered){this.hovered=id;this.paint();this.sync();this.emit('hover',this.components.get(id));}});
     on(this.svg,'pointerout',e=>{const id=componentAt(e.relatedTarget);if(id!==this.hovered){this.hovered=id||null;this.paint();this.sync();}});
     on(this.svg,'pointerleave',()=>{this.hovered=null;this.paint();this.sync();});
@@ -64,6 +65,7 @@ class FrameworkController {
     on(this.svg,'focusout',e=>{if(!this.svg.contains(e.relatedTarget)){this.hovered=null;this.paint();this.sync();}});
     on(this.svg,'click',e=>{const id=componentAt(e.target);this.selectComponent(id||null);});
     on(this.svg,'keydown',e=>{if(e.key==='Escape'){this.selectComponent(null);this.svg.blur();}else if(['Enter',' '].includes(e.key)&&componentAt(e.target)){e.preventDefault();this.selectComponent(componentAt(e.target));}});
+    }
     on(document,'visibilitychange',()=>this.sync());on(this.reduced,'change',()=>this.sync());
     this.observer=new IntersectionObserver(entries=>{this.visible=entries[0].isIntersecting;this.sync();});this.observer.observe(this.surface);
     if(options.layout)for(const [id,patch] of Object.entries(options.layout))this.setComponent(id,patch);

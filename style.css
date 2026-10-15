@@ -546,61 +546,6 @@ tbody .ours { background: rgba(219, 233, 251, 0.62); color: var(--blue-dark); }
 }
 
 
-/* Temporary protective film over the project body; keep the hero uncovered. */
-.construction-zone { position: relative; isolation: isolate; }
-.construction-content { pointer-events: none; user-select: none; }
-.construction-film {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  border-top: 1px solid rgba(172, 124, 46, .3);
-  background:
-    repeating-linear-gradient(135deg, transparent 0 38px, rgba(255, 255, 255, .13) 38px 39px),
-    rgba(247, 250, 255, .20);
-  backdrop-filter: blur(5px) saturate(.92);
-  -webkit-backdrop-filter: blur(5px) saturate(.92);
-}
-.construction-seal {
-  height: 24px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  gap: 30px;
-  overflow: hidden;
-  background: repeating-linear-gradient(135deg, #eed7aa 0 14px, #f7e8cd 14px 28px);
-  border-bottom: 1px solid rgba(172, 124, 46, .25);
-  color: #735020;
-  font: 700 10px ui-monospace, monospace;
-  letter-spacing: .19em;
-  white-space: nowrap;
-}
-.construction-card {
-  position: sticky;
-  top: 112px;
-  width: min(390px, calc(100% - 40px));
-  margin: 48px auto 72px;
-  padding: 20px 24px;
-  border: 1px solid rgba(136, 159, 189, .35);
-  border-radius: 14px;
-  text-align: center;
-  background: linear-gradient(145deg, rgba(255,255,255,.85), rgba(244,248,254,.8));
-  box-shadow: 0 8px 28px rgba(25, 49, 81, .07), inset 0 1px 0 white;
-}
-.construction-status { display: flex; align-items: center; justify-content: center; gap: 9px; color: #6d7e96; font: 500 8px ui-monospace, monospace; letter-spacing: .05em; }
-.construction-status > span { width: 7px; height: 7px; flex-shrink: 0; border-radius: 50%; background: #c38c36; box-shadow: 0 0 0 4px rgba(195,140,54,.12); }
-.construction-symbol { display: block; width: 30px; height: 30px; margin: 12px auto 8px; color: #b47b27; }
-.construction-kicker { display: none; }
-.construction-card h2 { margin: 0 0 10px; font-size: 25px; font-weight: 600; letter-spacing: -.045em; line-height: 1.1; }
-.construction-description { margin-bottom: 0; color: #61718a; font-size: 12px; line-height: 1.65; }
-.construction-note { display: none; }
-@media (max-width: 700px) {
-  .construction-card { top: 90px; padding: 18px; margin-top: 36px; }
-  .construction-status { font-size: 8px; letter-spacing: .04em; }
-  .construction-description { font-size: 11px; }
-  .construction-seal { justify-content: center; }
-  .construction-seal span:not(:first-child) { display: none; }
-}
-
 /* Interactive trajectory observatory. */
 .trajectory-section { width: min(1240px, calc(100% - 64px)); margin: 0 auto; padding: 96px 0 104px; }
 .trajectory-intro { display: grid; grid-template-columns: 1.2fr .8fr; gap: 70px; align-items: end; margin-bottom: 32px; }

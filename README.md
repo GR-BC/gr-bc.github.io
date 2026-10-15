@@ -18,7 +18,17 @@ The collection starts as four overlapping preview cards in a shelf. Hover/focus 
 
 The camera views remain on a shared timebase. Camera 2 is initially focused except for RAM, which starts on Camera 0. Drop captions are visual observations/interpretations of the provided keyframes, not verified causal labels or failure classifications. All four source episodes are successful.
 
-The new section is outside the construction overlay. The earlier homepage body remains under that overlay while it is being edited.
+The construction overlay has been removed; the full homepage body is accessible.
+
+## Interactive framework
+
+Figure 1 in the original Approach section uses `assets/framework/homepage.js` and `homepage.css`, mounted from the same decomposed SVG as `framework-preview.html`. The editor keeps its default component-selection behavior; the homepage mounts with `interactive: false` and supplies stage/trajectory interactions. The original SVG, all source geometry, and editable component inventory are preserved.
+
+The first viewport entrance plays an approximately 11-second A → B → C → D reveal. A single clockwise feedback arrow, slow dashed borders, and floating stages continue afterward. Hover a part or use its stage button to focus it. Hover a graph path/node or use its trajectory button to highlight the entire path; click to pin, click again or Escape to clear. Replay restarts the introduction. Pause stops the ambient motion and holds the introduction in place. Motion also pauses outside the viewport and when the document is hidden; reduced-motion preferences show the complete static diagram. Narrow screens scroll within the diagram instead of shrinking its labels. The original JPG is the fallback if the interactive assets cannot load.
+
+The graph's four route memberships follow the temporal arrows in the illustrative source figure. Similarity links remain independent. Source temporal edge 17 contains two unrelated arrows in one compound path; the homepage splits its four subpaths into two arrow pairs in the presentation DOM only. These are schematic paths, not additional experimental trajectories.
+
+After framework edits, run `python3 scripts/check-framework.py` and `python3 scripts/version-framework.py`. The version script refreshes both preview and homepage dependencies, including the main stylesheet hash. Verify the first entrance, replay, pause/resume, stage focus, complete-route focus, keyboard controls, and small-screen scrolling.
 
 ## Checks and release
 

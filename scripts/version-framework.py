@@ -1,4 +1,4 @@
-"""Refresh only the standalone framework kit's content-addressed resource versions."""
+"""Refresh the framework preview and homepage's content-addressed resources."""
 from pathlib import Path
 import hashlib,re
 repo=Path(__file__).resolve().parents[1];base=repo/'assets/framework'
@@ -13,3 +13,12 @@ for name in ['framework.css','preview.css','preview.js']:
  s=re.sub(r'assets/framework/'+re.escape(name)+r'(?:\?v=[a-f0-9]+)?',f'assets/framework/{name}?v={digest(base/name)}',s)
 p.write_text(s)
 print('Versioned standalone framework bundle:',bundle)
+p=base/'homepage.js'
+if p.exists():
+ s=re.sub(r"from './framework.js(?:\?v=[a-f0-9]+)?'",f"from './framework.js?v={digest(base/'framework.js')}'",p.read_text());p.write_text(s)
+ p=repo/'index.html';s=p.read_text()
+ for name in ['framework.css','homepage.css','homepage.js']:
+  s=re.sub(r'assets/framework/'+re.escape(name)+r'(?:\?v=[a-f0-9]+)?',f'assets/framework/{name}?v={digest(base/name)}',s)
+ s=re.sub(r'style.css\?v=[a-f0-9]+',f'style.css?v={digest(repo/"style.css")}',s)
+ p.write_text(s)
+ print('Versioned homepage framework presentation')

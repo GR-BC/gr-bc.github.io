@@ -35,7 +35,7 @@ Keep `framework.js`, `framework.config.js`, the SVG, inventory, and media in the
 
 ## Controller
 
-`mountFramework(container, options)` returns a promise. Options: `autoplay`, `speed`, `reducedMotion`, `layout`, `onSelect`, and `config` overrides for `framework.config.js`.
+`mountFramework(container, options)` returns a promise. Options: `autoplay`, `speed`, `reducedMotion`, `layout`, `onSelect`, and `config` overrides for `framework.config.js`. Set `interactive: false` to skip the default component hover/click/keyboard handlers when supplying a custom presentation, as in `homepage.js`; editor interaction remains enabled by default.
 
 | Method | Effect |
 | --- | --- |

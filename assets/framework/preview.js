@@ -1,4 +1,4 @@
-import {mountFramework} from './framework.js?v=7744239ff12c';
+import {mountFramework} from './framework.js?v=e7a27d8d7140';
 const $=s=>document.querySelector(s),mount=$('#framework-mount');let controller,selected=null;
 const fields=[...document.querySelectorAll('[data-property]')];
 const defaults={visible:true,dx:0,dy:0,scale:1,rotate:0,opacity:1};

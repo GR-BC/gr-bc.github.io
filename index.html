@@ -23,7 +23,9 @@
       content="Learning task-advancing action chunks from demonstrations, failures, and human interventions."
     />
     <meta name="twitter:image" content="/og.jpg" />
-    <link rel="stylesheet" href="style.css?v=c93736ac717c" />
+    <link rel="stylesheet" href="style.css?v=e7a92dee95e3" />
+    <link rel="stylesheet" href="assets/framework/framework.css?v=89ea7ca8eef2" />
+    <link rel="stylesheet" href="assets/framework/homepage.css?v=d600849f6255" />
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -130,8 +132,6 @@
         <p class="trajectory-method-note"><strong>Reading the signal.</strong> Graph progress is a graph-derived estimate, not human-annotated ground truth. The default curve uses a centered 15-frame moving average; select Raw trace to inspect the original values. Dip values follow the selected curve. Transition weights use their own 0–1.5 scale. Pale orange marks recorded human-intervention frames; the rose-tinted dip windows follow the supplied event annotations. Captions describe visible motion and possible interpretations, rather than verified causes of the progress change.</p>
       </section>
 
-      <div class="construction-zone" aria-label="Homepage body under construction">
-        <div class="construction-content" inert aria-hidden="true">
       <section class="film section-shell" id="film" aria-labelledby="film-title">
         <div class="section-intro compact-intro reveal">
           <div>
@@ -244,21 +244,30 @@
           </p>
         </div>
 
-        <figure class="paper-figure reveal">
-          <button
-            class="figure-zoom"
-            type="button"
-            data-figure="assets/paper-figures/fig1-framework.jpg"
-            data-alt="Overview of the GR-BC framework"
-            aria-label="Open Figure 1 at full size"
-          >
-            <img
-              src="assets/paper-figures/fig1-framework.jpg"
-              alt="GR-BC framework: recoverability graph, remaining-step search, weighted VLA training, and new rollouts"
-              loading="lazy"
-            />
-            <span class="zoom-hint">Open figure</span>
-          </button>
+        <figure class="pipeline-figure" id="learning-cycle" aria-label="Interactive GR-BC learning cycle">
+          <div class="pipeline-toolbar pipeline-interactive">
+            <div class="pipeline-steps" aria-label="Focus a framework stage">
+              <button type="button" data-pipeline-step="A" aria-pressed="false"><b>A</b> Build graph</button>
+              <button type="button" data-pipeline-step="B" aria-pressed="false"><b>B</b> Estimate</button>
+              <button type="button" data-pipeline-step="C" aria-pressed="false"><b>C</b> Reweight</button>
+              <button type="button" data-pipeline-step="D" aria-pressed="false"><b>D</b> Repeat</button>
+            </div>
+            <div class="pipeline-tools">
+              <button type="button" data-pipeline-replay aria-label="Replay framework introduction">↺ Replay</button>
+              <button type="button" data-pipeline-motion aria-pressed="false">Pause motion</button>
+            </div>
+          </div>
+          <div class="pipeline-viewport" tabindex="0" role="region" aria-label="Learning cycle diagram; scroll horizontally on small screens">
+            <div class="pipeline-host" data-pipeline-host>
+              <img class="pipeline-fallback" src="assets/paper-figures/fig1-framework.jpg" width="1120" height="543" loading="lazy"
+                alt="GR-BC framework: recoverability graph, remaining-step search, weighted VLA training, and new rollouts" />
+            </div>
+          </div>
+          <p class="pipeline-mobile-hint pipeline-interactive">Swipe across the diagram to explore every part ↔</p>
+          <div class="pipeline-caption pipeline-interactive">
+            <p class="pipeline-status" data-pipeline-status role="status" aria-live="polite"></p>
+            <div class="pipeline-route-controls" data-pipeline-routes aria-label="Highlight a complete graph trajectory"><span>Trace a path</span></div>
+          </div>
           <figcaption>
             <strong>Figure 1.</strong> GR-BC constructs a goal-reachability graph, estimates remaining steps,
             reweights action chunks, and incorporates new real-world rollouts.
@@ -534,19 +543,6 @@
         <a href="#top">Back to top ↑</a>
       </div>
     </footer>
-        </div>
-        <div class="construction-film">
-          <div class="construction-seal" aria-hidden="true"><span>WORK IN PROGRESS</span><span>WORK IN PROGRESS</span><span>WORK IN PROGRESS</span></div>
-          <div class="construction-card" role="note">
-            <div class="construction-status"><span></span> GR-BC / SITE UPDATE IN PROGRESS</div>
-            <svg class="construction-symbol" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M12 48L32 13L52 48H12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M32 25V35M32 41V42" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M7 54H57" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-            <p class="construction-kicker">A little more work. A clearer story.</p>
-            <h2>Under Construction</h2>
-            <p class="construction-description">We're refining the experiments, visuals, and details.<br />The full project experience is taking shape.</p>
-            <div class="construction-note"><span>RESEARCH IN FOCUS</span><span>DETAILS IN THE MAKING</span></div>
-          </div>
-        </div>
-      </div>
     </main>
 
     <button class="back-to-top" type="button" aria-label="Back to top">↑</button>
@@ -556,6 +552,7 @@
       <img alt="" />
     </dialog>
 
+    <script type="module" src="assets/framework/homepage.js?v=0cae114f71fa"></script>
     <script src="progress.js?v=faf9eb44d4fc" defer></script>
     <script>
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
