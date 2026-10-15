@@ -25,7 +25,7 @@
     <meta name="twitter:image" content="/og.jpg" />
     <link rel="stylesheet" href="style.css?v=e7a92dee95e3" />
     <link rel="stylesheet" href="assets/framework/framework.css?v=89ea7ca8eef2" />
-    <link rel="stylesheet" href="assets/framework/homepage.css?v=d600849f6255" />
+    <link rel="stylesheet" href="assets/framework/homepage.css?v=98054b761b74" />
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -245,17 +245,9 @@
         </div>
 
         <figure class="pipeline-figure" id="learning-cycle" aria-label="Interactive GR-BC learning cycle">
-          <div class="pipeline-toolbar pipeline-interactive">
-            <div class="pipeline-steps" aria-label="Focus a framework stage">
-              <button type="button" data-pipeline-step="A" aria-pressed="false"><b>A</b> Build graph</button>
-              <button type="button" data-pipeline-step="B" aria-pressed="false"><b>B</b> Estimate</button>
-              <button type="button" data-pipeline-step="C" aria-pressed="false"><b>C</b> Reweight</button>
-              <button type="button" data-pipeline-step="D" aria-pressed="false"><b>D</b> Repeat</button>
-            </div>
-            <div class="pipeline-tools">
-              <button type="button" data-pipeline-replay aria-label="Replay framework introduction">↺ Replay</button>
-              <button type="button" data-pipeline-motion aria-pressed="false">Pause motion</button>
-            </div>
+          <div class="pipeline-tools pipeline-interactive">
+            <button type="button" data-pipeline-replay aria-label="Replay framework introduction" title="Replay introduction">↺</button>
+            <button type="button" data-pipeline-motion aria-label="Pause motion" aria-pressed="false" title="Pause motion">Ⅱ</button>
           </div>
           <div class="pipeline-viewport" tabindex="0" role="region" aria-label="Learning cycle diagram; scroll horizontally on small screens">
             <div class="pipeline-host" data-pipeline-host>
@@ -263,15 +255,6 @@
                 alt="GR-BC framework: recoverability graph, remaining-step search, weighted VLA training, and new rollouts" />
             </div>
           </div>
-          <p class="pipeline-mobile-hint pipeline-interactive">Swipe across the diagram to explore every part ↔</p>
-          <div class="pipeline-caption pipeline-interactive">
-            <p class="pipeline-status" data-pipeline-status role="status" aria-live="polite"></p>
-            <div class="pipeline-route-controls" data-pipeline-routes aria-label="Highlight a complete graph trajectory"><span>Trace a path</span></div>
-          </div>
-          <figcaption>
-            <strong>Figure 1.</strong> GR-BC constructs a goal-reachability graph, estimates remaining steps,
-            reweights action chunks, and incorporates new real-world rollouts.
-          </figcaption>
         </figure>
 
         <div class="method-steps">
@@ -552,7 +535,7 @@
       <img alt="" />
     </dialog>
 
-    <script type="module" src="assets/framework/homepage.js?v=0cae114f71fa"></script>
+    <script type="module" src="assets/framework/homepage.js?v=8097d0b152de"></script>
     <script src="progress.js?v=faf9eb44d4fc" defer></script>
     <script>
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;

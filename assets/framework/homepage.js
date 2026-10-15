@@ -21,12 +21,90 @@ const trajectories = [
     nodes: ['a-node-replay-05', 'a-node-intervention-03', 'a-node-replay-03', 'a-node-replay-08', 'a-node-replay-07', 'a-node-replay-09', 'a-node-failure-01'],
     edges: [14, 6, 3, 4, 19, 20, 22], highlights: []},
 ];
-const steps = [
-  {id: 'A', title: 'Build the graph', text: 'Connect demonstrations, interventions, and replay through multi-view state representations.', start: 0},
-  {id: 'B', title: 'Estimate remaining steps', text: 'Search backward from success, then interpolate remaining steps along observed trajectories.', start: 4100},
-  {id: 'C', title: 'Reweight behavior cloning', text: 'Turn graph-derived progress into training weights for the original VLA objective.', start: 6500},
-  {id: 'D', title: 'Roll out & repeat', text: 'Collect new rollouts and human interventions, then return the experience to the dataset.', start: 8800},
-];
+const steps = [{id: 'A', start: 0}, {id: 'B', start: 4100}, {id: 'C', start: 6500}, {id: 'D', start: 8800}];
+const INTRO_DURATION = 2500, INTRO_SCALE = INTRO_DURATION / 11200;
+
+function createCircuit(svg, prefix) {
+  const circuit = el('g', {class: 'pipeline-circuit', 'aria-hidden': 'true', 'pointer-events': 'none'});
+  const gradientId = `${prefix}ribbon-gradient`, tipId = `${prefix}tip-gradient`;
+  const defs = el('defs');
+  const gradient = el('linearGradient', {id: gradientId, gradientUnits: 'userSpaceOnUse'});
+  const stops = [[0, 0], [.3, .16], [.72, .65], [1, .96]].map(([offset, opacity]) => {
+    const stop = el('stop', {offset, 'stop-color': '#559eb2', 'stop-opacity': opacity}); gradient.append(stop); return stop;
+  });
+  const tip = el('linearGradient', {id: tipId, x1: '0%', y1: '0%', x2: '100%', y2: '0%'});
+  const tipStops = ['#9cc9da', '#356995'].map((color, i) => {const stop = el('stop', {offset: i, 'stop-color': color}); tip.append(stop); return stop;});
+  defs.append(gradient, tip); circuit.append(defs);
+  const orbit = el('path', {d: 'M560 -25 H1572 Q1625 -25 1625 28 V754 Q1625 807 1572 807 H28 Q-25 807 -25 754 V28 Q-25 -25 28 -25 Z', class: 'pipeline-orbit'});
+  const glow = el('path', {class: 'pipeline-ribbon-glow', fill: `url(#${gradientId})`});
+  const ribbon = el('path', {class: 'pipeline-ribbon', fill: `url(#${gradientId})`});
+  const core = el('path', {class: 'pipeline-ribbon-core', stroke: `url(#${gradientId})`});
+  const head = el('g', {class: 'pipeline-arrow'});
+  head.append(el('path', {d: 'M11 0 Q-2 -3 -14 -10 L-8 0 L-14 10 Q-2 3 11 0Z', fill: `url(#${tipId})`}), el('path', {d: 'M-8 0 H6', class: 'pipeline-arrow-glint'}));
+  circuit.append(orbit); svg.append(circuit);
+
+  // Sample the fixed orbit once. Ribbon deformation uses cached points rather
+  // than repeated SVG geometry queries on every animation frame.
+  const length = orbit.getTotalLength(), sampleCount = 2048;
+  const samples = Array.from({length: sampleCount}, (_, i) => orbit.getPointAtLength(i / sampleCount * length));
+  const at = distance => {
+    const value = ((distance % length + length) % length) / length * sampleCount;
+    const i = Math.floor(value), t = value - i, a = samples[i], b = samples[(i + 1) % sampleCount];
+    return {x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t};
+  };
+  const palette = [[77, 149, 177], [183, 145, 85], [191, 131, 122], [121, 155, 115]];
+  const anchors = [[450, -25], [1370, -25], [1625, 650], [400, 807]];
+  const gates = anchors.map(([x, y], i) => {
+    let nearest = 0;
+    samples.forEach((p, j) => {if (Math.hypot(p.x - x, p.y - y) < Math.hypot(samples[nearest].x - x, samples[nearest].y - y)) nearest = j;});
+    const group = el('g', {class: 'pipeline-gate', transform: `translate(${x} ${y})`, style: `color:rgb(${palette[i].join(',')})`});
+    const halo = el('circle', {r: 7, class: 'pipeline-gate-halo'});
+    group.append(halo, el('circle', {r: 2.2, class: 'pipeline-gate-core'})); circuit.append(group);
+    return {halo, distance: nearest / sampleCount * length};
+  });
+  circuit.append(glow, ribbon, core);
+  const particles = Array.from({length: 4}, (_, i) => {
+    const dot = el('circle', {r: 1.2 + (i % 2) * .5, class: 'pipeline-flow-particle'}); circuit.append(dot); return dot;
+  });
+  circuit.append(head);
+  const number = n => n.toFixed(2);
+  return elapsed => {
+    const distance = elapsed / 18500 * length % length;
+    const point = at(distance), tangent = at(distance + 2), tail = at(distance - 360);
+    const huePosition = distance / length * 4, hue = Math.floor(huePosition), mix = huePosition - hue;
+    const color = palette[hue].map((value, i) => Math.round(value + (palette[(hue + 1) % 4][i] - value) * mix));
+    const rgb = values => `rgb(${values.join(',')})`;
+    stops.forEach(stop => stop.setAttribute('stop-color', rgb(color)));
+    tipStops[0].setAttribute('stop-color', rgb(color.map(v => Math.round(v + (255 - v) * .45))));
+    tipStops[1].setAttribute('stop-color', rgb(color.map(v => Math.round(v * .72))));
+    for (const [key, value] of Object.entries({x1: tail.x, y1: tail.y, x2: point.x, y2: point.y})) gradient.setAttribute(key, value);
+    const left = [], right = [], spine = [];
+    for (let i = 0; i <= 40; i++) {
+      const t = i / 40, d = distance - 360 * (1 - t), p = at(d), next = at(d + 2);
+      const angle = Math.atan2(next.y - p.y, next.x - p.x), nx = -Math.sin(angle), ny = Math.cos(angle);
+      const wave = Math.sin(t * 10 - elapsed / 720) * 2.2 * Math.sin(t * Math.PI);
+      const width = .2 + 4.6 * Math.pow(Math.sin(t * Math.PI / 2), 1.6);
+      const x = p.x + nx * wave, y = p.y + ny * wave;
+      left.push(`${number(x + nx * width)} ${number(y + ny * width)}`);
+      right.push(`${number(x - nx * width)} ${number(y - ny * width)}`);
+      spine.push(`${number(x)} ${number(y)}`);
+    }
+    const shape = `M${left.join(' L')} L${right.reverse().join(' L')} Z`;
+    ribbon.setAttribute('d', shape); glow.setAttribute('d', shape);
+    core.setAttribute('d', `M${spine.join(' L')}`);
+    head.setAttribute('transform', `translate(${point.x} ${point.y}) rotate(${Math.atan2(tangent.y - point.y, tangent.x - point.x) * 180 / Math.PI})`);
+    particles.forEach((dot, i) => {
+      const d = distance - 65 - i * 58, p = at(d), n = at(d + 2), angle = Math.atan2(n.y - p.y, n.x - p.x);
+      const spread = (i % 2 ? 1 : -1) * (7 + Math.sin(elapsed / 950 + i) * 2);
+      dot.setAttribute('cx', p.x - Math.sin(angle) * spread); dot.setAttribute('cy', p.y + Math.cos(angle) * spread);
+      dot.setAttribute('fill', rgb(color)); dot.setAttribute('opacity', .48 - i * .085);
+    });
+    gates.forEach(gate => {
+      const gap = Math.abs(distance - gate.distance), pulse = Math.max(0, 1 - Math.min(gap, length - gap) / 180);
+      gate.halo.setAttribute('r', 5 + 6 * pulse); gate.halo.setAttribute('opacity', .08 + .48 * pulse);
+    });
+  };
+}
 const host = document.querySelector('[data-pipeline-host]');
 if (host) initialize().catch(error => {
   host.querySelector('.fw-surface')?.remove();
@@ -39,16 +117,14 @@ async function initialize() {
   const {svg, manifest, elements} = controller;
   const figure = host.closest('.pipeline-figure');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  const status = figure.querySelector('[data-pipeline-status]');
   const replay = figure.querySelector('[data-pipeline-replay]');
   const motion = figure.querySelector('[data-pipeline-motion]');
-  const phaseButtons = [...figure.querySelectorAll('[data-pipeline-step]')];
-  const routeControls = figure.querySelector('[data-pipeline-routes]');
   const component = id => elements.get(id) || [];
   const metadata = new Map(manifest.components.map(c => [c.id, c]));
   svg.setAttribute('viewBox', '-48 -50 1700 890');
   svg.setAttribute('width', '1700'); svg.setAttribute('height', '890');
   svg.setAttribute('aria-label', 'GR-BC learning cycle. Four stages and four selectable graph trajectories.');
+  svg.querySelector(':scope > title')?.remove();
   svg.querySelectorAll('[data-component]').forEach(node => {
     ['tabindex', 'role', 'aria-pressed'].forEach(attr => node.removeAttribute(attr));
   });
@@ -81,6 +157,7 @@ async function initialize() {
   compound.style.display = 'none';
   const routeGroups = new Map();
   const graphParent = parts.get('A').querySelector('.pipeline-float');
+  const graphHits = [];
   const assigned = new Set();
   for (const route of trajectories) {
     const group = el('g', {class: 'pipeline-graph-route', 'data-route': route.id,
@@ -94,67 +171,76 @@ async function initialize() {
     if (route.split !== undefined) group.prepend(halves[route.split]);
     if (route.id === 'failure') component('a-failure-label').forEach(node => group.append(node));
     const centers = route.nodes.map(id => {const [x, y, w, h] = metadata.get(id).bounds; return [x + w / 2, y + h / 2];});
-    group.append(el('path', {d: centers.map(([x,y], i) => `${i ? 'L' : 'M'}${x} ${y}`).join(' '), class: 'pipeline-route-hit', fill: 'none', stroke: 'transparent', 'stroke-width': 25}));
+    graphHits.push(el('path', {d: centers.map(([x,y], i) => `${i ? 'L' : 'M'}${x} ${y}`).join(' '), class: 'pipeline-route-hit', 'data-route': route.id, 'aria-hidden': 'true', fill: 'none', stroke: 'transparent', 'stroke-width': 36}));
     graphParent.append(group); routeGroups.set(route.id, group);
-    const button = document.createElement('button'); button.type = 'button';
-    button.dataset.route = route.id; button.setAttribute('aria-pressed', 'false');
-    button.style.setProperty('--route-color', route.color); button.textContent = route.label;
-    routeControls.append(button);
   }
+  // The hit paths stay at rest while their visible trajectories spring upward.
+  // Keeping hit testing independent avoids losing hover under a stationary cursor.
+  graphParent.append(...graphHits);
   const allNodes = manifest.components.filter(c => c.id.startsWith('a-node-'));
   if (allNodes.some(c => !assigned.has(c.id))) throw Error('An ungrouped graph node remains');
   svg.querySelectorAll('[data-component^="a-similarity-edge-"]').forEach(n => n.classList.add('pipeline-similarity'));
 
-  // One clockwise feedback circuit replaces the four disconnected white arrows.
-  const circuit = el('g', {class: 'pipeline-circuit', 'aria-hidden': 'true', 'pointer-events': 'none'});
-  const pathData = 'M560 -25 H1582 Q1625 -25 1625 18 V755 Q1625 807 1573 807 H28 Q-25 807 -25 754 V18 Q-25 -25 28 -25 Z';
-  const orbit = el('path', {d: pathData, class: 'pipeline-orbit'});
-  const trail = el('path', {d: pathData, class: 'pipeline-comet'});
-  const glow = el('path', {d: pathData, class: 'pipeline-comet pipeline-comet-glow'});
-  const head = el('g', {class: 'pipeline-arrow'});
-  head.append(el('path', {d: 'M-14 -8 L0 0 L-14 8 M-26 -8 L-12 0 L-26 8'}));
-  circuit.append(orbit, glow, trail, head); svg.append(circuit);
-  const length = orbit.getTotalLength();
-  [trail, glow].forEach(p => p.setAttribute('stroke-dasharray', `190 ${length - 190}`));
+  // Follow the two source arrows across the stage boundary. Keep B's strips in
+  // their own stage so hovering all of B still reveals its complete contents.
+  const linkedGroups = new Map();
+  for (const [route, connector, strip] of [
+    ['demo-2', 'loop-a-b-demo', 'b-trajectory-demo'],
+    ['assisted', 'loop-a-b-replay', 'b-trajectory-mixed'],
+  ]) {
+    component(connector).forEach(node => routeGroups.get(route).prepend(node));
+    const group = el('g', {class: 'pipeline-linked-route', 'data-route': route});
+    group.style.setProperty('--route-color', trajectories.find(r => r.id === route).color);
+    [strip, ...[1, 2, 3, 4].map(i => `${strip}-frame-${i}`)].forEach(id => component(id).forEach(node => group.append(node)));
+    parts.get('B').querySelector('.pipeline-float').append(group);
+    linkedGroups.set(route, group);
+  }
+
+  const drawFlow = createCircuit(svg, controller.id);
 
   const ambient = [];
-  svg.querySelectorAll('[stroke-dasharray]:not(.pipeline-comet)').forEach((node, i) => {
+  svg.querySelectorAll('[stroke-dasharray]:not(.pipeline-orbit)').forEach((node, i) => {
     const period = node.getAttribute('stroke-dasharray').split(/[ ,]+/).reduce((sum, n) => sum + Number(n), 0);
-    const a = node.animate([{strokeDashoffset: 0}, {strokeDashoffset: -period}], {duration: 4400 + i % 3 * 1100, iterations: Infinity});
+    const frame = node.closest('[data-component$="-frame"]');
+    const duration = (4400 + i % 3 * 1100) * (frame ? .78 : .9);
+    const a = node.animate([{strokeDashoffset: 0}, {strokeDashoffset: -period}], {duration, iterations: Infinity});
     a.pause(); ambient.push(a);
   });
   let visible = false, started = false, paused = false, intro = false, raf = 0, last = null;
-  let elapsed = 0, introTime = 0, phase = '', hoveredPart = null, hoveredRoute = null, pinnedPart = null, pinnedRoute = null;
+  let elapsed = 0, introTime = 0, phase = '', hoveredPart = null, hoveredRoute = null;
+  let focusedPart = null, focusedRoute = null;
   let introAnimations = [];
   const springs = new WeakMap();
 
   function setPhase(id) {
     if (phase === id) return;
     phase = id; figure.dataset.phase = id || '';
-    phaseButtons.forEach(b => b.classList.toggle('is-current', b.dataset.pipelineStep === id));
-    const step = steps.find(s => s.id === id);
-    status.textContent = step ? `${step.id} / ${step.title} — ${step.text}` : 'Follow the learning cycle. Hover a part to focus; trace any graph trajectory to lift its entire path.';
   }
   function spring(node, active, isRoute = false) {
     if (node.classList.contains('is-focused') === active) return;
     const from = getComputedStyle(node).transform;
     springs.get(node)?.cancel(); node.classList.toggle('is-focused', active);
     if (reduced.matches || paused) return;
-    const to = active ? `translateY(${isRoute ? -8 : -7}px) scale(${isRoute ? 1.025 : 1.012})` : 'translateY(0px) scale(1)';
-    const overshoot = active ? `translateY(${isRoute ? -12 : -11}px) scale(${isRoute ? 1.036 : 1.021})` : 'translateY(2px) scale(.997)';
+    const lift = isRoute ? 8 : 7;
+    const to = active ? `translateY(${-lift}px) scale(${isRoute ? 1.025 : 1.012})` : 'translateY(0px) scale(1)';
+    const overshoot = active ? `translateY(${-lift - 4}px) scale(${isRoute ? 1.036 : 1.021})` : 'translateY(2px) scale(.997)';
     springs.set(node, node.animate([{transform: from}, {transform: overshoot, offset: .62}, {transform: to}], {duration: 720, easing: 'cubic-bezier(.22,.75,.2,1)'}));
   }
   function focus() {
-    const route = hoveredRoute || pinnedRoute;
-    const part = route ? 'A' : hoveredPart || pinnedPart;
+    const route = hoveredRoute || focusedRoute;
+    const part = route ? 'A' : hoveredPart || focusedPart;
     figure.dataset.focus = part || ''; figure.dataset.route = route || '';
-    parts.forEach((node, id) => {spring(node, part === id); node.classList.toggle('is-muted', !!part && part !== id);});
+    parts.forEach((node, id) => {
+      const linked = id === 'B' && linkedGroups.has(route);
+      spring(node, part === id && !route);
+      node.classList.toggle('is-muted', !!part && part !== id && !linked);
+      node.classList.toggle('is-linked', linked);
+    });
     routeGroups.forEach((node, id) => {
       spring(node, route === id, true); node.classList.toggle('is-muted', !!route && route !== id);
-      node.setAttribute('aria-pressed', String(pinnedRoute === id));
+      node.setAttribute('aria-pressed', String(route === id));
     });
-    routeControls.querySelectorAll('button').forEach(b => {b.classList.toggle('is-current', b.dataset.route === route); b.setAttribute('aria-pressed', String(b.dataset.route === pinnedRoute));});
-    phaseButtons.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.pipelineStep === pinnedPart)));
+    linkedGroups.forEach((node, id) => {spring(node, route === id, true); node.classList.toggle('is-muted', !!route && route !== id);});
     if (!intro) setPhase(part);
   }
   function timing(c) {
@@ -176,12 +262,12 @@ async function initialize() {
     intro = false; figure.dataset.intro = 'complete'; setPhase(''); focus();
   }
   function playIntro() {
-    started = true; paused = false; hoveredPart = hoveredRoute = pinnedPart = pinnedRoute = null;
+    started = true; paused = false; hoveredPart = hoveredRoute = focusedPart = focusedRoute = null;
     finishIntro(); introTime = 0; elapsed = 0;
     if (reduced.matches) {sync(); return;}
     intro = true; figure.dataset.intro = 'playing';
     const animate = (node, delay) => {
-      const a = node.animate([{opacity: 0, transform: 'translateY(12px) scale(.98)'}, {opacity: 1, transform: 'translateY(-2px) scale(1.003)', offset: .8}, {opacity: 1, transform: 'none'}], {delay, duration: 850, fill: 'both', easing: 'cubic-bezier(.2,.65,.24,1)'});
+      const a = node.animate([{opacity: 0, transform: 'translateY(12px) scale(.98)'}, {opacity: 1, transform: 'translateY(-2px) scale(1.003)', offset: .8}, {opacity: 1, transform: 'none'}], {delay: delay * INTRO_SCALE, duration: 850 * INTRO_SCALE, fill: 'both', easing: 'cubic-bezier(.2,.65,.24,1)'});
       a.pause(); introAnimations.push(a);
     };
     for (const c of manifest.components) component(c.id).forEach(node => {
@@ -195,20 +281,14 @@ async function initialize() {
     });
     setPhase('A'); sync();
   }
-  function drawCircuit() {
-    const distance = elapsed / 18000 * length % length;
-    const point = orbit.getPointAtLength(distance), next = orbit.getPointAtLength((distance + 1) % length);
-    head.setAttribute('transform', `translate(${point.x} ${point.y}) rotate(${Math.atan2(next.y - point.y, next.x - point.x) * 180 / Math.PI})`);
-    [trail, glow].forEach(p => p.setAttribute('stroke-dashoffset', 190 - distance));
-  }
   function tick(now) {
     const delta = last === null ? 0 : Math.min(now - last, 80); last = now; elapsed += delta;
-    drawCircuit();
+    drawFlow(elapsed);
     if (intro) {
       introTime += delta;
       introAnimations.forEach(a => a.currentTime = introTime);
-      setPhase([...steps].reverse().find(s => introTime >= s.start).id);
-      if (introTime >= 11200) finishIntro();
+      setPhase([...steps].reverse().find(s => introTime >= s.start * INTRO_SCALE).id);
+      if (introTime >= INTRO_DURATION) finishIntro();
     }
     raf = requestAnimationFrame(tick);
   }
@@ -216,55 +296,46 @@ async function initialize() {
     const running = visible && !document.hidden && !paused && !reduced.matches;
     figure.dataset.running = String(running);
     ambient.forEach(a => running ? a.play() : a.pause());
-    motion.textContent = paused ? 'Play motion' : 'Pause motion';
+    motion.textContent = paused ? '▷' : 'Ⅱ';
+    motion.setAttribute('aria-label', paused ? 'Play motion' : 'Pause motion');
     motion.setAttribute('aria-pressed', String(paused)); motion.disabled = reduced.matches;
-    motion.title = reduced.matches ? 'Motion is off according to your device preference' : '';
+    motion.title = reduced.matches ? 'Motion is off according to your device preference' : paused ? 'Play motion' : 'Pause motion';
     if (running && !raf) {last = null; raf = requestAnimationFrame(tick);}
     if (!running && raf) {cancelAnimationFrame(raf); raf = 0; last = null;}
   }
   function interact() {
     if (intro || !started) {started = true; finishIntro();}
   }
-  svg.addEventListener('pointerover', e => {
-    if (e.pointerType === 'touch') return;
-    const part = e.target.closest('[data-part]')?.dataset.part;
-    if (!part) {hoveredPart = hoveredRoute = null; focus(); return;}
-    interact(); hoveredPart = part; hoveredRoute = e.target.closest('[data-route]')?.dataset.route || null; focus();
-  });
-  svg.addEventListener('pointerleave', () => {hoveredPart = hoveredRoute = null; focus();});
-  svg.addEventListener('click', e => {
-    const route = e.target.closest('[data-route]')?.dataset.route;
-    const part = e.target.closest('[data-part]')?.dataset.part;
-    interact(); pinnedRoute = route ? (pinnedRoute === route ? null : route) : null;
-    pinnedPart = route ? null : (pinnedPart === part ? null : part); focus();
-  });
-  svg.addEventListener('focusin', e => {if (e.target.dataset.route) {interact(); hoveredRoute = e.target.dataset.route; focus();}});
-  svg.addEventListener('focusout', () => {hoveredRoute = null; focus();});
+  function pointAt(target) {
+    focusedPart = focusedRoute = null;
+    const within = target instanceof Element && svg.contains(target);
+    hoveredPart = within ? target.closest('[data-part]')?.dataset.part || null : null;
+    hoveredRoute = within ? target.closest('[data-route]')?.dataset.route || null : null;
+    if (hoveredPart) interact();
+    focus();
+  }
+  svg.addEventListener('pointerover', e => {if (e.pointerType !== 'touch') pointAt(e.target);});
+  svg.addEventListener('pointerout', e => {if (e.pointerType !== 'touch') pointAt(e.relatedTarget);});
+  svg.addEventListener('pointerleave', () => pointAt(null));
+  // Focus is transient: clicking never pins a part or a path after the pointer leaves.
+  svg.addEventListener('click', interact);
+  svg.addEventListener('pointerdown', e => {if (e.pointerType === 'touch') pointAt(e.target);});
+  svg.addEventListener('pointerup', e => {if (e.pointerType === 'touch') pointAt(null);});
+  svg.addEventListener('pointercancel', () => pointAt(null));
+  function keyboardFocus(target) {
+    interact();
+    focusedPart = target.closest('[data-part]')?.dataset.part || null;
+    focusedRoute = target.closest('[data-route]')?.dataset.route || null;
+    focus();
+  }
+  svg.addEventListener('focusin', e => {if (e.target.matches(':focus-visible')) keyboardFocus(e.target);});
+  svg.addEventListener('focusout', () => {focusedPart = focusedRoute = null; focus();});
   figure.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {pinnedRoute = pinnedPart = hoveredRoute = hoveredPart = null; focus();}
+    if (e.key === 'Escape') pointAt(null);
     if (e.target.matches('.pipeline-graph-route') && ['Enter', ' '].includes(e.key)) {
-      e.preventDefault(); interact(); pinnedRoute = pinnedRoute === e.target.dataset.route ? null : e.target.dataset.route; focus();
+      e.preventDefault(); keyboardFocus(e.target);
     }
   });
-  function bindFocusButton(button, type) {
-    const id = type === 'route' ? button.dataset.route : button.dataset.pipelineStep;
-    const setHover = value => {interact(); if (type === 'route') hoveredRoute = value; else hoveredPart = value; focus();};
-    button.addEventListener('pointerenter', e => {if (e.pointerType !== 'touch') setHover(id);});
-    button.addEventListener('pointerleave', () => setHover(null));
-    button.addEventListener('focus', () => setHover(id)); button.addEventListener('blur', () => setHover(null));
-    button.addEventListener('click', () => {
-      interact(); if (type === 'route') {pinnedRoute = pinnedRoute === id ? null : id; pinnedPart = null;}
-      else {pinnedPart = pinnedPart === id ? null : id; pinnedRoute = null;} focus();
-      const viewport = figure.querySelector('.pipeline-viewport');
-      if (viewport.scrollWidth > viewport.clientWidth) {
-        const target = (type === 'route' ? routeGroups : parts).get(id).getBoundingClientRect();
-        const bounds = viewport.getBoundingClientRect();
-        viewport.scrollTo({left: viewport.scrollLeft + target.x + target.width / 2 - bounds.x - bounds.width / 2, behavior: reduced.matches ? 'instant' : 'smooth'});
-      }
-    });
-  }
-  phaseButtons.forEach(b => bindFocusButton(b, 'part'));
-  routeControls.querySelectorAll('button').forEach(b => bindFocusButton(b, 'route'));
   replay.addEventListener('click', playIntro);
   motion.addEventListener('click', () => {paused = !paused; sync();});
   reduced.addEventListener('change', () => {if (reduced.matches) finishIntro(); sync();});
@@ -276,5 +347,5 @@ async function initialize() {
   }, {threshold: [0, .18]});
   // Defer the entrance until the figure is in view; the fallback stays available if mounting failed.
   figure.classList.add('is-ready'); figure.dataset.intro = 'waiting';
-  drawCircuit(); setPhase(null); sync(); observer.observe(host);
+  drawFlow(elapsed); setPhase(null); sync(); observer.observe(host);
 }
