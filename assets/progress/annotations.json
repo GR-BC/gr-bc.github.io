@@ -1,0 +1,76 @@
+{
+  "screw_ep092": {
+    "D1": {
+      "title": "Tip alignment changes",
+      "description": "The screwdriver shifts relative to the screw head during this brief dip, then continues positioning over the fastener.",
+      "confidence": "Visual interpretation",
+      "cameraHint": "Compare cam_1 and cam_2 for the tip-to-screw alignment."
+    },
+    "D2": {
+      "title": "Another small repositioning",
+      "description": "A second change in tool-to-screw alignment accompanies the dip. The close views reveal motion that is subtle in the wider view.",
+      "confidence": "Visual interpretation",
+      "cameraHint": "Use cam_1 to inspect the screw head; cam_2 adds the surrounding context."
+    },
+    "D3": {
+      "title": "Tool-to-screw pose change",
+      "description": "The screw head moves relative to the tool tip between the peak and trough. This short repositioning coincides with the largest score drop in this episode.",
+      "confidence": "Visual interpretation",
+      "cameraHint": "Compare peak and trough in cam_1, then check the tool pose in cam_2."
+    }
+  },
+  "gpu_ep044": {
+    "D1": {
+      "title": "Approach adjustment",
+      "description": "The card stays in the gripper as its pose changes above the motherboard. The small dip accompanies this adjustment during approach.",
+      "confidence": "Visual interpretation",
+      "cameraHint": "Use cam_2 for card-to-board position and cam_1 for the held card."
+    },
+    "D2": {
+      "title": "Fine alignment near the slot",
+      "description": "The card makes a subtle pose adjustment near the slot. Compare the peak and trough to see the small change in card-to-board alignment.",
+      "confidence": "Visual interpretation",
+      "cameraHint": "Compare cam_1 and cam_2; the change is subtle in cam_0."
+    },
+    "D3": {
+      "title": "Extended pose correction",
+      "description": "The card shifts relative to the motherboard over a longer interval, then moves back toward its earlier pose. The progress estimate falls during this correction.",
+      "confidence": "Visual interpretation",
+      "cameraHint": "Use cam_2 to follow the card edge and cam_1 to compare alignment."
+    }
+  },
+  "block_ep075": {
+    "D1": {
+      "title": "Lift-off transition",
+      "description": "The gripper lifts the dark plate from the tabletop. The score briefly falls during the transition from grasping to transport.",
+      "confidence": "Observed motion",
+      "cameraHint": "Use cam_0 to see lift-off and cam_2 to inspect the grasp."
+    },
+    "D2": {
+      "title": "Aligning the plate and pegs",
+      "description": "The plate shifts over the white fixture. The pegs move within the plate’s openings as its alignment is adjusted.",
+      "confidence": "Observed motion",
+      "cameraHint": "Compare the peg positions in cam_1 and cam_2."
+    },
+    "D3": {
+      "title": "Gripper release transition",
+      "description": "The fingers begin opening while the plate remains over the peg fixture. The sharp dip coincides with this change in grasp state.",
+      "confidence": "Observed motion",
+      "cameraHint": "Use cam_1 or cam_2 to watch the fingers open; cam_0 shows the fixture."
+    }
+  },
+  "ram_ep006": {
+    "D1": {
+      "title": "Reorientation over the board",
+      "description": "The RAM stays in the gripper while its orientation changes above the motherboard. The dip coincides with this rotation during approach.",
+      "confidence": "Observed motion",
+      "cameraHint": "Use cam_1 for the RAM orientation and cam_0 for its relation to the board."
+    },
+    "D2": {
+      "title": "Adjustment at the slot",
+      "description": "A brief pose adjustment occurs with the RAM near the slot. Compare the peak and trough to inspect the alignment change and visible motion blur.",
+      "confidence": "Visual interpretation",
+      "cameraHint": "Compare cam_0 and cam_2; cam_1 shows the RAM above the slot."
+    }
+  }
+}

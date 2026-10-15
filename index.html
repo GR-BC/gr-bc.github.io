@@ -23,7 +23,7 @@
       content="Learning task-advancing action chunks from demonstrations, failures, and human interventions."
     />
     <meta name="twitter:image" content="/og.jpg" />
-    <link rel="stylesheet" href="style.css?v=6bafddcc4b1c" />
+    <link rel="stylesheet" href="style.css?v=348edbe34f56" />
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -36,7 +36,7 @@
       <nav class="desktop-nav" aria-label="Sections">
         <a href="#abstract">Abstract</a>
         <a href="#method">Approach</a>
-        <a href="#evidence">Evidence</a>
+        <a href="#trajectories">Trajectories</a>
         <a href="#results">Results</a>
         <a href="#citation">BibTeX</a>
       </nav>
@@ -112,6 +112,22 @@
             <span>Failed rollouts</span>
           </div>
         </div>
+      </section>
+
+      <section class="trajectory-section" id="trajectories" aria-labelledby="trajectory-title">
+        <div class="trajectory-intro">
+          <div><span class="kicker">INTERACTIVE TRAJECTORIES</span><h2 id="trajectory-title">Progress, under<br /><em>the microscope.</em></h2></div>
+          <p>A successful trajectory is rarely a straight line. Scrub through four real-world rollouts, follow the graph progress, and look closer at every setback — from three synchronized cameras.</p>
+        </div>
+        <nav class="trajectory-index" aria-label="Choose a trajectory">
+          <a href="#trajectory-screw_ep092"><span>01</span>Screw tightening</a>
+          <a href="#trajectory-gpu_ep044"><span>02</span>Graphics card</a>
+          <a href="#trajectory-block_ep075"><span>03</span>Block assembly</a>
+          <a href="#trajectory-ram_ep006"><span>04</span>Memory stick</a>
+        </nav>
+        <div id="trajectory-modules"><p class="trajectory-loading">Loading the trajectory observatory…</p></div>
+        <noscript><p>Please enable JavaScript to explore the synchronized camera views and progress traces.</p></noscript>
+        <p class="trajectory-method-note"><strong>Reading the signal.</strong> Graph progress is a graph-derived estimate, not human-annotated ground truth. The default curve uses a centered 15-frame moving average; select Raw trace to inspect the original values. Dip values follow the selected curve. Transition weights use their own 0–1.5 scale. Highlighted windows follow the supplied event annotations. Captions describe visible motion and possible interpretations, rather than verified causes of the progress change.</p>
       </section>
 
       <div class="construction-zone" aria-label="Homepage body under construction">
@@ -540,6 +556,7 @@
       <img alt="" />
     </dialog>
 
+    <script src="progress.js?v=2982d5d91a76" defer></script>
     <script>
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 

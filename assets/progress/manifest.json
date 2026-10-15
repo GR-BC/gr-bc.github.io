@@ -1,0 +1,42 @@
+[
+  {
+    "id": "screw_ep092",
+    "title": "Screw tightening \u00b7 Episode 92",
+    "data": "screw_ep092/data.json",
+    "default_camera": "cam_2",
+    "poster": "screw_ep092/cam_2.poster.jpg",
+    "frames": 1978,
+    "duration": 65.9,
+    "drops": 3
+  },
+  {
+    "id": "gpu_ep044",
+    "title": "GPU insertion \u00b7 Episode 44",
+    "data": "gpu_ep044/data.json",
+    "default_camera": "cam_2",
+    "poster": "gpu_ep044/cam_2.poster.jpg",
+    "frames": 1097,
+    "duration": 36.53333333333333,
+    "drops": 3
+  },
+  {
+    "id": "block_ep075",
+    "title": "Build block \u00b7 Episode 75",
+    "data": "block_ep075/data.json",
+    "default_camera": "cam_2",
+    "poster": "block_ep075/cam_2.poster.jpg",
+    "frames": 435,
+    "duration": 14.466666666666667,
+    "drops": 3
+  },
+  {
+    "id": "ram_ep006",
+    "title": "RAM insertion \u00b7 Episode 6",
+    "data": "ram_ep006/data.json",
+    "default_camera": "cam_0",
+    "poster": "ram_ep006/cam_0.poster.jpg",
+    "frames": 1396,
+    "duration": 46.5,
+    "drops": 2
+  }
+]
