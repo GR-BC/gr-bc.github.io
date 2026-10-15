@@ -1,0 +1,120 @@
+{
+  "version": 1,
+  "source": "Frame 16.svg",
+  "sourceSha256": "67b037bc61289e35a6ad0b09818196b3237d27b86566390652281ff115bc0da8",
+  "methods": [
+    {
+      "id": "dagger",
+      "label": "DAgger",
+      "color": "#F3C8B8",
+      "description": "Dataset aggregation with human interventions."
+    },
+    {
+      "id": "awr",
+      "label": "AWR",
+      "color": "#DFE8D5",
+      "description": "Advantage-weighted regression."
+    },
+    {
+      "id": "rabc",
+      "label": "RA-BC",
+      "color": "#9DD0DB",
+      "description": "The RA-BC baseline in the supplied experiment figure."
+    },
+    {
+      "id": "grbc",
+      "label": "GR-BC",
+      "color": "#F3C888",
+      "description": "Graph-reweighted behavior cloning."
+    }
+  ],
+  "tasks": [
+    {
+      "id": "assembly",
+      "label": "Assembly Model",
+      "file": "assembly.svg",
+      "rounds": 2,
+      "finalSuccess": {
+        "dagger": 88,
+        "awr": 72,
+        "rabc": 86,
+        "grbc": 98
+      },
+      "bestBaseline": 88,
+      "grbcGain": 10,
+      "parts": {
+        "label": 4,
+        "bar": 8,
+        "value": 4,
+        "curve": 4,
+        "dot": 12
+      }
+    },
+    {
+      "id": "graphics",
+      "label": "Graphics Card",
+      "file": "graphics.svg",
+      "rounds": 3,
+      "finalSuccess": {
+        "dagger": 63,
+        "awr": 32,
+        "rabc": 72,
+        "grbc": 93
+      },
+      "bestBaseline": 72,
+      "grbcGain": 21,
+      "parts": {
+        "label": 4,
+        "bar": 8,
+        "value": 4,
+        "curve": 4,
+        "dot": 16
+      }
+    },
+    {
+      "id": "screw",
+      "label": "Screw Tightening",
+      "file": "screw.svg",
+      "rounds": 4,
+      "finalSuccess": {
+        "dagger": 56,
+        "awr": 37,
+        "rabc": 52,
+        "grbc": 89
+      },
+      "bestBaseline": 56,
+      "grbcGain": 33,
+      "parts": {
+        "label": 4,
+        "bar": 8,
+        "value": 4,
+        "curve": 4,
+        "dot": 20
+      }
+    },
+    {
+      "id": "memory",
+      "label": "Memory Stick",
+      "file": "memory.svg",
+      "rounds": 3,
+      "finalSuccess": {
+        "dagger": 49,
+        "awr": 19,
+        "rabc": 57,
+        "grbc": 83
+      },
+      "bestBaseline": 57,
+      "grbcGain": 26,
+      "parts": {
+        "label": 4,
+        "bar": 8,
+        "value": 4,
+        "curve": 4,
+        "dot": 16
+      }
+    }
+  ],
+  "notes": [
+    "Final success values are transcribed from the bar annotations. Curves retain the supplied SVG geometry; no intermediate numeric results are inferred from drawn pixels."
+  ]
+}
