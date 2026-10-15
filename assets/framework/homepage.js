@@ -309,10 +309,16 @@ async function initialize() {
   function pointAt(target) {
     focusedPart = focusedRoute = null;
     const within = target instanceof Element && svg.contains(target);
-    hoveredPart = within ? target.closest('[data-part]')?.dataset.part || null : null;
-    hoveredRoute = within ? target.closest('[data-route]')?.dataset.route || null : null;
+    hoveredPart = within ? target.closest('.pipeline-part')?.dataset.part || null : null;
+    hoveredRoute = within ? routeAt(target) : null;
     if (hoveredPart) interact();
     focus();
+  }
+  function routeAt(target) {
+    // The figure's data-route is output state, not an interactive hit region.
+    // A generic [data-route] ancestor search would pick up that previous route
+    // from every other part and keep A selected until the pointer leaves the SVG.
+    return target.closest('.pipeline-graph-route, .pipeline-linked-route, .pipeline-route-hit')?.dataset.route || null;
   }
   svg.addEventListener('pointerover', e => {if (e.pointerType !== 'touch') pointAt(e.target);});
   svg.addEventListener('pointerout', e => {if (e.pointerType !== 'touch') pointAt(e.relatedTarget);});
@@ -324,8 +330,8 @@ async function initialize() {
   svg.addEventListener('pointercancel', () => pointAt(null));
   function keyboardFocus(target) {
     interact();
-    focusedPart = target.closest('[data-part]')?.dataset.part || null;
-    focusedRoute = target.closest('[data-route]')?.dataset.route || null;
+    focusedPart = target.closest('.pipeline-part')?.dataset.part || null;
+    focusedRoute = routeAt(target);
     focus();
   }
   svg.addEventListener('focusin', e => {if (e.target.matches(':focus-visible')) keyboardFocus(e.target);});
