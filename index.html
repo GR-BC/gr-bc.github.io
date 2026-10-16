@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="assets/progress-comparison/comparison.css?v=c5fcda11f31a" />
     <link rel="stylesheet" href="assets/robustness/rack.css?v=48f6f582f883" />
     <link rel="stylesheet" href="assets/state-progress/state.css?v=4ecdb2d2d493" />
+    <link rel="stylesheet" href="assets/estimator-table.css?v=38c33bee26b6" />
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -358,33 +359,76 @@
           </figure>
         </div>
 
-        <dl class="metric-grid">
-          <div class="reveal"><dt>0.97</dt><dd>success–failure progress gap <span>Δ<sub>SF</sub></span></dd></div>
-          <div class="reveal"><dt>0.92</dt><dd>localized deviation detection <span>ρ<sub>dev</sub></span></dd></div>
-          <div class="reveal"><dt>30/30</dt><dd>successful episodes classified</dd></div>
-          <div class="reveal"><dt>30/30</dt><dd>failed episodes classified</dd></div>
-        </dl>
-
-        <div class="table-wrap reveal" tabindex="0" role="region" aria-label="Progress estimator comparison table">
-          <table>
-            <thead>
-              <tr>
-                <th>Method</th>
-                <th>Δ<sub>SF</sub> ↑</th>
-                <th>ρ<sub>dev</sub> ↑</th>
-                <th>Failure data</th>
-                <th>Progress labels</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><th>ReWiND</th><td>0.003</td><td>0.00</td><td>—</td><td>—</td></tr>
-              <tr><th>SARM</th><td>0.24</td><td>0.48</td><td>—</td><td>Required</td></tr>
-              <tr><th>Robo-Dopamine</th><td>0.29</td><td>0.59</td><td>—</td><td>Required</td></tr>
-              <tr><th>RoboMeter</th><td>0.159</td><td>0.69</td><td>Used</td><td>Required</td></tr>
-              <tr class="ours"><th>GRP (ours)</th><td>0.97</td><td>0.92</td><td>Used</td><td>None</td></tr>
-            </tbody>
-          </table>
-        </div>
+        <section class="estimator-comparison" id="estimator-comparison" data-estimator-table aria-labelledby="estimator-table-title">
+          <div class="ec-heading">
+            <h3 id="estimator-table-title">Progress estimator comparison</h3>
+            <button class="ec-replay" type="button" aria-label="Replay comparison table animation" title="Replay animation" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1.8 7.1M4 4v6h6" /></svg>
+            </button>
+          </div>
+          <div class="ec-scroll" tabindex="0" role="region" aria-label="Progress estimator results; scroll horizontally on small screens">
+            <table class="ec-table" aria-labelledby="estimator-table-title">
+              <thead>
+                <tr>
+                  <th scope="col">Method</th>
+                  <th scope="col"><span class="ec-symbol">Δ<sub>SF</sub></span> <span class="ec-up">↑</span><small>Success–failure gap</small></th>
+                  <th scope="col"><span class="ec-symbol">ρ<sub>dev</sub></span> <span class="ec-up">↑</span><small>Deviation detection</small></th>
+                  <th scope="col">Class. SE <span class="ec-up">↑</span><small>Successful episodes</small></th>
+                  <th scope="col">Class. FE <span class="ec-up">↑</span><small>Failed episodes</small></th>
+                  <th scope="col">Failure data</th>
+                  <th scope="col">Progress labels</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">ReWiND</th>
+                  <td data-score="0.003"><span class="ec-value">0.003</span></td>
+                  <td data-score="0"><span class="ec-value">0</span></td>
+                  <td data-score="1"><span class="ec-value">30<span class="ec-total">/30</span></span></td>
+                  <td data-score="0.0333333333"><span class="ec-value">1<span class="ec-total">/30</span></span></td>
+                  <td class="ec-feature"><span aria-label="Not used">—</span></td>
+                  <td class="ec-feature"><span aria-label="Not required">—</span></td>
+                </tr>
+                <tr>
+                  <th scope="row">SARM</th>
+                  <td data-score="0.24"><span class="ec-value">0.24</span></td>
+                  <td data-score="0.48"><span class="ec-value">0.48</span></td>
+                  <td data-score="0.8666666667"><span class="ec-value">26<span class="ec-total">/30</span></span></td>
+                  <td data-score="0.4666666667"><span class="ec-value">14<span class="ec-total">/30</span></span></td>
+                  <td class="ec-feature"><span aria-label="Not used">—</span></td>
+                  <td class="ec-feature"><span class="ec-check" aria-label="Required">✓</span></td>
+                </tr>
+                <tr>
+                  <th scope="row">Robo-Dopamine</th>
+                  <td data-score="0.29"><span class="ec-value">0.29</span></td>
+                  <td data-score="0.59"><span class="ec-value">0.59</span></td>
+                  <td data-score="0.9666666667"><span class="ec-value">29<span class="ec-total">/30</span></span></td>
+                  <td data-score="0.2666666667"><span class="ec-value">8<span class="ec-total">/30</span></span></td>
+                  <td class="ec-feature"><span aria-label="Not used">—</span></td>
+                  <td class="ec-feature"><span class="ec-check" aria-label="Required">✓</span></td>
+                </tr>
+                <tr>
+                  <th scope="row">RoboMeter</th>
+                  <td data-score="0.159"><span class="ec-value">0.159</span></td>
+                  <td data-score="0.69"><span class="ec-value">0.69</span></td>
+                  <td data-score="1"><span class="ec-value">30<span class="ec-total">/30</span></span></td>
+                  <td data-score="0.2"><span class="ec-value">6<span class="ec-total">/30</span></span></td>
+                  <td class="ec-feature"><span class="ec-check" aria-label="Used">✓</span></td>
+                  <td class="ec-feature"><span class="ec-check" aria-label="Required">✓</span></td>
+                </tr>
+                <tr class="ec-ours">
+                  <th scope="row">GRP <span class="ec-ours-label">(ours)</span></th>
+                  <td data-score="0.97"><span class="ec-value">0.97</span></td>
+                  <td data-score="0.92"><span class="ec-value">0.92</span></td>
+                  <td data-score="1"><span class="ec-value">30<span class="ec-total">/30</span></span></td>
+                  <td data-score="1"><span class="ec-value">30<span class="ec-total">/30</span></span></td>
+                  <td class="ec-feature"><span class="ec-check" aria-label="Used">✓</span></td>
+                  <td class="ec-feature"><span aria-label="Not required">—</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
       </section>
 
       <section class="results section-band" id="results" aria-labelledby="results-title">
@@ -591,6 +635,7 @@
     <script type="module" src="assets/weight-lab/lab.js?v=f670cb568386"></script>
     <script type="module" src="assets/motivation.js?v=d12d51c0ffad"></script>
     <script type="module" src="assets/robustness/rack.js?v=1515707b579f"></script>
+    <script type="module" src="assets/estimator-table.js?v=ba66764dbf30"></script>
     <script>
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
