@@ -1,5 +1,5 @@
 import {createCloth} from './cloth.js?v=8f03d3208da3';
-const ASSET_VERSION = 'a01f41cab146';
+const ASSET_VERSION = 'd2c59bc3324c';
 const asset=name=>new URL(`${name}?v=${ASSET_VERSION}`,import.meta.url);
 const shell=document.querySelector('[data-task-curtain]');
 if(shell)mount().catch(error=>{
@@ -29,7 +29,7 @@ async function mount(){
   const stage=shell.querySelector('.demo-stage'),sheet=shell.querySelector('.curtain-sheet');
   const video=shell.querySelector('.demo-video video'),play=shell.querySelector('.demo-play');
   const teaser=document.createElement('span');teaser.className='demo-teaser';teaser.setAttribute('aria-hidden','true');teaser.textContent='▶';video.parentElement.append(teaser);
-  const peel=shell.querySelector('.curtain-peel');
+  const peel=shell.querySelector('.curtain-peel'),cta=shell.querySelector('.curtain-cta');
   const rail=[...shell.querySelectorAll('[data-curtain-task]')],toggles=[...shell.querySelectorAll('[data-curtain-toggle]')];
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   const art=shell.querySelector('.curtain-art');art.append(svg);
@@ -65,12 +65,12 @@ async function mount(){
     for(const [index,hanger] of hangers.entries())hanger.style.left=`${railWidth+(index+.25)/(hangers.length-.5)*w*Math.max(.025,topPosition)}px`;
     art.style.clipPath=`inset(0 ${100*(1-p)}% 0 0)`;
     const isStatic=reduced.matches;
-    const gust=Math.pow(.5+.5*Math.sin(windTime*.88-.6+.2*Math.sin(windTime*.17+breezeSeed)),4);
-    const envelope=.7+.3*Math.sin(windTime*.31+breezeSeed)**2;
-    breeze.phase=windTime*.95+breezeSeed;
-    breeze.sway=Math.sin(windTime*.73+breezeSeed)*.7+Math.sin(windTime*1.19+breezeSeed*1.3)*.3;
-    breeze.strength=isStatic||!open?0:.8+.35*Math.sin(windTime*.43+breezeSeed)**2;
-    breeze.curl=isStatic||!open||drag?0:gust*envelope*invitationAmount+attentionAmount*.16;
+    const gust=Math.pow(.5+.5*Math.sin(windTime*1.32-.6+.2*Math.sin(windTime*.25+breezeSeed)),4);
+    const envelope=.7+.3*Math.sin(windTime*.45+breezeSeed)**2;
+    breeze.phase=windTime*1.42+breezeSeed;
+    breeze.sway=Math.sin(windTime*1.09+breezeSeed)*.7+Math.sin(windTime*1.78+breezeSeed*1.3)*.3;
+    breeze.strength=isStatic||!open?0:1.2+.52*Math.sin(windTime*.64+breezeSeed)**2;
+    breeze.curl=isStatic||!open||drag?0:gust*envelope*invitationAmount*1.4+attentionAmount*.2;
     if(cloth){
       cloth.draw({width:w,height,bodyStart:clothHead/height,bodyEnd:(clothHead+artHeight)/height,progress:p,topProgress:Math.max(0,Math.min(1,topPosition)),pointer,pull,peek:peekAmount,time:windTime,breeze,wind:open&&!drag,dt,staticMotion:isStatic});
       corner=cloth.corner;
@@ -113,6 +113,10 @@ async function mount(){
     sheet.inert=!open;sheet.setAttribute('aria-hidden',String(!open));sheet.style.pointerEvents=open?'auto':'none';
     if(open)video.pause();video.inert=open;video.controls=!open;video.setAttribute('aria-hidden',String(open));
     for(const button of [...rail,...toggles])button.setAttribute('aria-expanded',String(open));
+    if(cta){
+      cta.querySelector('.curtain-cta-action').textContent=open?'掀起':'放下';
+      cta.querySelector('.curtain-cta-purpose').textContent=open?'for demo':'for tasks';
+    }
     for(const button of rail)button.setAttribute('aria-label',`${open?'Draw curtain aside':'Reveal task curtain'}: ${button.querySelector('img').alt}`);
     peel.setAttribute('aria-label',open?'Drag curtain corner to reveal the demo':'Drag curtain corner to reveal the task map');
     peel.title='Hold and drag the cloth corner · Click to toggle';
