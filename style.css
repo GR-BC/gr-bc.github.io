@@ -370,12 +370,12 @@ h1 span {
 .motivation-chart { display: block; width: 100%; height: auto; margin: 8px 0 6px; overflow: visible; }
 .motivation-chart path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
 .motivation-guide { stroke: #dce5ef; stroke-width: 1; }
-.motivation-track { stroke: #d4deeb; stroke-width: 1.5; }
-.motivation-trace { stroke: #789bbf; stroke-width: 1.8; stroke-dasharray: 1; }
+.motivation-track { stroke: #d4deeb; stroke-width: 2.8; }
+.motivation-trace { stroke: #789bbf; stroke-width: 3.4; stroke-dasharray: 1; }
 .motivation-chunk { transform-box: fill-box; transform-origin: center; transition: transform .5s cubic-bezier(.22,.7,.2,1); }
 .motivation-chart .motivation-selection { fill: var(--chunk-tint); stroke: var(--chunk-color); stroke-width: .7; stroke-dasharray: 2 4; stroke-opacity: .35; }
-.motivation-highlight { stroke: var(--chunk-color); stroke-width: 2.8; }
-.motivation-point { fill: var(--chunk-color); stroke: var(--paper); stroke-width: 1.5; }
+.motivation-highlight { stroke: var(--chunk-color); stroke-width: 4.5; }
+.motivation-point { fill: var(--chunk-color); stroke: var(--paper); stroke-width: 1.8; }
 .motivation-end { fill: #789bbf; transform-box: fill-box; transform-origin: center; }
 .motivation-case[data-motivation-case="failure"] .motivation-end { fill: #aa6672; }
 .motivation-caption { color: #647993; font-size: 12px; line-height: 1.5; }
