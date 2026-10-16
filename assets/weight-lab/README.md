@@ -1,6 +1,6 @@
 # Interactive chunk weighting
 
-The homepage places this module immediately after the learning-cycle figure. Three functions share one row: stable progress, insufficient net gain, and a transient setback despite the same positive endpoint gain. They illustrate the accepted branch and the two rejection conditions of the paper's single weighting rule, rather than three different learned estimators.
+The homepage places this module after the state-to-progress mapping, following the learning-cycle figure. Three functions share one row: stable progress, insufficient net gain, and a transient setback despite the same positive endpoint gain. They illustrate the accepted branch and the two rejection conditions of the paper's single weighting rule, rather than three different learned estimators.
 
 `model.js` implements Section 4.3 / Equation 8. It requires strictly positive gain above the minimum threshold and regression depth at or below the allowed limit. Accepted weights use the clipped tanh expression; rejected or unreachable chunks receive zero. The examples use δ = 0.003, η = 0.030, β = 0.5, γ = 20 and bounds [0.5, 1.5], within the paper's reported ranges. Curves are explicitly illustrative functions, not recorded trajectories.
 
