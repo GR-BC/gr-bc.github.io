@@ -45,7 +45,7 @@
         <a href="#results">Results</a>
         <a href="#citation">BibTeX</a>
       </nav>
-      <a class="header-paper" href="assets/grbc-paper.pdf">Paper <span aria-hidden="true">↗</span></a>
+      <a class="header-paper" href="https://arxiv.org/pdf/2610.20504">Paper <span aria-hidden="true">↗</span></a>
     </header>
 
     <main id="main-content">
@@ -101,14 +101,14 @@
             detours, failures, and human recoveries.
           </p>
           <div class="hero-actions" aria-label="Project resources">
-            <button class="button button-coming-soon" type="button" disabled>
+            <a class="button" href="https://arxiv.org/abs/2610.20504" target="_blank" rel="noopener noreferrer">
               <img class="resource-icon" src="assets/arxiv.svg" alt="" width="22" height="22" />
-              <span>Arxiv <span class="coming-soon">(coming soon)</span></span>
-            </button>
-            <button class="button button-coming-soon" type="button" disabled>
+              <span>arXiv</span>
+            </a>
+            <a class="button" href="https://github.com/Xiaoman521/GR-BC" target="_blank" rel="noopener noreferrer">
               <img class="resource-icon" src="assets/github.svg" alt="" width="22" height="22" />
-              <span>Code <span class="coming-soon">(coming soon)</span></span>
-            </button>
+              <span>Code</span>
+            </a>
           </div>
 
           <div class="hero-data" aria-label="Data used by GR-BC">
@@ -193,22 +193,22 @@
               <div class="pipeline-insight-overview"><span class="pipeline-insight-orbit" aria-hidden="true">↻</span><div><strong>From mixed experience to better supervision.</strong><p>Hover a part to follow its role in the learning cycle.</p></div><span class="pipeline-insight-hint" aria-hidden="true">Explore A–D <span>↗</span></span></div>
             </div>
             <div class="pipeline-insight-panel" data-insight="A" id="pipeline-guide-A" aria-hidden="true">
-              <div class="pipeline-insight-heading"><span class="pipeline-insight-index">A</span><div><span class="pipeline-insight-eyebrow">Connect compatible experience</span><h3>Build a conservative path to success.</h3></div><a class="pipeline-insight-source" href="assets/grbc-paper.pdf#page=4" target="_blank" rel="noopener">§4.1 ↗</a></div>
+              <div class="pipeline-insight-heading"><span class="pipeline-insight-index">A</span><div><span class="pipeline-insight-eyebrow">Connect compatible experience</span><h3>Build a conservative path to success.</h3></div><a class="pipeline-insight-source" href="https://arxiv.org/pdf/2610.20504#page=4" target="_blank" rel="noopener">§4.1 ↗</a></div>
               <p>Demonstrations, policy rollouts, and human recoveries share one task-conditioned graph. Frozen MCR features encode three camera views. Temporal edges preserve executed transitions; cross-trajectory bridges require mutual neighbors in every view, matching gripper states, and locally normalized distances.</p>
               <div class="pipeline-insight-result"><span>Pass forward</span> A goal-reachability graph that can reconnect failed trajectories to successful paths.</div>
             </div>
             <div class="pipeline-insight-panel" data-insight="B" id="pipeline-guide-B" aria-hidden="true">
-              <div class="pipeline-insight-heading"><span class="pipeline-insight-index">B</span><div><span class="pipeline-insight-eyebrow">Retrieve remaining steps</span><h3>Search backward. Make progress dense.</h3></div><a class="pipeline-insight-source" href="assets/grbc-paper.pdf#page=5" target="_blank" rel="noopener">§4.2 ↗</a></div>
+              <div class="pipeline-insight-heading"><span class="pipeline-insight-index">B</span><div><span class="pipeline-insight-eyebrow">Retrieve remaining steps</span><h3>Search backward. Make progress dense.</h3></div><a class="pipeline-insight-source" href="https://arxiv.org/pdf/2610.20504#page=5" target="_blank" rel="noopener">§4.2 ↗</a></div>
               <p>Successful endpoints connect to a shared goal sink. Reverse Dijkstra search retrieves the minimum task-completion cost supported by the graph; failed endpoints must reconnect through valid bridges. Linear interpolation extends sparse estimates to every frame. States without a goal path receive zero training weight.</p>
               <div class="pipeline-insight-result"><span>Pass forward</span> Dense remaining-step estimates for evaluating each observed action chunk.</div>
             </div>
             <div class="pipeline-insight-panel" data-insight="C" id="pipeline-guide-C" aria-hidden="true">
-              <div class="pipeline-insight-heading"><span class="pipeline-insight-index">C</span><div><span class="pipeline-insight-eyebrow">Learn from the consequence</span><h3>Imitate chunks that make stable progress.</h3></div><a class="pipeline-insight-source" href="assets/grbc-paper.pdf#page=6" target="_blank" rel="noopener">§4.3 ↗</a></div>
+              <div class="pipeline-insight-heading"><span class="pipeline-insight-index">C</span><div><span class="pipeline-insight-eyebrow">Learn from the consequence</span><h3>Imitate chunks that make stable progress.</h3></div><a class="pipeline-insight-source" href="https://arxiv.org/pdf/2610.20504#page=6" target="_blank" rel="noopener">§4.3 ↗</a></div>
               <p>Normalize remaining steps into progress, then evaluate both the net gain across an executed chunk and its deepest temporary regression. Chunks that pass both thresholds receive bounded positive weights; the rest receive zero. These weights scale the original supervised VLA loss, while all states remain available for graph connectivity.</p>
               <div class="pipeline-insight-result"><span>Pass forward</span> A post-trained VLA policy, using the original architecture and observed action targets.</div>
             </div>
             <div class="pipeline-insight-panel" data-insight="D" id="pipeline-guide-D" aria-hidden="true">
-              <div class="pipeline-insight-heading"><span class="pipeline-insight-index">D</span><div><span class="pipeline-insight-eyebrow">Collect, reconnect, repeat</span><h3>Turn the next rollout into new evidence.</h3></div><a class="pipeline-insight-source" href="assets/grbc-paper.pdf#page=6" target="_blank" rel="noopener">§4.3 ↗</a></div>
+              <div class="pipeline-insight-heading"><span class="pipeline-insight-index">D</span><div><span class="pipeline-insight-eyebrow">Collect, reconnect, repeat</span><h3>Turn the next rollout into new evidence.</h3></div><a class="pipeline-insight-source" href="https://arxiv.org/pdf/2610.20504#page=6" target="_blank" rel="noopener">§4.3 ↗</a></div>
               <p>Run the updated policy in the real world and collect successful and failed rollouts, including human interventions and recoveries. Add these trajectories to the accumulated data pool, extend the graph, and rerun reverse search to refresh training weights for the next offline round.</p>
               <div class="pipeline-insight-result"><span>Back to A</span> New experience updates the graph and supervision for the next training round.</div>
             </div>
@@ -466,8 +466,8 @@
         <span>CoRL 2026</span>
       </div>
       <div class="footer-links">
-        <a href="assets/grbc-paper.pdf">Paper</a>
-        <a href="assets/grbc-appendix.pdf">Appendix</a>
+        <a href="https://arxiv.org/pdf/2610.20504">Paper</a>
+        <a href="https://arxiv.org/pdf/2610.20504">Appendix</a>
         <a href="#top">Back to top ↑</a>
       </div>
     </footer>
@@ -484,7 +484,7 @@
     <script type="module" src="assets/framework/homepage.js?v=3bf5d7cfeee6"></script>
     <script type="module" src="assets/homepage-modules.js?v=64b8e466d66f"></script>
     <script src="progress.js?v=c1d8a8ffedd5" defer></script>
-    <script type="module" src="assets/weight-lab/lab.js?v=a9a86570334d"></script>
+    <script type="module" src="assets/weight-lab/lab.js?v=af75bd713471"></script>
     <script type="module" src="assets/motivation.js?v=9a36940d9827"></script>
     <script>
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
