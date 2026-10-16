@@ -10,6 +10,8 @@ The following chunk-weighting module shows three illustrative cases from the pap
 
 The demo and original Frame 20 task figure share one stage. The task curtain hangs from a rod and eight rings, with a separate pleated hem below the complete picture, gentle irregular wind motion, and a small lifted corner that reveals the video behind it. An animated diagonal arrow guides corner dragging; labels and the corner also toggle the task map. Drawing it aside preserves the video's playback position. The former separate task section is removed, with its `#tasks` anchor moved to the combined stage. See `assets/task-curtain/README.md` for motion, accessibility, and source-fidelity checks.
 
+The main demo uses the supplied final 2:21 video and cover. Its web copy retains 1920×1080 at 60 FPS, uses H.264 video with AAC audio, and places MP4 metadata before media data for progressive playback. Content hashes on the video and poster URLs refresh cached copies when these assets change.
+
 ## Embedded experiment figures
 
 `assets/homepage-modules.js` mounts the same native components used by `experiment-motion.html` and `progress-comparison.html`. The progress comparison replaces Figure 5; the four-task animated result panel replaces Figure 6 and the old task-tab bar chart. Method highlighting, detail-frame links, percentage bubbles, replay, keyboard controls, and reduced motion remain available. The homepage supplies section headings instead of repeating the experiment preview's heading. Static paper figures remain visible without JavaScript or if a module fails to load.
