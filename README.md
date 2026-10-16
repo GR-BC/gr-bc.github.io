@@ -4,6 +4,8 @@ Static GitHub Pages website. The interactive trajectory section is implemented i
 
 The homepage opens with the project demo, then the animated framework. Abstract and task context follow; the four-trajectory collection and progress comparison appear afterward, with headline and policy results later on the page. Navigation follows that reading order.
 
+The framework's four stage explanations follow the paper's method sections and live inside the figure. Hover or focus a part to lift it and smoothly switch the shared explanation; move away to return to the complete cycle. The former separate method cards and potential note are removed.
+
 The demo and original Frame 20 task figure share one stage. The task curtain hangs from a rod and eight rings, with a separate pleated hem below the complete picture, gentle irregular wind motion, and a small lifted corner that reveals the video behind it. An animated diagonal arrow guides corner dragging; labels and the corner also toggle the task map. Drawing it aside preserves the video's playback position. The former separate task section is removed, with its `#tasks` anchor moved to the combined stage. See `assets/task-curtain/README.md` for motion, accessibility, and source-fidelity checks.
 
 ## Embedded experiment figures

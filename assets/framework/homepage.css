@@ -36,6 +36,28 @@
 .pipeline-arrow-glint { fill:none; stroke:#fff; stroke-width:1.3; stroke-linecap:round; opacity:.8; }
 .pipeline-gate-halo { fill:none; stroke:currentColor; stroke-width:1.3; }
 .pipeline-gate-core { fill:currentColor; opacity:.45; }
+.pipeline-insight { --guide-accent:#6e8ba6; --guide-tint:#f6f9fd; position:relative; height:88px; overflow:hidden; border-top:1px solid #dce6f0; background:linear-gradient(110deg,var(--guide-tint),#ffffffb3); transition:height .64s cubic-bezier(.22,.75,.2,1),background .5s; }
+.pipeline-insight::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--guide-accent); opacity:.65; transform:scaleY(0); transform-origin:50% 0; transition:transform .55s cubic-bezier(.22,.75,.2,1),background .4s; }
+.pipeline-figure[data-guide]:not([data-guide="overview"]) .pipeline-insight::before { transform:scaleY(1); }
+.pipeline-insight-panel { position:absolute; top:0; left:0; right:0; padding:24px 30px; opacity:0; transform:translateY(12px); filter:blur(3px); pointer-events:none; transition:opacity .28s,transform .54s cubic-bezier(.22,.75,.2,1),filter .38s; }
+.pipeline-insight-panel.is-active { opacity:1; transform:none; filter:none; pointer-events:auto; transition-delay:.06s; }
+.pipeline-insight-heading { display:flex; align-items:center; gap:14px; }
+.pipeline-insight-index { flex:none; display:grid; place-items:center; width:38px; height:42px; border-radius:10px; color:var(--guide-accent); background:#ffffffc9; border:1px solid currentColor; font:600 18px/1 ui-monospace,SFMono-Regular,monospace; box-shadow:0 3px 14px -10px var(--guide-accent); }
+.pipeline-insight-eyebrow { display:block; margin-bottom:5px; color:var(--guide-accent); font:500 10px/1.4 ui-monospace,SFMono-Regular,monospace; letter-spacing:.1em; text-transform:uppercase; }
+.pipeline-insight h3 { margin:0; color:#1d304c; font-size:20px; line-height:1.3; font-weight:650; letter-spacing:-.025em; }
+.pipeline-insight-source { margin-left:auto; flex:none; align-self:flex-start; padding-top:3px; color:#7d8fa5; font:11px/1.4 ui-monospace,SFMono-Regular,monospace; transition:color .2s; }
+.pipeline-insight-source:hover, .pipeline-insight-source:focus-visible { color:var(--guide-accent); }
+.pipeline-insight-panel > p { max-width:99ch; margin:16px 0 14px; color:#516580; font-size:14px; line-height:1.75; }
+.pipeline-insight-result { display:flex; gap:13px; align-items:baseline; color:#536b82; font-size:12px; line-height:1.6; }
+.pipeline-insight-result > span { flex:none; color:var(--guide-accent); font:500 10px/1.6 ui-monospace,SFMono-Regular,monospace; text-transform:uppercase; letter-spacing:.05em; }
+.pipeline-insight-overview { display:flex; align-items:center; gap:15px; min-height:36px; }
+.pipeline-insight-orbit { color:#88a7ba; font:300 30px/1 system-ui,sans-serif; }
+.pipeline-insight-overview strong { color:#45617f; font-size:13px; font-weight:550; }
+.pipeline-insight-overview p { margin:4px 0 0; color:#8192a8; font-size:12px; line-height:1.5; }
+.pipeline-insight-hint { margin-left:auto; flex:none; color:#8196ac; font:10px/1.5 ui-monospace,SFMono-Regular,monospace; letter-spacing:.05em; }
+.pipeline-insight-hint > span { margin-left:10px; font-size:15px; }
+.pipeline-part:focus { outline:none; }
+.pipeline-part:focus-visible > .pipeline-float > rect:first-child { stroke:#719ac4; stroke-width:2; stroke-dasharray:5 5; }
 @keyframes pipeline-float { 0%,100% { transform:translateY(1px); } 50% { transform:translateY(-5px); } }
 @media (max-width:800px) {
   .pipeline-viewport { padding:30px 18px 18px; }
@@ -43,8 +65,16 @@
   .pipeline-figure:not(.is-ready) .pipeline-host { min-width:0; }
   .pipeline-tools { top:2px; right:8px; }
   .pipeline-tools button { width:32px; height:32px; }
+  .pipeline-insight-panel { padding:20px; }
+  .pipeline-insight h3 { font-size:18px; }
+  .pipeline-insight-panel > p { font-size:13px; line-height:1.7; }
+  .pipeline-insight-result { font-size:11px; gap:9px; }
+  .pipeline-insight-hint { display:none; }
+  .pipeline-insight-heading { gap:10px; }
+  .pipeline-insight-source { font-size:10px; }
 }
 @media (prefers-reduced-motion:reduce) {
   .pipeline-figure .pipeline-float { animation:none; }
   .pipeline-figure .pipeline-part, .pipeline-figure .pipeline-graph-route, .pipeline-figure .pipeline-linked-route { transform:none!important; transition:none; }
+  .pipeline-insight, .pipeline-insight::before, .pipeline-insight-panel { transition:none; }
 }

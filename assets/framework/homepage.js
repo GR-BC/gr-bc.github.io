@@ -119,6 +119,39 @@ async function initialize() {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const replay = figure.querySelector('[data-pipeline-replay]');
   const motion = figure.querySelector('[data-pipeline-motion]');
+  const insight = figure.querySelector('[data-pipeline-insight]');
+  const insightPanels = new Map([...insight.querySelectorAll('[data-insight]')].map(node => [node.dataset.insight, node]));
+  const guideColors = {overview: ['#6e8ba6', '#f6f9fd'], A: ['#4e8e9c', '#edf7f8'], B: ['#a57a36', '#fcf6eb'], C: ['#b87562', '#fcf2ee'], D: ['#73915c', '#f2f7ed']};
+  insightPanels.forEach(node => node.inert = node.dataset.insight !== 'overview');
+  let guide = 'overview', guideHold = false, guideTimer = 0, touchActive = false;
+  function measureInsight() {
+    insight.style.height = `${Math.ceil(insightPanels.get(guide).getBoundingClientRect().height) + 1}px`;
+  }
+  function showInsight(id) {
+    clearTimeout(guideTimer); guideTimer = 0;
+    const next = id || 'overview';
+    if (guide !== next) {
+      guide = next;
+      insightPanels.forEach((node, key) => {
+        node.classList.toggle('is-active', key === guide);
+        node.setAttribute('aria-hidden', String(key !== guide));
+        node.inert = key !== guide;
+      });
+    }
+    figure.dataset.guide = guide;
+    insight.style.setProperty('--guide-accent', guideColors[guide][0]);
+    insight.style.setProperty('--guide-tint', guideColors[guide][1]);
+    measureInsight();
+  }
+  function guideFocus(id) {
+    clearTimeout(guideTimer);
+    if (id) showInsight(id);
+    // Only the caption gets a short grace period, so readers can reach its paper
+    // link. Diagram focus always clears immediately when leaving a part.
+    else if (!guideHold) guideTimer = setTimeout(() => showInsight(null), 180);
+  }
+  const insightResize = new ResizeObserver(measureInsight);
+  insightPanels.forEach(node => insightResize.observe(node));
   const component = id => elements.get(id) || [];
   const metadata = new Map(manifest.components.map(c => [c.id, c]));
   svg.setAttribute('viewBox', '-48 -50 1700 890');
@@ -134,7 +167,9 @@ async function initialize() {
   // Keep foreground fragments with their own stage while preserving source geometry.
   const parts = new Map();
   for (const [i, stage] of manifest.stages.entries()) {
-    const outer = el('g', {class: 'pipeline-part', 'data-part': stage.id});
+    const outer = el('g', {class: 'pipeline-part', 'data-part': stage.id, tabindex: 0, role: 'group',
+      'aria-label': `Part ${stage.id}: ${insightPanels.get(stage.id).querySelector('h3').textContent}`,
+      'aria-describedby': `pipeline-guide-${stage.id}`});
     const floating = el('g', {class: 'pipeline-float', style: `--float-delay:${-i * 1.7}s`});
     const [x, y, width, height] = stage.bounds;
     floating.append(el('rect', {x, y, width, height, rx: 18, fill: 'transparent', 'pointer-events': 'all'}));
@@ -241,6 +276,7 @@ async function initialize() {
       node.setAttribute('aria-pressed', String(route === id));
     });
     linkedGroups.forEach((node, id) => {spring(node, route === id, true); node.classList.toggle('is-muted', !!route && route !== id);});
+    guideFocus(hoveredPart || focusedPart || part);
     if (!intro) setPhase(part);
   }
   function timing(c) {
@@ -262,6 +298,7 @@ async function initialize() {
     intro = false; figure.dataset.intro = 'complete'; setPhase(''); focus();
   }
   function playIntro() {
+    guideHold = false; touchActive = false; showInsight(null);
     started = true; paused = false; hoveredPart = hoveredRoute = focusedPart = focusedRoute = null;
     finishIntro(); introTime = 0; elapsed = 0;
     if (reduced.matches) {sync(); return;}
@@ -322,12 +359,16 @@ async function initialize() {
   }
   svg.addEventListener('pointerover', e => {if (e.pointerType !== 'touch') pointAt(e.target);});
   svg.addEventListener('pointerout', e => {if (e.pointerType !== 'touch') pointAt(e.relatedTarget);});
-  svg.addEventListener('pointerleave', () => pointAt(null));
+  svg.addEventListener('pointerleave', e => {if (e.pointerType !== 'touch') pointAt(null);});
   // Focus is transient: clicking never pins a part or a path after the pointer leaves.
   svg.addEventListener('click', interact);
-  svg.addEventListener('pointerdown', e => {if (e.pointerType === 'touch') pointAt(e.target);});
-  svg.addEventListener('pointerup', e => {if (e.pointerType === 'touch') pointAt(null);});
+  svg.addEventListener('pointerdown', e => {if (e.pointerType === 'touch') {touchActive = true; pointAt(e.target);}});
   svg.addEventListener('pointercancel', () => pointAt(null));
+  document.addEventListener('pointerdown', e => {if (touchActive && !figure.contains(e.target)) {touchActive = false; pointAt(null);}});
+  insight.addEventListener('pointerenter', () => {guideHold = true; clearTimeout(guideTimer);});
+  insight.addEventListener('pointerleave', () => {guideHold = false; guideFocus(hoveredPart || focusedPart);});
+  insight.addEventListener('focusin', () => {guideHold = true; clearTimeout(guideTimer);});
+  insight.addEventListener('focusout', e => {if (!insight.contains(e.relatedTarget)) {guideHold = false; guideFocus(hoveredPart || focusedPart);}});
   function keyboardFocus(target) {
     interact();
     focusedPart = target.closest('.pipeline-part')?.dataset.part || null;
@@ -337,8 +378,8 @@ async function initialize() {
   svg.addEventListener('focusin', e => {if (e.target.matches(':focus-visible')) keyboardFocus(e.target);});
   svg.addEventListener('focusout', () => {focusedPart = focusedRoute = null; focus();});
   figure.addEventListener('keydown', e => {
-    if (e.key === 'Escape') pointAt(null);
-    if (e.target.matches('.pipeline-graph-route') && ['Enter', ' '].includes(e.key)) {
+    if (e.key === 'Escape') {guideHold = false; touchActive = false; pointAt(null); showInsight(null);}
+    if (e.target.matches('.pipeline-graph-route, .pipeline-part') && ['Enter', ' '].includes(e.key)) {
       e.preventDefault(); keyboardFocus(e.target);
     }
   });
@@ -353,5 +394,6 @@ async function initialize() {
   }, {threshold: [0, .18]});
   // Defer the entrance until the figure is in view; the fallback stays available if mounting failed.
   figure.classList.add('is-ready'); figure.dataset.intro = 'waiting';
-  drawFlow(elapsed); setPhase(null); sync(); observer.observe(host);
+  showInsight(null); drawFlow(elapsed); setPhase(null); sync(); observer.observe(host);
+  window.addEventListener('pagehide', e => {if (!e.persisted) {clearTimeout(guideTimer); insightResize.disconnect();}});
 }

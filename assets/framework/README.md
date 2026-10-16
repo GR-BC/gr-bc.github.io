@@ -56,6 +56,12 @@ Mounting again into the same container destroys the previous instance. `framewor
 
 Hover temporarily holds the cycle. Clicking pins the component; click SVG whitespace or use Play/Show all to release it. Enter/Space selects a focused SVG component; Escape clears it. The cycle pauses outside the viewport and while the document is hidden. Reduced motion removes moving particles/dashes while retaining selection and editing.
 
+## Homepage explanations
+
+`homepage.js` adds transient stage focus and a single caption inside the homepage figure. It replaces the separate A/B/C explanation cards and state-potential note. The English explanations in `index.html` follow the bundled paper's Sections 4.1–4.3: conservative graph construction; reverse search and dense interpolation; net-progress and regression-depth weighting of observed chunks; and iterative offline updates with new rollouts. Each explanation links to its source page in the paper.
+
+Hovering or keyboard-focusing a stage synchronizes its spring lift with the caption's crossfade, accent color, and height transition. Leaving a stage immediately restores the whole diagram. The caption has a short grace period for reaching its paper link, and returns to the overview when leaving. Touch selection stays readable until the next selection or a tap outside the figure; Escape clears both focus and caption. Replay resets the explanation to the overview. Reduced motion disables the caption transitions. All four stages remain reachable by keyboard; graph-trajectory highlighting still follows its original linked paths.
+
 ## Rebuild and check
 
 ```sh
