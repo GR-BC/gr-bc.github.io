@@ -16,3 +16,7 @@ node --check assets/task-curtain/curtain.js
 ```
 
 Verify the initial video peek, full task reveal, cloth brushing and corner dragging in both directions, rapid reversal, Escape, video pause/time preservation, reduced motion, narrow layout, and viewport re-entry.
+
+## Idle invitation
+
+The suspended fabric continuously billows with broad, irregular gusts, keeping the rod and left seam pinned. Before the first interaction, a roughly seven-second, amplitude-modulated gust lifts the lower-right corner and briefly reveals more of the video, including a small play glyph beneath the cloth. The fold and diagonal arrow follow that same gust. Hover/focus adds a small local lift; dragging or toggling ends the automatic invitation while leaving gentle wind on the open task map. The initial spread leaves only a narrow video glimpse. Motion pauses offscreen or in a hidden document; reduced motion keeps the still curtain and normal click/drag controls.

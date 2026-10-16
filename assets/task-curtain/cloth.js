@@ -48,28 +48,29 @@ export async function createCloth(svg,canvas){
     const location=gl.getAttribLocation(program,name);gl.enableVertexAttribArray(location);gl.vertexAttribPointer(location,size,gl.FLOAT,false,32,offset);
   }
   const indexBuffer=gl.createBuffer();gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,indexBuffer);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(indices),gl.STATIC_DRAW);
-  const size=gl.getUniformLocation(program,'uSize'),body=gl.getUniformLocation(program,'uBody'),breezeSeed=Math.random()*Math.PI*2;
+  const size=gl.getUniformLocation(program,'uSize'),body=gl.getUniformLocation(program,'uBody');
   let lost=false;canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();lost=true;canvas.closest('.demo-theatre').classList.remove('has-cloth-mesh');});
   return {
     corner:{x:0,y:0},
-    draw({width,height,bodyStart,bodyEnd,progress,topProgress,pointer,pull,peek,time,wind,dt,staticMotion}){
+    draw({width,height,bodyStart,bodyEnd,progress,topProgress,pointer,pull,peek,time,breeze,wind,dt,staticMotion}){
       if(lost)return;
       const ratio=Math.min(devicePixelRatio||1,1.75),cw=Math.round(width*ratio),ch=Math.round(height*ratio);
       if(canvas.width!==cw||canvas.height!==ch){canvas.width=cw;canvas.height=ch;}
       gl.viewport(0,0,cw,ch);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
       gl.useProgram(program);gl.uniform2f(size,width,height);gl.uniform2f(body,bodyStart,bodyEnd);gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);
       const step=Math.min(dt||1/60,.025);
-      const breeze=.42+.2*Math.sin(time*.57+breezeSeed)+.15*Math.sin(time*.91+breezeSeed*1.7);
       for(let row=0;row<=rows;row++)for(let col=0;col<=columns;col++){
         const i=row*(columns+1)+col,u=col/columns,v=row/rows,s=i*6;
         const spread=topProgress+(progress-topProgress)*Math.pow(v,1.4);
         const x=u*width,y=v*height,pleat=Math.sin(u*Math.PI*24),fold=pleat*(1-spread);
         let tx=0,ty=0,tz=0;
         if(!staticMotion&&wind){
-          const free=Math.pow(v,1.55)*(.3+.7*u);
-          tx=(Math.sin(time*.8+breezeSeed)*3+Math.sin(u*5.2-time*1.1+breezeSeed)*2)*free*breeze;
-          ty=Math.sin(time*.63+u*4+breezeSeed)*free*breeze*2;
-          tz=(Math.sin(u*5.4-time*1.25+breezeSeed)*13+Math.sin(u*11.3+time*.73)*4)*free*breeze;
+          // Broad billows travel through the fabric; the rod and left seam stay pinned.
+          const free=Math.pow(v,1.45)*(.2+.8*u),phase=breeze.phase-u*2.4-v*.65;
+          const billow=Math.sin(phase),cornerCurl=Math.pow(u,5)*Math.pow(v,3)*breeze.curl;
+          tx=(breeze.sway*12+billow*7)*free*breeze.strength-cornerCurl*width*.026;
+          ty=(Math.sin(phase*.72)*5+breeze.sway*3)*free*breeze.strength-cornerCurl*height*.105;
+          tz=(billow*34+Math.sin(phase*.53+1.2)*12)*free*breeze.strength+cornerCurl*48;
         }
         if(!staticMotion&&pointer.strength>0){
           const distance=((x-pointer.x)**2/180**2+(y-pointer.y)**2/150**2),influence=Math.exp(-distance)*pointer.strength*u;

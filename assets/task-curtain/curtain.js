@@ -1,5 +1,5 @@
-import {createCloth} from './cloth.js?v=ffec82ac35fa';
-const ASSET_VERSION = '8922c68e0702';
+import {createCloth} from './cloth.js?v=8f03d3208da3';
+const ASSET_VERSION = 'a01f41cab146';
 const asset=name=>new URL(`${name}?v=${ASSET_VERSION}`,import.meta.url);
 const shell=document.querySelector('[data-task-curtain]');
 if(shell)mount().catch(error=>{
@@ -28,6 +28,7 @@ async function mount(){
   }
   const stage=shell.querySelector('.demo-stage'),sheet=shell.querySelector('.curtain-sheet');
   const video=shell.querySelector('.demo-video video'),play=shell.querySelector('.demo-play');
+  const teaser=document.createElement('span');teaser.className='demo-teaser';teaser.setAttribute('aria-hidden','true');teaser.textContent='▶';video.parentElement.append(teaser);
   const peel=shell.querySelector('.curtain-peel');
   const rail=[...shell.querySelectorAll('[data-curtain-task]')],toggles=[...shell.querySelectorAll('[data-curtain-toggle]')];
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
@@ -36,8 +37,10 @@ async function mount(){
   let cloth=null;
   try{cloth=await createCloth(svg,canvas);}catch(error){console.warn('Using the vector curtain fallback.',error);}
   if(cloth)shell.classList.add('has-cloth-mesh');
-  const initialSpread=.965;
+  const initialSpread=.985,breezeSeed=Math.random()*Math.PI*2;
   let open=true,peek=true,peekAmount=1,peekVelocity=0,position=initialSpread,velocity=0,topPosition=1,topVelocity=0,energy=0,raf=0,last=0,visible=false,windTime=0;
+  let inviting=true,invitationAmount=1,attention=0,attentionAmount=0;
+  const breeze={phase:breezeSeed,sway:0,strength:0,curl:0};
   let width=1,railWidth=1,height=1,drag=null,suppressClick=false,corner={x:0,y:0};
   const clothTop=30,hangers=[...shell.querySelectorAll('.curtain-hangers span')];
   const pointer={x:0,y:0,vx:0,vy:0,strength:0},pull={active:false,x:0,y:0};
@@ -62,23 +65,32 @@ async function mount(){
     for(const [index,hanger] of hangers.entries())hanger.style.left=`${railWidth+(index+.25)/(hangers.length-.5)*w*Math.max(.025,topPosition)}px`;
     art.style.clipPath=`inset(0 ${100*(1-p)}% 0 0)`;
     const isStatic=reduced.matches;
+    const gust=Math.pow(.5+.5*Math.sin(windTime*.88-.6+.2*Math.sin(windTime*.17+breezeSeed)),4);
+    const envelope=.7+.3*Math.sin(windTime*.31+breezeSeed)**2;
+    breeze.phase=windTime*.95+breezeSeed;
+    breeze.sway=Math.sin(windTime*.73+breezeSeed)*.7+Math.sin(windTime*1.19+breezeSeed*1.3)*.3;
+    breeze.strength=isStatic||!open?0:.8+.35*Math.sin(windTime*.43+breezeSeed)**2;
+    breeze.curl=isStatic||!open||drag?0:gust*envelope*invitationAmount+attentionAmount*.16;
     if(cloth){
-      cloth.draw({width:w,height,bodyStart:clothHead/height,bodyEnd:(clothHead+artHeight)/height,progress:p,topProgress:Math.max(0,Math.min(1,topPosition)),pointer,pull,peek:peekAmount,time:windTime,wind:open&&!drag,dt,staticMotion:isStatic});
+      cloth.draw({width:w,height,bodyStart:clothHead/height,bodyEnd:(clothHead+artHeight)/height,progress:p,topProgress:Math.max(0,Math.min(1,topPosition)),pointer,pull,peek:peekAmount,time:windTime,breeze,wind:open&&!drag,dt,staticMotion:isStatic});
       corner=cloth.corner;
     }else{
-      corner={x:w*p+pull.x,y:height+pull.y};
+      corner={x:w*p+pull.x-breeze.curl*w*.026,y:height+pull.y-breeze.curl*height*.105};
       sheet.style.clipPath=`polygon(0 0,${w*Math.max(0,Math.min(1,topPosition))}px 0,${corner.x}px ${corner.y}px,0 ${height}px)`;
-      art.style.transform=isStatic?'none':`perspective(1300px) rotateY(${pointer.vx*.004*pointer.strength}deg)`;
+      art.style.transform=isStatic?'none':`perspective(1300px) rotateY(${pointer.vx*.004*pointer.strength+breeze.sway*breeze.strength*.7}deg)`;
     }
     const size=25+p*Math.min(30,w*.028);
     peel.style.width=`${size}px`;peel.style.height=`${size}px`;
     peel.style.left=`${Math.max(2,railWidth+corner.x-size*.82)}px`;
     peel.style.top=`${Math.max(0,clothTop+corner.y-size*.82)}px`;
     peel.style.setProperty('--corner-lift',`${pull.active?Math.min(14,4+Math.abs(pull.y)*.08):0}px`);
+    peel.style.setProperty('--tease',String(breeze.curl));
   }
   function tick(time){
-    const dt=last?Math.min((time-last)/1000,.032):1/60;last=time;
-    windTime+=dt;
+    const elapsed=last?Math.min((time-last)/1000,.1):1/60,dt=Math.min(elapsed,.032);last=time;
+    windTime+=elapsed;
+    invitationAmount+=(Number(inviting)-invitationAmount)*(1-Math.exp(-dt*3));
+    attentionAmount+=(attention-attentionAmount)*(1-Math.exp(-dt*5));
     peekVelocity+=((Number(peek)-peekAmount)*90-peekVelocity*18)*dt;peekAmount+=peekVelocity*dt;
     if(drag)updateGrip();
     const target=open?(peek?initialSpread:1):0;
@@ -88,7 +100,7 @@ async function mount(){
     pointer.strength*=Math.exp(-dt*3);pointer.vx*=Math.exp(-dt*3);pointer.vy*=Math.exp(-dt*3);
     energy*=Math.exp(-dt*2.5);
     const settled=!drag&&Math.abs(position-target)<.0004&&Math.abs(velocity)<.003&&Math.abs(topPosition-topTarget)<.0004&&Math.abs(topVelocity)<.003&&Math.abs(peekAmount-Number(peek))<.0004&&Math.abs(peekVelocity)<.003;
-    if(settled){position=target;topPosition=topTarget;peekAmount=Number(peek);velocity=topVelocity=peekVelocity=0;shell.dataset.curtainMotion='settled';}
+    if(settled){position=target;topPosition=topTarget;peekAmount=Number(peek);velocity=topVelocity=peekVelocity=0;shell.dataset.curtainMotion=open&&!reduced.matches?'breeze':'settled';}
     draw(dt);
     if(!settled||energy>.001||pointer.strength>.001||drag||(open&&!reduced.matches))raf=requestAnimationFrame(tick);else{raf=0;last=0;}
   }
@@ -113,14 +125,20 @@ async function mount(){
     pointer.vx=Math.max(-650,Math.min(650,(x-pointer.x)/seconds));pointer.vy=Math.max(-500,Math.min(500,(y-pointer.y)/seconds));
     pointer.x=x;pointer.y=y;pointer.time=now;pointer.strength=1;energy=1;animate();
   }
+  function endInvitation(){inviting=false;shell.dataset.curtainInviting='false';}
   for(const button of toggles)button.addEventListener('click',()=>{
-    if(button===peel&&suppressClick){suppressClick=false;return;}setOpen(!open);
+    if(button===peel&&suppressClick){suppressClick=false;return;}endInvitation();setOpen(!open);
   });
-  for(const button of rail)button.addEventListener('click',()=>setOpen(!open));
+  for(const button of rail)button.addEventListener('click',()=>{endInvitation();setOpen(!open);});
   sheet.addEventListener('pointermove',brush);
   sheet.addEventListener('pointerleave',()=>{pointer.time=0;});
+  peel.addEventListener('pointerenter',()=>{attention=1;animate();});
+  peel.addEventListener('pointerleave',()=>{attention=0;});
+  peel.addEventListener('focus',()=>{attention=1;animate();});
+  peel.addEventListener('blur',()=>{attention=0;});
   peel.addEventListener('pointerdown',event=>{
     if(event.button!==0)return;
+    endInvitation();
     const rect=stage.getBoundingClientRect();
     drag={id:event.pointerId,startX:event.clientX,startY:event.clientY,clientX:event.clientX,clientY:event.clientY,startProgress:position,startTop:topPosition,offsetX:event.clientX-rect.left-railWidth-corner.x,offsetY:event.clientY-rect.top-clothTop-corner.y,moved:false};
     peel.setPointerCapture(event.pointerId);pull.active=true;setOpen(true);shell.classList.add('is-grabbing');
@@ -150,7 +168,7 @@ async function mount(){
   peel.addEventListener('pointerup',event=>release(event));
   peel.addEventListener('pointercancel',event=>release(event,true));
   peel.addEventListener('lostpointercapture',event=>{if(drag)release(event,true);});
-  shell.addEventListener('keydown',event=>{if(event.key==='Escape'&&(open||drag)){if(drag)release({pointerId:drag.id},true);setOpen(false);peel.focus({preventScroll:true});}});
+  shell.addEventListener('keydown',event=>{if(event.key==='Escape'&&(open||drag)){endInvitation();if(drag)release({pointerId:drag.id},true);setOpen(false);peel.focus({preventScroll:true});}});
   play.addEventListener('click',()=>{video.play().catch(()=>{video.controls=true;});});
   for(const event of ['play','pause','ended'])video.addEventListener(event,refreshPlay);
   video.addEventListener('play',()=>{if(open)setOpen(false);});
@@ -159,7 +177,7 @@ async function mount(){
   const resize=new ResizeObserver(measure);resize.observe(stage);observer.observe(stage);
   document.addEventListener('visibilitychange',sync);
   reduced.addEventListener('change',()=>{if(raf)cancelAnimationFrame(raf);raf=0;animate();});
-  sheet.hidden=false;shell.classList.add('is-ready');setOpen(true,true);
+  sheet.hidden=false;shell.classList.add('is-ready');shell.dataset.curtainInviting='true';setOpen(true,true);
   peel.querySelector('span').innerHTML='<svg viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M22 22 7 7M7 18V7h11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   peel.title='Hold and drag the cloth corner · Click to toggle';
   measure();refreshPlay();
