@@ -23,7 +23,7 @@
       content="Learning task-advancing action chunks from demonstrations, failures, and human interventions."
     />
     <meta name="twitter:image" content="/og.jpg" />
-    <link rel="stylesheet" href="style.css?v=b5e7571c0365" />
+    <link rel="stylesheet" href="style.css?v=ef12c85ad6fb" />
     <link rel="stylesheet" href="assets/task-curtain/curtain.css?v=3b189c9166db" />
     <link rel="stylesheet" href="assets/framework/framework.css?v=89ea7ca8eef2" />
     <link rel="stylesheet" href="assets/framework/homepage.css?v=e3c7ac603da9" />
@@ -240,33 +240,43 @@
         </div>
       </section>
 
-      <section class="challenge section-band" id="challenge" aria-labelledby="challenge-title">
-        <div class="section-shell">
-          <div class="section-intro reveal">
-            <div>
-              <span class="kicker">The challenge</span>
-              <h2 id="challenge-title">Trajectory outcome is too coarse for chunk-level credit.</h2>
-            </div>
-            <p>
-              Whether an action is worth imitating depends on what it causes from the current state — not
-              whether the overall episode eventually succeeded or failed.
-            </p>
-          </div>
-
-          <div class="contrast-grid">
-            <article class="contrast-card reveal">
-              <span class="card-index">01</span>
-              <div class="trajectory-line success-line" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-              <h3>A success can contain regression.</h3>
-              <p>Uniform SFT can clone pauses, detours, and unstable corrections hidden inside a successful episode.</p>
-            </article>
-            <article class="contrast-card reveal">
-              <span class="card-index">02</span>
-              <div class="trajectory-line failure-line" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-              <h3>A failure can contain recovery.</h3>
-              <p>Discarding the whole rollout wastes valid, task-advancing chunks that reconnect to successful regions.</p>
-            </article>
-          </div>
+      <section class="challenge section-shell" id="challenge" aria-labelledby="challenge-title">
+        <div class="motivation-copy">
+          <span class="motivation-eyebrow">Motivation</span>
+          <h2 id="challenge-title">Outcomes hide <br />the details.</h2>
+          <p>Credit belongs to each action chunk.</p>
+        </div>
+        <div class="motivation-examples" aria-label="Illustrative trajectories; click either example to replay">
+          <button class="motivation-case" type="button" data-motivation-case="success" aria-label="Replay: a successful trajectory can contain regression" title="Click to replay">
+            <span class="motivation-case-top"><span>01 / Success</span><svg class="motivation-replay" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6a5 5 0 1 1 0 4M3 2.5V6h3.5" /></svg></span>
+            <svg class="motivation-chart" viewBox="0 0 300 72" aria-hidden="true">
+              <path class="motivation-guide" d="M8 62H292" />
+              <path class="motivation-track" d="M10 54C40 54 51 30 79 30S105 24 119 28C135 33 138 52 156 51S182 25 205 24S246 15 287 11" />
+              <path class="motivation-trace" data-motivation-draw pathLength="1" d="M10 54C40 54 51 30 79 30S105 24 119 28C135 33 138 52 156 51S182 25 205 24S246 15 287 11" />
+              <g class="motivation-chunk" data-motivation-chunk>
+                <path class="motivation-selection" d="M111 19h53v40h-53z" />
+                <path class="motivation-highlight" pathLength="1" d="M119 28C135 33 138 52 156 51" />
+                <circle class="motivation-point" cx="156" cy="51" r="3" />
+              </g>
+              <circle class="motivation-end" data-motivation-end cx="287" cy="11" r="3" />
+            </svg>
+            <span class="motivation-caption">…can contain <strong>regression.</strong></span>
+          </button>
+          <button class="motivation-case" type="button" data-motivation-case="failure" aria-label="Replay: a failed trajectory can contain useful recovery" title="Click to replay">
+            <span class="motivation-case-top"><span>02 / Failure</span><svg class="motivation-replay" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6a5 5 0 1 1 0 4M3 2.5V6h3.5" /></svg></span>
+            <svg class="motivation-chart" viewBox="0 0 300 72" aria-hidden="true">
+              <path class="motivation-guide" d="M8 62H292" />
+              <path class="motivation-track" d="M10 51C37 51 47 42 68 43S96 57 116 49C132 42 140 24 160 24S188 20 204 34S248 48 287 57" />
+              <path class="motivation-trace" data-motivation-draw pathLength="1" d="M10 51C37 51 47 42 68 43S96 57 116 49C132 42 140 24 160 24S188 20 204 34S248 48 287 57" />
+              <g class="motivation-chunk" data-motivation-chunk>
+                <path class="motivation-selection" d="M108 16h60v41h-60z" />
+                <path class="motivation-highlight" pathLength="1" d="M116 49C132 42 140 24 160 24" />
+                <circle class="motivation-point" cx="160" cy="24" r="3" />
+              </g>
+              <circle class="motivation-end" data-motivation-end cx="287" cy="57" r="3" />
+            </svg>
+            <span class="motivation-caption">…can contain <strong>useful recovery.</strong></span>
+          </button>
         </div>
       </section>
 
@@ -475,6 +485,7 @@
     <script type="module" src="assets/homepage-modules.js?v=64b8e466d66f"></script>
     <script src="progress.js?v=c1d8a8ffedd5" defer></script>
     <script type="module" src="assets/weight-lab/lab.js?v=a9a86570334d"></script>
+    <script type="module" src="assets/motivation.js?v=9a36940d9827"></script>
     <script>
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 

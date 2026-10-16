@@ -356,27 +356,49 @@ h1 span {
 .abstract-copy { padding-top: 30px; }
 .abstract-copy p { margin-bottom: 24px; color: #3d506e; font-size: clamp(17px, 1.7vw, 20px); line-height: 1.72; letter-spacing: -0.01em; }
 
-.contrast-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
-.contrast-card {
-  min-height: 360px;
-  padding: clamp(26px, 4vw, 42px);
-  display: flex;
-  flex-direction: column;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.75);
-  box-shadow: 0 16px 44px rgba(30, 71, 126, 0.07);
-}
 .card-index { color: var(--blue-deep); }
-.trajectory-line { position: relative; height: 78px; margin: auto 0 34px; display: flex; align-items: center; justify-content: space-between; }
-.trajectory-line::before { content: ""; position: absolute; left: 7px; right: 7px; top: 39px; height: 3px; border-radius: 99px; background: var(--blue); }
-.trajectory-line i { position: relative; z-index: 1; width: 15px; height: 15px; border: 3px solid white; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 1px var(--blue); }
-.success-line i:nth-child(3) { transform: translateY(28px); background: #df7d86; box-shadow: 0 0 0 1px #df7d86; }
-.success-line::before { clip-path: polygon(0 46%, 43% 46%, 53% 82%, 64% 46%, 100% 46%, 100% 54%, 64% 54%, 53% 95%, 43% 54%, 0 54%); height: 78px; top: 0; }
-.failure-line::before { background: linear-gradient(90deg, #df7d86 0 36%, var(--blue) 36% 100%); }
-.failure-line i:first-child, .failure-line i:nth-child(2) { background: #df7d86; box-shadow: 0 0 0 1px #df7d86; }
-.contrast-card h3 { margin: 0 0 12px; font-size: clamp(25px, 2.8vw, 36px); line-height: 1.08; letter-spacing: -0.03em; }
-.contrast-card p { margin: 0; color: var(--ink-soft); font-size: 17px; line-height: 1.6; }
+.challenge { display: grid; grid-template-columns: .85fr 2fr; align-items: center; gap: 44px; padding: 28px 0; border-block: 1px solid var(--line); }
+.motivation-eyebrow { color: #5c718b; font: 500 10px/1.5 ui-monospace, SFMono-Regular, monospace; letter-spacing: .12em; text-transform: uppercase; }
+.motivation-copy h2 { margin: 10px 0; font-size: clamp(25px, 2.4vw, 30px); line-height: 1.12; font-weight: 550; letter-spacing: -.035em; }
+.motivation-copy p { margin: 0; color: #647993; font-size: 12px; line-height: 1.5; }
+.motivation-examples { min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.motivation-case { --chunk-color: #aa6672; --chunk-tint: #aa66720d; min-width: 0; padding: 10px 24px; border: 0; border-radius: 0; background: transparent; color: var(--ink-soft); font: inherit; text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.motivation-case + .motivation-case { border-left: 1px solid var(--line); }
+.motivation-case[data-motivation-case="failure"] { --chunk-color: #2f6fd5; --chunk-tint: #2f6fd50c; }
+.motivation-case-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: #5c718b; font: 500 10px/1.4 ui-monospace, SFMono-Regular, monospace; letter-spacing: .07em; text-transform: uppercase; }
+.motivation-replay { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; opacity: .3; transition: opacity .2s, transform .4s; }
+.motivation-chart { display: block; width: 100%; height: auto; margin: 8px 0 6px; overflow: visible; }
+.motivation-chart path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.motivation-guide { stroke: #dce5ef; stroke-width: 1; }
+.motivation-track { stroke: #d4deeb; stroke-width: 1.5; }
+.motivation-trace { stroke: #789bbf; stroke-width: 1.8; stroke-dasharray: 1; }
+.motivation-chunk { transform-box: fill-box; transform-origin: center; transition: transform .5s cubic-bezier(.22,.7,.2,1); }
+.motivation-chart .motivation-selection { fill: var(--chunk-tint); stroke: var(--chunk-color); stroke-width: .7; stroke-dasharray: 2 4; stroke-opacity: .35; }
+.motivation-highlight { stroke: var(--chunk-color); stroke-width: 2.8; }
+.motivation-point { fill: var(--chunk-color); stroke: var(--paper); stroke-width: 1.5; }
+.motivation-end { fill: #789bbf; transform-box: fill-box; transform-origin: center; }
+.motivation-case[data-motivation-case="failure"] .motivation-end { fill: #aa6672; }
+.motivation-caption { color: #647993; font-size: 12px; line-height: 1.5; }
+.motivation-caption strong { color: var(--chunk-color); font-weight: 500; }
+.motivation-case:focus-visible { outline: 2px solid #3f7cbd; outline-offset: 4px; border-radius: 3px; }
+@media (hover: hover) {
+  .motivation-case:hover .motivation-chunk { transform: translateY(-3px); }
+  .motivation-case:hover .motivation-replay { opacity: .9; transform: rotate(-35deg); }
+}
+@media (max-width: 900px) {
+  .challenge { gap: 22px; grid-template-columns: .8fr 2fr; }
+  .motivation-case { padding-inline: 16px; }
+}
+@media (max-width: 700px) {
+  .challenge { grid-template-columns: 1fr; gap: 20px; padding-block: 25px; }
+  .motivation-copy h2 { margin: 8px 0; font-size: 26px; }
+  .motivation-copy h2 br { display: none; }
+  .motivation-case { padding: 0 14px; }
+  .motivation-case:first-child { padding-left: 0; }
+  .motivation-case:last-child { padding-right: 0; }
+  .motivation-case-top { font-size: 9px; }
+  .motivation-caption { font-size: 11px; }
+}
 
 .paper-figure { margin: 0; }
 .figure-zoom {
@@ -515,8 +537,6 @@ tbody .ours { background: rgba(219, 233, 251, 0.62); color: var(--blue-dark); }
   .proof-grid > div { min-height: auto; padding: 30px 0; }
   .proof-grid > div + div { padding-left: 0; border-top: 1px solid var(--line); border-left: 0; }
   .proof-grid dd { max-width: none; }
-  .contrast-grid { grid-template-columns: 1fr; }
-  .contrast-card { min-height: 330px; }
   .potential-note { grid-template-columns: 1fr; }
   .note-mark { min-height: auto; padding-bottom: 15px; justify-content: start; border-right: 0; border-bottom: 1px solid var(--line-strong); }
   .metric-grid { grid-template-columns: 1fr; }

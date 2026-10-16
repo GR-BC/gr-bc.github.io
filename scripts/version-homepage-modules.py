@@ -48,7 +48,7 @@ for module in [experiment / 'experiment-motion.js', comparison / 'comparison.js'
     relative = module.relative_to(ROOT / 'assets').as_posix()
     rewrite(loader, re.escape(relative) + r'\?v=[\w-]+', f'{relative}?v={digest(module)}')
 
-for asset in [ROOT / 'style.css', loader, comparison / 'comparison.css']:
+for asset in [ROOT / 'style.css', loader, comparison / 'comparison.css', ROOT / 'assets/motivation.js']:
     relative = asset.relative_to(ROOT).as_posix()
     rewrite(ROOT / 'index.html', re.escape(relative) + r'\?v=[\w-]+', f'{relative}?v={digest(asset)}')
 print('Versioned homepage modules and styles.')
