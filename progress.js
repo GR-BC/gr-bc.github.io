@@ -17,32 +17,104 @@
   async function json(url) {const r=await fetch(dataVersion?`${url}?v=${dataVersion}`:url);if(!r.ok)throw Error(`Unable to load ${url}`);return r.json();}
   class Trajectory {
     constructor(data,index,annotations) {
-      this.d=data;this.annotations=annotations||{};this.frame=0;this.camera=data.default_camera;this.playing=false;this.speed=1;this.raw=false;this.loop=false;this.event=null;this.pending=null;this.seeking=false;this.loaded=false;this.token=0;this.detailsOpen=false;this.detailAnimation=null;
+      this.d=data;this.annotations=annotations||{};this.frame=0;this.camera=data.default_camera;this.playing=false;this.speed=1;this.raw=false;this.loop=false;this.event=null;this.pending=null;this.seeking=false;this.loaded=false;this.ready=null;this.buffering=false;this.playRequested=false;this.mediaURLs=new Map();this.loadStates=new Map();this.downloads=new Set();this.token=0;this.detailsOpen=false;this.detailAnimation=null;
       this.interventionFlags=data.intervention?.flags||[];this.interventionRanges=[];
       let start=null;for(let i=0;i<=this.interventionFlags.length;i++){if(this.interventionFlags[i]===true){if(start===null)start=i;}else if(start!==null){this.interventionRanges.push([start,i]);start=null;}}
       this.el=document.createElement('article');this.el.className='trajectory';this.el.tabIndex=0;this.el.id=`trajectory-${data.id}`;this.el.setAttribute('aria-labelledby',`${data.id}-title`);
       const cameras=[this.camera,...Object.keys(data.cameras).filter(c=>c!==this.camera)];
       this.el.innerHTML=`<header class="trajectory-header"><div class="trajectory-identity"><span class="trajectory-number">0${index+1}</span><div><span class="trajectory-overline">TRAJECTORY / EPISODE ${String(data.id.split('ep')[1]).padStart(3,'0')}</span><h3 id="${data.id}-title">${titles[data.id]}</h3></div></div><div class="trajectory-tags"><span><i></i>Successful rollout</span><span>${(data.duration+1/data.fps).toFixed(1)} s</span><span>${data.events.length} dips to explore</span></div></header>
-      <div class="trajectory-workspace"><div class="camera-deck" aria-label="Three synchronized camera views">${cameras.map(cam=>`<button class="camera-view ${cam===this.camera?'is-main':''}" type="button" data-camera="${cam}" aria-label="Focus ${cameraNames[cam]} for ${titles[data.id]}" aria-pressed="${cam===this.camera}"><video muted playsinline preload="none" poster="${base+data.cameras[cam].poster}" data-camera="${cam}"></video><span class="camera-label">${cameraNames[cam]}<span>${cam===this.camera?'FOCUSED':'CLICK TO FOCUS'}</span></span><span class="camera-frame">FRAME 0000</span><span class="camera-intervention" aria-hidden="true">Intervention</span></button>`).join('')}<span class="camera-sync" aria-live="polite">3 VIEWS · ONE TIMELINE</span></div>
+      <div class="trajectory-workspace"><div class="camera-deck" aria-label="Three synchronized camera views">${cameras.map(cam=>`<button class="camera-view ${cam===this.camera?'is-main':''}" type="button" data-camera="${cam}" aria-label="Focus ${cameraNames[cam]} for ${titles[data.id]}" aria-pressed="${cam===this.camera}"><video muted playsinline preload="none" poster="${base+data.cameras[cam].poster}" data-camera="${cam}"></video><span class="camera-buffer-mask" aria-hidden="true"><img src="${base+data.cameras[cam].poster}" alt="" width="480" height="360" /></span><span class="camera-buffer-scan" aria-hidden="true"></span><span class="camera-buffer-badge" aria-hidden="true">Preparing <b>0%</b></span><span class="camera-label">${cameraNames[cam]}<span>${cam===this.camera?'FOCUSED':'CLICK TO FOCUS'}</span></span><span class="camera-frame">FRAME 0000</span><span class="camera-intervention" aria-hidden="true">Intervention</span></button>`).join('')}<span class="camera-sync" aria-live="polite">3 VIEWS · ONE TIMELINE</span><div class="camera-buffer" hidden><div class="camera-buffer-heading"><span>Preparing three camera views</span><strong>0%</strong></div><div class="camera-buffer-track" role="progressbar" aria-label="Three camera views loading" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i></div><span class="camera-buffer-note">Three views, ready to play together.</span></div></div>
       <div class="signal-panel"><div class="signal-heading"><div><span class="trajectory-overline">FOLLOW THE CONSEQUENCE</span><h4>Every advance. Every setback.</h4></div><button class="chart-mode" type="button" aria-pressed="false" title="Toggle raw or 15-frame smoothed graph progress">Raw trace</button></div><div class="signal-metrics"><div><span class="metric-dot progress-dot"></span><span>Graph progress</span><strong data-readout="progress">0.000</strong></div><div><span class="metric-dot weight-dot"></span><span>Transition weight</span><strong data-readout="weight">0.000</strong></div></div><div class="trace-chart" role="group" aria-label="Interactive progress and weight charts. Drag to inspect a frame."></div><div class="signal-footnote"><span class="curve-mode-label">15-frame moving average</span><span class="intervention-legend" title="Recorded human intervention"><i aria-hidden="true"></i>Intervention</span><span>Drag chart ↔</span></div></div></div>
       <div class="trajectory-transport" hidden inert><button class="transport-play" type="button" aria-label="Play ${titles[data.id]}">${playIcon}<span>Play</span></button><div class="frame-step"><button type="button" data-step="-1" aria-label="Previous frame for ${titles[data.id]}">−1</button><button type="button" data-step="1" aria-label="Next frame for ${titles[data.id]}">+1</button></div><div class="timeline-control"><div class="timeline-labels"><span data-readout="time">0:00.00</span><span data-readout="frame">FRAME 0000 / ${data.frame_count-1}</span><span>${fmt(data.duration)}</span></div><input class="trajectory-slider" type="range" min="0" max="${data.frame_count-1}" step="1" value="0" aria-label="Scrub ${titles[data.id]} trajectory"/><div class="timeline-events">${data.events.map(e=>`<button type="button" data-jump="${e.id}" style="left:${e.peak_frame/(data.frame_count-1)*100}%" aria-label="Jump to ${e.id} in ${titles[data.id]}">${e.id}</button>`).join('')}</div></div><label class="speed-control"><span>Speed</span><select aria-label="Playback speed for ${titles[data.id]}"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select></label></div>
       <button class="dip-toggle" type="button" aria-expanded="false" aria-controls="${data.id}-details"><span><span data-detail-label>Expand trajectory</span><small>Weight · playback · ${data.events.length} dips</small></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></button><div class="dip-panel" id="${data.id}-details" hidden inert><div class="dip-explorer"><div class="dip-selector"><span class="trajectory-overline">INSPECT A DIP</span><div class="dip-buttons">${data.events.map(e=>`<button type="button" data-jump="${e.id}" aria-pressed="false"><span>${e.id}</span><strong>−${e.smoothed_drop.toFixed(3)}</strong><small>${(e.peak_frame/data.fps).toFixed(1)} s</small></button>`).join('')}</div><div class="dip-tools"><button type="button" data-loop aria-pressed="false" disabled>Loop dip</button><button type="button" data-expand>Expand camera ↗</button></div></div><div class="dip-detail"><div class="dip-copy"><span class="dip-caption">SMALL SETBACKS, IN CONTEXT</span><h4>What changed when progress fell?</h4><p>Select a dip to compare the moments before and after it. Switch the focused camera to inspect the same motion from another view.</p></div><div class="dip-keyframes" aria-label="Before, peak, trough, and after keyframes"></div></div></div>
-      </div><div class="trajectory-status" role="status" aria-live="polite"></div>`;
+      </div><div class="trajectory-status" role="status" aria-live="polite"></div><button class="trajectory-retry" type="button" hidden>Retry loading &amp; play</button>`;
       root.append(this.el);
       this.videos=[...this.el.querySelectorAll('video')];this.slider=this.el.querySelector('input');this.chart=this.el.querySelector('.trace-chart');this.master=this.videos.find(v=>v.dataset.camera===data.default_camera);
-      this.videos.forEach(v=>{v.muted=true;v.addEventListener('error',()=>this.error('A camera could not load. Check your connection and retry.'));v.addEventListener('ended',()=>{if(this.playing)this.pause();});});
+      this.videos.forEach(v=>{v.muted=true;v.addEventListener('error',()=>{if(this.playing)this.error('A camera could not play. Retry loading to reconnect the three views.');});v.addEventListener('ended',()=>{if(this.playing)this.pause();});});
       this.bind();this.drawChart();this.render(0);
     }
     status(s){this.el.querySelector('.trajectory-status').textContent=s;}
-    error(s){this.pause();this.status(s);this.el.classList.remove('is-seeking');}
+    updatePlayButton(){
+      const button=this.el.querySelector('.transport-play');
+      button.innerHTML=(this.playing?pauseIcon:playIcon)+`<span>${this.playing?'Pause':this.playRequested?'Cancel':this.buffering?'Play when ready':'Play'}</span>`;
+      button.setAttribute('aria-label',this.playing?`Pause ${titles[this.d.id]}`:this.playRequested?`Cancel queued playback for ${titles[this.d.id]}`:`Play ${titles[this.d.id]}`);
+      button.setAttribute('aria-pressed',String(this.playing||this.playRequested));
+      button.setAttribute('aria-busy',String(this.playRequested&&!this.playing));
+    }
+    error(s){this.pause();if(this.videos.some(video=>video.error)){this.ready=null;this.loaded=false;}this.status(s);this.el.classList.remove('is-seeking');this.el.querySelector('.trajectory-retry').hidden=false;}
+    updateBuffer(){
+      if(this.bufferRaf)return;
+      this.bufferRaf=requestAnimationFrame(()=>{this.bufferRaf=0;this.paintBuffer();});
+    }
+    paintBuffer(){
+      let sum=0;
+      for(const video of this.videos){
+        const state=this.loadStates.get(video)||{fraction:0};
+        const percent=Math.floor(state.fraction*100);sum+=state.fraction;
+        const card=video.closest('.camera-view');
+        card.style.setProperty('--camera-progress',`${percent}%`);
+        card.querySelector('.camera-buffer-badge b').textContent=`${percent}%`;
+      }
+      const percent=Math.floor(sum/this.videos.length*100), panel=this.el.querySelector('.camera-buffer');
+      panel.querySelector('strong').textContent=`${percent}%`;
+      panel.querySelector('[role="progressbar"]').setAttribute('aria-valuenow',String(percent));
+      panel.querySelector('i').style.width=`${percent}%`;
+    }
+    waitForVideo(video,predicate,action){
+      return new Promise((resolve,reject)=>{
+        const events=['loadedmetadata','loadeddata','canplay','seeked','error'];
+        const cleanup=()=>{clearTimeout(timer);clearInterval(poll);events.forEach(event=>video.removeEventListener(event,check));};
+        const check=()=>{if(video.error){cleanup();reject(Error('Camera decode failed'));}else if(predicate()){cleanup();resolve();}};
+        const timer=setTimeout(()=>{cleanup();reject(Error('Camera decode timed out'));},30000);
+        const poll=setInterval(check,100);
+        events.forEach(event=>video.addEventListener(event,check));
+        try{action?.();check();}catch(error){cleanup();reject(error);}
+      });
+    }
+    async cacheVideo(video){
+      if(this.mediaURLs.has(video)&&!video.error&&video.readyState>=2){this.loadStates.set(video,{fraction:1});this.updateBuffer();return;}
+      const old=this.mediaURLs.get(video);if(old){URL.revokeObjectURL(old);this.mediaURLs.delete(video);}
+      const state={fraction:0};this.loadStates.set(video,state);this.updateBuffer();
+      let blob;
+      // A slow connection may take longer than 20 seconds in total. Only an
+      // idle transfer expires; a second attempt leaves the other cameras intact.
+      for(let attempt=0;attempt<2;attempt++){
+        const abort=new AbortController();this.downloads.add(abort);let timer;
+        const heartbeat=()=>{clearTimeout(timer);timer=setTimeout(()=>abort.abort(),45000);};
+        try{
+          heartbeat();state.fraction=0;this.updateBuffer();
+          const response=await fetch(base+this.d.cameras[video.dataset.camera].src,{signal:abort.signal});
+          if(!response.ok)throw Error(`Camera download failed (${response.status})`);
+          const total=Number(response.headers.get('Content-Length'));
+          if(response.body){
+            const reader=response.body.getReader(),chunks=[];let received=0;
+            try{while(true){const {done,value}=await reader.read();if(done)break;chunks.push(value);received+=value.byteLength;heartbeat();state.fraction=total?Math.min(.97,received/total*.97):0;this.updateBuffer();}}
+            finally{reader.releaseLock();}
+            if(total&&received!==total)throw Error('Incomplete camera download');
+            blob=new Blob(chunks,{type:'video/mp4'});
+          }else blob=await response.blob();
+          clearTimeout(timer);break;
+        }catch(error){clearTimeout(timer);abort.abort();if(attempt===1)throw error;}finally{this.downloads.delete(abort);}
+      }
+      state.fraction=.98;this.updateBuffer();
+      const url=URL.createObjectURL(blob);this.mediaURLs.set(video,url);
+      try{await this.waitForVideo(video,()=>video.readyState>=2,()=>{video.preload='auto';video.src=url;video.load();});}
+      catch(error){URL.revokeObjectURL(url);this.mediaURLs.delete(video);throw error;}
+      state.fraction=1;this.updateBuffer();
+    }
     async activate(){
-      if(this.loaded)return this.ready;
-      this.loaded=true;this.el.classList.add('is-loading');
-      this.ready=Promise.all(this.videos.map(v=>new Promise((resolve,reject)=>{
-        const done=()=>{cleanup();resolve();},fail=()=>{cleanup();reject(Error('Camera load failed'));};
-        const timer=setTimeout(fail,20000),cleanup=()=>{clearTimeout(timer);v.removeEventListener('loadeddata',done);v.removeEventListener('error',fail);};
-        v.addEventListener('loadeddata',done);v.addEventListener('error',fail);v.src=base+this.d.cameras[v.dataset.camera].src;v.preload='auto';v.load();
-      }))).then(()=>{this.el.classList.remove('is-loading');this.status('');}).catch(e=>{this.el.classList.remove('is-loading');this.loaded=false;this.error('The camera views are taking too long to load. Press Play to retry.');throw e;});
+      if(this.ready)return this.ready;
+      this.buffering=true;this.status('');this.el.querySelector('.trajectory-retry').hidden=true;
+      this.el.classList.add('is-loading');this.el.querySelector('.camera-deck').setAttribute('aria-busy','true');
+      this.el.querySelector('.camera-buffer').hidden=false;this.updatePlayButton();this.updateBuffer();
+      this.ready=(async()=>{
+        const results=await Promise.allSettled(this.videos.map(video=>this.cacheVideo(video)));
+        const failed=results.find(result=>result.status==='rejected');if(failed)throw failed.reason;
+        this.loaded=true;this.updateBuffer();this.status('');
+      })().catch(error=>{this.ready=null;this.loaded=false;this.error('The three views are not ready yet. Retry to finish loading; completed views are kept.');throw error;}).finally(()=>{
+        this.buffering=false;this.el.classList.remove('is-loading');this.el.querySelector('.camera-buffer').hidden=true;
+        this.el.querySelector('.camera-deck').setAttribute('aria-busy','false');this.updatePlayButton();
+      });
       return this.ready;
     }
     bind(){
@@ -57,7 +129,8 @@
         if(e.target!==this.el||!['Enter',' '].includes(e.key)||collection?.moving)return;
         e.preventDefault();this.setDetails(!this.detailsOpen);
       });
-      this.el.querySelector('.transport-play').onclick=()=>this.playing?this.pause():this.play();
+      this.el.querySelector('.transport-play').onclick=()=>this.playing||this.playRequested?this.pause():this.play();
+      this.el.querySelector('.trajectory-retry').onclick=()=>this.play();
       this.slider.addEventListener('input',()=>this.seek(+this.slider.value));
       this.el.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>this.seek(this.frame+ +b.dataset.step));
       this.el.querySelectorAll('[data-jump]').forEach(b=>b.onclick=()=>this.selectEvent(b.dataset.jump));
@@ -97,27 +170,35 @@
       this.pause();frame=Math.max(0,Math.min(this.d.frame_count-1,Math.round(frame)));this.pending=frame;this.render(frame,false);this.el.classList.add('is-seeking');
       if(this.seeking)return this.seekWork;
       this.seeking=true;
-      this.seekWork=(async()=>{try{await this.activate();while(this.pending!==null){const next=this.pending;this.pending=null;await Promise.all(this.videos.map(v=>this.seekVideo(v,next/this.d.fps)));if(this.pending===null)this.render(next);}}catch(e){this.error('Could not seek all three views. Try another frame or reload.');}finally{this.seeking=false;this.el.classList.remove('is-seeking');}})();
+      this.seekWork=(async()=>{try{await this.activate();while(this.pending!==null){const next=this.pending;this.pending=null;await Promise.all(this.videos.map(v=>this.seekVideo(v,next/this.d.fps)));if(this.pending===null)this.render(next);}}catch(e){this.error('Could not synchronize this frame. Retry playback or choose another frame.');}finally{this.seeking=false;this.el.classList.remove('is-seeking');}})();
       return this.seekWork;
     }
-    seekVideo(v,time){return new Promise((resolve,reject)=>{if(Math.abs(v.currentTime-time)<.001&&!v.seeking){resolve();return;}const cleanup=()=>{clearTimeout(timer);v.removeEventListener('seeked',done);v.removeEventListener('error',fail);},done=()=>{cleanup();resolve();},fail=()=>{cleanup();reject(Error('Seek failed'));},timer=setTimeout(fail,12000);v.addEventListener('seeked',done);v.addEventListener('error',fail);v.currentTime=time;});}
+    seekVideo(video,time){
+      const target=Math.max(0,Math.min(time,Number.isFinite(video.duration)?Math.max(0,video.duration-.001):time));
+      const atTarget=()=>!video.seeking&&video.readyState>=2&&Math.abs(video.currentTime-target)<1/this.d.fps/2;
+      return this.waitForVideo(video,atTarget,()=>{if(!atTarget())video.currentTime=target;});
+    }
     async play(){
-      if(this.playing)return;
+      if(this.playing||this.playRequested)return;
       if(activePlayer&&activePlayer!==this)activePlayer.pause();activePlayer=this;
-      const token=++this.token;
-      try{await this.activate();if(this.seeking)await this.seekWork;if(token!==this.token)return;
+      const token=++this.token;this.playRequested=true;this.updatePlayButton();
+      try{
+        await this.activate();if(this.seeking)await this.seekWork;if(token!==this.token)return;
         if(this.frame>=this.d.frame_count-2){await this.seek(0);return this.play();}
-        this.videos.forEach(v=>v.playbackRate=this.speed);await Promise.all(this.videos.map(v=>v.play()));
-        if(token!==this.token){this.videos.forEach(v=>v.pause());return;}
-        this.playing=true;this.el.classList.add('is-playing');const b=this.el.querySelector('.transport-play');b.innerHTML=pauseIcon+'<span>Pause</span>';b.setAttribute('aria-label',`Pause ${titles[this.d.id]}`);this.tick();
-      }catch(e){this.error('Playback could not start. Press Play to try again.');}
+        await Promise.all(this.videos.map(video=>this.seekVideo(video,this.frame/this.d.fps)));
+        if(token!==this.token)return;
+        this.videos.forEach(video=>video.playbackRate=this.speed);
+        await Promise.all(this.videos.map(video=>video.play()));
+        if(token!==this.token){if(!this.playRequested&&!this.playing)this.videos.forEach(video=>video.pause());return;}
+        this.playRequested=false;this.playing=true;this.el.classList.add('is-playing');this.updatePlayButton();this.tick();
+      }catch(error){if(token===this.token)this.error('Playback could not start. Retry to reconnect the three views.');}
     }
     tick(){if(!this.playing)return;const time=this.master.currentTime,frame=Math.min(this.d.frame_count-1,Math.floor(time*this.d.fps+1e-5));this.render(frame);
       if(this.loop&&this.event&&frame>=this.event.keyframes.at(-1).frame_index){const work=this.seek(this.event.keyframes[0].frame_index), intent=this.token;work.then(()=>{if(this.token===intent)this.play();});return;}
       if(frame>=this.d.frame_count-1){this.pause();return;}
       this.videos.forEach(v=>{if(v!==this.master&&!v.seeking&&Math.abs(v.currentTime-time)>.08)v.currentTime=time;});this.raf=requestAnimationFrame(()=>this.tick());
     }
-    pause(){this.token++;this.playing=false;cancelAnimationFrame(this.raf);this.videos.forEach(v=>v.pause());this.el.classList.remove('is-playing');const b=this.el.querySelector('.transport-play');b.innerHTML=playIcon+'<span>Play</span>';b.setAttribute('aria-label',`Play ${titles[this.d.id]}`);}
+    pause(){this.token++;this.playRequested=false;this.playing=false;cancelAnimationFrame(this.raf);this.videos.forEach(video=>video.pause());this.el.classList.remove('is-playing');this.updatePlayButton();}
     setCamera(cam){this.camera=cam;this.el.querySelectorAll('.camera-view').forEach(b=>{const active=b.dataset.camera===cam;b.classList.toggle('is-main',active);b.setAttribute('aria-pressed',active);b.querySelector('.camera-label span').textContent=active?'FOCUSED':'CLICK TO FOCUS';});if(this.event)this.showEvent();}
     selectEvent(id,jump=true){this.event=this.d.events.find(e=>e.id===id);this.el.querySelectorAll('.dip-buttons [data-jump]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.jump===id));this.el.querySelectorAll('[data-loop]').forEach(b=>b.disabled=false);this.showEvent();if(jump){this.setDetails(true);this.seek(this.event.peak_frame);}}
     setDetails(open,{animate=true}={}) {
@@ -142,7 +223,7 @@
       this.el.querySelector('.dip-keyframes').innerHTML=e.keyframes.map(k=>`<button class="keyframe-button" type="button" data-frame="${k.frame_index}" aria-label="View ${k.role} at frame ${k.frame_index}"><img loading="lazy" src="${base+k.images[this.camera]}" alt="${esc(titles[this.d.id])}: ${k.role} of ${e.id}, ${cameraNames[this.camera]}" width="480" height="360"/><span>${k.role}<small>${(k.frame_index/this.d.fps).toFixed(2)}s</small></span></button>`).join('');
       this.el.querySelectorAll('.keyframe-button').forEach(b=>b.onclick=()=>this.seek(+b.dataset.frame));
     }
-    async expand(){this.pause();try{await this.activate();if(this.seeking)await this.seekWork;const dialog=document.createElement('dialog');dialog.className='camera-dialog';dialog.innerHTML=`<header><div><span class="trajectory-overline">${esc(titles[this.d.id])} · FRAME ${this.frame}</span><h3>${cameraNames[this.camera]}</h3></div><button type="button" aria-label="Close expanded camera">Close ×</button></header><div class="expanded-camera ${this.interventionFlags[this.frame]===true?'is-intervention':''}"><video muted playsinline src="${base+this.d.cameras[this.camera].src}"></video><span class="camera-intervention">Intervention</span></div><p>Paused at ${fmt(this.frame/this.d.fps)} · Return to the timeline to inspect another frame.</p>`;document.body.append(dialog);dialog.showModal();const v=dialog.querySelector('video');v.addEventListener('loadedmetadata',()=>{v.currentTime=this.frame/this.d.fps;},{once:true});dialog.querySelector('button').onclick=()=>dialog.close();dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});dialog.addEventListener('close',()=>{v.pause();dialog.remove();});}catch(e){this.error('Unable to expand this camera.');}}
+    async expand(){this.pause();try{await this.activate();if(this.seeking)await this.seekWork;const dialog=document.createElement('dialog');dialog.className='camera-dialog';dialog.innerHTML=`<header><div><span class="trajectory-overline">${esc(titles[this.d.id])} · FRAME ${this.frame}</span><h3>${cameraNames[this.camera]}</h3></div><button type="button" aria-label="Close expanded camera">Close ×</button></header><div class="expanded-camera ${this.interventionFlags[this.frame]===true?'is-intervention':''}"><video muted playsinline src="${this.mediaURLs.get(this.videos.find(video=>video.dataset.camera===this.camera))}"></video><span class="camera-intervention">Intervention</span></div><p>Paused at ${fmt(this.frame/this.d.fps)} · Return to the timeline to inspect another frame.</p>`;document.body.append(dialog);dialog.showModal();const v=dialog.querySelector('video');v.addEventListener('loadedmetadata',()=>{v.currentTime=this.frame/this.d.fps;},{once:true});dialog.querySelector('button').onclick=()=>dialog.close();dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});dialog.addEventListener('close',()=>{v.pause();dialog.remove();});}catch(e){this.error('Unable to expand this camera.');}}
   }
   // Shared camera frames and curves travel between measured shelf/grid positions.
   class TrajectoryCollection {
@@ -301,6 +382,7 @@
     const lazy=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){players.find(p=>p.el===e.target).activate().catch(()=>{});lazy.unobserve(e.target);}}),{rootMargin:'150px'});players.forEach(p=>lazy.observe(p.el));
     const visibility=new IntersectionObserver(entries=>entries.forEach(e=>{if(!e.isIntersecting)players.find(p=>p.el===e.target).pause();}));players.forEach(p=>visibility.observe(p.el));
     document.addEventListener('visibilitychange',()=>{if(document.hidden)players.forEach(p=>p.pause());});
+    window.addEventListener('pagehide',event=>{if(!event.persisted)players.forEach(player=>{player.pause();cancelAnimationFrame(player.bufferRaf);player.downloads.forEach(abort=>abort.abort());player.mediaURLs.forEach(url=>URL.revokeObjectURL(url));});});
   }catch(e){root.innerHTML='<p class="trajectory-load-error" role="alert">The trajectories could not load. Please reload this page to try again.</p>';}}
   init();
 })();

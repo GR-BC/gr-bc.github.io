@@ -23,7 +23,7 @@
       content="Learning task-advancing action chunks from demonstrations, failures, and human interventions."
     />
     <meta name="twitter:image" content="/og.jpg" />
-    <link rel="stylesheet" href="style.css?v=571f6ac87cf4" />
+    <link rel="stylesheet" href="style.css?v=b5e7571c0365" />
     <link rel="stylesheet" href="assets/framework/framework.css?v=89ea7ca8eef2" />
     <link rel="stylesheet" href="assets/framework/homepage.css?v=98054b761b74" />
     <link rel="stylesheet" href="assets/progress-comparison/comparison.css?v=c5fcda11f31a" />
@@ -313,7 +313,7 @@
         </nav>
         <div id="trajectory-modules"><p class="trajectory-loading">Loading the trajectory observatory…</p></div>
         <noscript><p>Please enable JavaScript to explore the synchronized camera views and progress traces.</p></noscript>
-        <p class="trajectory-method-note"><strong>Reading the signal.</strong> Graph progress is a graph-derived estimate, not human-annotated ground truth. The default curve uses a centered 15-frame moving average; select Raw trace to inspect the original values. Dip values follow the selected curve. Transition weights use their own 0–1.5 scale. Pale orange marks recorded human-intervention frames; the rose-tinted dip windows follow the supplied event annotations. Captions describe visible motion and possible interpretations, rather than verified causes of the progress change.</p>
+        <p class="trajectory-method-note"><strong>Reading the signal.</strong> Graph progress is a graph-derived estimate, not human-annotated ground truth. The default curve uses a centered 15-frame moving average; select Raw trace to inspect the original values. Dip values follow the selected curve. Transition weights use their own 0–1.5 scale. Pale orange marks recorded human-intervention frames; the rose-tinted dip windows follow the supplied event annotations. Episode annotations describe the motion, alignment corrections, and human–policy control handoffs associated with each dip.</p>
       </section>
 
       <section class="evidence section-shell" id="evidence" aria-labelledby="evidence-title">
@@ -502,7 +502,7 @@
 
     <script type="module" src="assets/framework/homepage.js?v=f763972040b1"></script>
     <script type="module" src="assets/homepage-modules.js?v=64b8e466d66f"></script>
-    <script src="progress.js?v=faf9eb44d4fc" defer></script>
+    <script src="progress.js?v=c1d8a8ffedd5" defer></script>
     <script>
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
