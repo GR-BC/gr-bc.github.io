@@ -1,4 +1,4 @@
-"""Refresh content versions for the two embedded homepage experiment modules."""
+"""Refresh content versions for the homepage curtain and experiment modules."""
 from pathlib import Path
 import hashlib
 import re
@@ -8,6 +8,15 @@ digest = lambda path: hashlib.sha256(path.read_bytes()).hexdigest()[:12]
 
 def rewrite(path, pattern, replacement):
     path.write_text(re.sub(pattern, replacement, path.read_text()))
+
+curtain = ROOT / 'assets/task-curtain'
+if curtain.exists():
+    files = [curtain / 'curtain.css', curtain / 'tasks.svg', curtain / 'manifest.json']
+    release = hashlib.sha256(b''.join(path.read_bytes() for path in files)).hexdigest()[:12]
+    rewrite(curtain / 'curtain.js', r"from './cloth.js\?v=[\w-]+'", f"from './cloth.js?v={digest(curtain / 'cloth.js')}'")
+    rewrite(curtain / 'curtain.js', r"const ASSET_VERSION = '[^']+';", f"const ASSET_VERSION = '{release}';")
+    for name in ['curtain.css', 'curtain.js']:
+        rewrite(ROOT / 'index.html', r'assets/task-curtain/' + re.escape(name) + r'\?v=[\w-]+', f'assets/task-curtain/{name}?v={digest(curtain / name)}')
 
 experiment = ROOT / 'assets/experiment-motion'
 assets = [experiment / name for name in ['experiment-motion.css', 'data.json', 'assembly.svg', 'graphics.svg', 'screw.svg', 'memory.svg']]

@@ -1,0 +1,144 @@
+{
+  "sourceSHA256": "62f0a059235dd64161455d0240003bc6d5b02404db3f284aa9bf2d363a5b36d4",
+  "viewBox": "0 0 1548 756",
+  "photos": [
+    {
+      "id": "image0_519_21",
+      "asset": "media/frame-00-cfec0f4d84.webp",
+      "bytes": 99168
+    },
+    {
+      "id": "image1_519_21",
+      "asset": "media/frame-01-c06fc123e2.webp",
+      "bytes": 96658
+    },
+    {
+      "id": "image2_519_21",
+      "asset": "media/frame-02-a30971a3e2.webp",
+      "bytes": 104222
+    },
+    {
+      "id": "image3_519_21",
+      "asset": "media/frame-03-71880dcc9d.webp",
+      "bytes": 99618
+    },
+    {
+      "id": "image4_519_21",
+      "asset": "media/frame-04-0986044197.webp",
+      "bytes": 97872
+    },
+    {
+      "id": "image5_519_21",
+      "asset": "media/frame-05-14ae4a347b.webp",
+      "bytes": 190904
+    },
+    {
+      "id": "image6_519_21",
+      "asset": "media/frame-06-b565ca6a6b.webp",
+      "bytes": 187606
+    },
+    {
+      "id": "image7_519_21",
+      "asset": "media/frame-07-af39cec456.webp",
+      "bytes": 178408
+    },
+    {
+      "id": "image8_519_21",
+      "asset": "media/frame-08-0210409b08.webp",
+      "bytes": 174392
+    },
+    {
+      "id": "image9_519_21",
+      "asset": "media/frame-09-f1b9a060fd.webp",
+      "bytes": 111962
+    },
+    {
+      "id": "image10_519_21",
+      "asset": "media/frame-10-4151d5b9e2.webp",
+      "bytes": 129686
+    },
+    {
+      "id": "image11_519_21",
+      "asset": "media/frame-11-83192c4f0d.webp",
+      "bytes": 120706
+    },
+    {
+      "id": "image12_519_21",
+      "asset": "media/frame-12-f3d13fe71a.webp",
+      "bytes": 104340
+    },
+    {
+      "id": "image13_519_21",
+      "asset": "media/frame-13-f2c23cc34d.webp",
+      "bytes": 130752
+    },
+    {
+      "id": "image14_519_21",
+      "asset": "media/frame-14-775cfed16a.webp",
+      "bytes": 102706
+    },
+    {
+      "id": "image15_519_21",
+      "asset": "media/frame-15-3d3865d178.webp",
+      "bytes": 97336
+    },
+    {
+      "id": "image16_519_21",
+      "asset": "media/frame-16-f7461f27cd.webp",
+      "bytes": 101778
+    },
+    {
+      "id": "image17_519_21",
+      "asset": "media/frame-17-3444370219.webp",
+      "bytes": 115450
+    },
+    {
+      "id": "image18_519_21",
+      "asset": "media/frame-18-7999a2f132.webp",
+      "bytes": 98402
+    },
+    {
+      "id": "image19_519_21",
+      "asset": "media/frame-19-610844d5d8.webp",
+      "bytes": 165562
+    }
+  ],
+  "labels": [
+    {
+      "id": "assembly",
+      "title": "Assembly model",
+      "y": 0,
+      "sourceIndices": [
+        91,
+        112
+      ]
+    },
+    {
+      "id": "graphics",
+      "title": "Graphics card",
+      "y": 189,
+      "sourceIndices": [
+        0,
+        88
+      ]
+    },
+    {
+      "id": "screw",
+      "title": "Screw tightening",
+      "y": 378,
+      "sourceIndices": [
+        28,
+        89
+      ]
+    },
+    {
+      "id": "memory",
+      "title": "Memory stick",
+      "y": 567,
+      "sourceIndices": [
+        55,
+        90
+      ]
+    }
+  ]
+}

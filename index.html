@@ -24,6 +24,7 @@
     />
     <meta name="twitter:image" content="/og.jpg" />
     <link rel="stylesheet" href="style.css?v=b5e7571c0365" />
+    <link rel="stylesheet" href="assets/task-curtain/curtain.css?v=3b189c9166db" />
     <link rel="stylesheet" href="assets/framework/framework.css?v=89ea7ca8eef2" />
     <link rel="stylesheet" href="assets/framework/homepage.css?v=98054b761b74" />
     <link rel="stylesheet" href="assets/progress-comparison/comparison.css?v=c5fcda11f31a" />
@@ -125,15 +126,16 @@
           </div>
           <p>
             A two-minute view of precise manipulation, backbone generalization, iterative training,
-            and robustness evaluations.
+            and robustness evaluations. Draw back the task curtain to watch the demo,
+            or reveal it to explore twenty key moments across four manipulation tasks.
           </p>
         </div>
 
-        <div class="film-frame reveal">
-          <div class="media-topline">
-            <span>Full project video</span>
-            <span>02:21 · sound available</span>
-          </div>
+        <div class="film-frame demo-theatre reveal" id="tasks" data-task-curtain>
+          <div class="demo-stage">
+            <div class="curtain-rod" aria-hidden="true"></div>
+            <div class="curtain-hangers" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="demo-video">
           <video
             src="assets/grbc-demo.mp4"
             poster="assets/grbc-demo-poster.jpg"
@@ -142,6 +144,23 @@
             preload="metadata"
             aria-label="GR-BC project video showing robot manipulation experiments"
           ></video>
+              <button class="demo-play" type="button" aria-label="Play the project demo"><span aria-hidden="true">▶</span> Play demo</button>
+            </div>
+            <nav class="curtain-rail" aria-label="Explore the four task sequences">
+              <div class="curtain-rail-inner">
+                <button type="button" data-curtain-task="assembly" aria-expanded="false" aria-controls="task-curtain-map" aria-label="Unfold task map: Assembly model"><img src="assets/task-curtain/assembly-label.svg" width="80" height="189" alt="Assembly model" /></button>
+                <button type="button" data-curtain-task="graphics" aria-expanded="false" aria-controls="task-curtain-map" aria-label="Unfold task map: Graphics card"><img src="assets/task-curtain/graphics-label.svg" width="80" height="189" alt="Graphics card" /></button>
+                <button type="button" data-curtain-task="screw" aria-expanded="false" aria-controls="task-curtain-map" aria-label="Unfold task map: Screw tightening"><img src="assets/task-curtain/screw-label.svg" width="80" height="189" alt="Screw tightening" /></button>
+                <button type="button" data-curtain-task="memory" aria-expanded="false" aria-controls="task-curtain-map" aria-label="Unfold task map: Memory stick"><img src="assets/task-curtain/memory-label.svg" width="80" height="189" alt="Memory stick" /></button>
+              </div>
+            </nav>
+            <div class="curtain-sheet" id="task-curtain-map" role="region" aria-label="Four real-world task sequences" aria-hidden="true" hidden inert>
+              <div class="curtain-art"></div>
+            </div>
+            <button class="curtain-peel" type="button" data-curtain-toggle aria-expanded="false" aria-controls="task-curtain-map" aria-label="Unfold task map" title="Unfold task map"><span aria-hidden="true">↗</span></button>
+          </div>
+          <div class="demo-footline"><span>Four tasks. Twenty moments of precision.</span></div>
+          <details class="task-curtain-fallback"><summary>Explore the four task sequences</summary><img src="assets/paper-figures/fig2-tasks.jpg" alt="Assembly model, graphics card insertion, screw tightening, and memory stick insertion task sequences" width="1120" height="547" loading="lazy" /></details>
         </div>
       </section>
 
@@ -254,48 +273,6 @@
               <h3>A failure can contain recovery.</h3>
               <p>Discarding the whole rollout wastes valid, task-advancing chunks that reconnect to successful regions.</p>
             </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="tasks section-band" id="tasks" aria-labelledby="tasks-title">
-        <div class="section-shell">
-          <div class="section-intro reveal">
-            <div>
-              <span class="kicker">Real-world tasks</span>
-              <h2 id="tasks-title">Precision, contact, and recovery over long horizons.</h2>
-            </div>
-            <p>
-              Four tasks cover object search, visual alignment, contact-rich execution, and recovery from
-              external disturbances or previous mistakes.
-            </p>
-          </div>
-
-          <figure class="paper-figure reveal">
-            <button
-              class="figure-zoom"
-              type="button"
-              data-figure="assets/paper-figures/fig2-tasks.jpg"
-              data-alt="Four real-world manipulation tasks evaluated in GR-BC"
-              aria-label="Open Figure 2 at full size"
-            >
-              <img
-                src="assets/paper-figures/fig2-tasks.jpg"
-                alt="Task sequences for assembly model, graphics card, screw tightening, and memory stick insertion"
-                loading="lazy"
-              />
-              <span class="zoom-hint">Open figure</span>
-            </button>
-            <figcaption>
-              <strong>Figure 2.</strong> Assembly Model, Graphics Card, Screw Tightening, and Memory Stick.
-            </figcaption>
-          </figure>
-
-          <div class="task-list" aria-label="Evaluation task list">
-            <span>Assembly Model</span>
-            <span>Graphics Card</span>
-            <span>Screw Tightening</span>
-            <span>Memory Stick</span>
           </div>
         </div>
       </section>
@@ -500,6 +477,7 @@
       <img alt="" />
     </dialog>
 
+    <script type="module" src="assets/task-curtain/curtain.js?v=1b631b9b1dbe"></script>
     <script type="module" src="assets/framework/homepage.js?v=f763972040b1"></script>
     <script type="module" src="assets/homepage-modules.js?v=64b8e466d66f"></script>
     <script src="progress.js?v=c1d8a8ffedd5" defer></script>
