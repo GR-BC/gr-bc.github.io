@@ -1,5 +1,5 @@
 import {createCloth} from './cloth.js?v=8f03d3208da3';
-const ASSET_VERSION = 'd2c59bc3324c';
+const ASSET_VERSION = 'c0e5e071c06e';
 const asset=name=>new URL(`${name}?v=${ASSET_VERSION}`,import.meta.url);
 const shell=document.querySelector('[data-task-curtain]');
 if(shell)mount().catch(error=>{
@@ -114,8 +114,8 @@ async function mount(){
     if(open)video.pause();video.inert=open;video.controls=!open;video.setAttribute('aria-hidden',String(open));
     for(const button of [...rail,...toggles])button.setAttribute('aria-expanded',String(open));
     if(cta){
-      cta.querySelector('.curtain-cta-action').textContent=open?'掀起':'放下';
-      cta.querySelector('.curtain-cta-purpose').textContent=open?'for demo':'for tasks';
+      cta.querySelector('.curtain-cta-action').textContent=open?'Reveal':'Show';
+      cta.querySelector('.curtain-cta-purpose').textContent=open?'the demo':'the task map';
     }
     for(const button of rail)button.setAttribute('aria-label',`${open?'Draw curtain aside':'Reveal task curtain'}: ${button.querySelector('img').alt}`);
     peel.setAttribute('aria-label',open?'Drag curtain corner to reveal the demo':'Drag curtain corner to reveal the task map');

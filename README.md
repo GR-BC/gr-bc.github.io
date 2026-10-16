@@ -2,7 +2,7 @@
 
 Static GitHub Pages website. The interactive trajectory section is implemented in `progress.js`, with styles in `style.css` and frame-aligned media in `assets/progress/`.
 
-The homepage opens with the project demo, then the animated framework. Abstract and task context follow; the four-trajectory collection and progress comparison appear afterward, with headline and policy results later on the page. Navigation follows that reading order.
+The homepage opens with the project demo, then Motivation and the animated framework with chunk weighting. Motivation combines the mixed-quality data context with two animated success/failure sketches. The four-trajectory collection and progress comparison follow, with policy results later on the page. The former standalone Abstract and headline-result strip are removed; their method context is consolidated into the framework introduction. Section spacing is shared and compact.
 
 The framework's four stage explanations follow the paper's method sections and live inside the figure. Hover or focus a part to lift it and smoothly switch the shared explanation; move away to return to the complete cycle. The former separate method cards and potential note are removed.
 

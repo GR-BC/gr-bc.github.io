@@ -43,8 +43,7 @@
 .is-grabbing .curtain-peel::after { transform:translate(-2px,calc(-1 * var(--corner-lift,0px))) rotate(-10deg); transition:none; }
 .is-grabbing .curtain-peel::before { transform:rotate(4deg); }
 .demo-footline { position:relative; display:flex; flex-direction:column; align-items:center; gap:12px; padding:14px 1px 0; color:#8291a3; background:transparent; font-size:11px; }
-.curtain-cta { display:flex; align-items:center; justify-content:center; gap:9px; padding:8px 0 10px; border:0; border-bottom:1px solid #356ba948; color:#274f7b; background:transparent; font:600 clamp(26px,3vw,36px)/1.2 "Helvetica Neue",Helvetica,Arial,sans-serif; letter-spacing:-.035em; cursor:pointer; transition:color .25s,border-color .25s; }
-.curtain-cta-purpose { font-weight:450; }
+.curtain-cta { display:flex; align-items:center; justify-content:center; gap:9px; padding:8px 0 10px; border:0; border-bottom:1px solid #356ba948; color:#274f7b; background:transparent; font:500 clamp(24px,2.6vw,32px)/1.2 "Helvetica Neue",Helvetica,Arial,sans-serif; letter-spacing:-.035em; cursor:pointer; transition:color .25s,border-color .25s; }
 .curtain-cta-arrow { display:grid; place-items:center; width:43px; height:43px; margin-left:10px; border:1px solid #8fa9c34d; border-radius:50%; font:400 28px/1 "Helvetica Neue",Helvetica,Arial,sans-serif; transition:transform .4s cubic-bezier(.2,.8,.2,1),background .3s; }
 .curtain-cta:hover { color:#1b65b7; border-color:#356ba999; }
 .curtain-cta:hover .curtain-cta-arrow { transform:translate(-3px,-3px); background:#dce9f65c; }

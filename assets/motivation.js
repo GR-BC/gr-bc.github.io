@@ -63,7 +63,7 @@ if (section) {
     }
     syncPlayback();
   }, { threshold: .25 });
-  observer.observe(section);
+  observer.observe(section.querySelector('.motivation-examples')||section);
   document.addEventListener('visibilitychange', syncPlayback);
   motion.addEventListener('change', () => {
     if (motion.matches) cases.forEach(stop);

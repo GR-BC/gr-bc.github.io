@@ -23,8 +23,8 @@
       content="Learning task-advancing action chunks from demonstrations, failures, and human interventions."
     />
     <meta name="twitter:image" content="/og.jpg" />
-    <link rel="stylesheet" href="style.css?v=3d013b24bd44" />
-    <link rel="stylesheet" href="assets/task-curtain/curtain.css?v=4bd07a1db9a8" />
+    <link rel="stylesheet" href="style.css?v=46cfb4f2277c" />
+    <link rel="stylesheet" href="assets/task-curtain/curtain.css?v=55a9a2ae7c3b" />
     <link rel="stylesheet" href="assets/framework/framework.css?v=89ea7ca8eef2" />
     <link rel="stylesheet" href="assets/framework/homepage.css?v=e3c7ac603da9" />
     <link rel="stylesheet" href="assets/weight-lab/lab.css?v=49ac42474954" />
@@ -96,10 +96,7 @@
               <p class="corresponding-authors"><span><sup>†</sup> Corresponding Authors</span></p>
             </div>
           </div>
-          <p class="hero-deck">
-            Find the action chunks that actually move the task forward — even when the data includes
-            detours, failures, and human recoveries.
-          </p>
+          <p class="hero-deck">Find the action chunks that actually move the task forward</p>
           <div class="hero-actions" aria-label="Project resources">
             <a class="button" href="https://arxiv.org/abs/2610.20504" target="_blank" rel="noopener noreferrer">
               <img class="resource-icon" src="assets/arxiv.svg" alt="" width="22" height="22" />
@@ -161,10 +158,54 @@
             <button class="curtain-peel" type="button" data-curtain-toggle aria-expanded="false" aria-controls="task-curtain-map" aria-label="Unfold task map" title="Unfold task map"><span aria-hidden="true">↗</span></button>
           </div>
           <div class="demo-footline">
-            <button class="curtain-cta" type="button" data-curtain-toggle aria-expanded="false" aria-controls="task-curtain-map"><span class="curtain-cta-action">掀起</span> <span class="curtain-cta-purpose">for demo</span><span class="curtain-cta-arrow" aria-hidden="true">↖</span></button>
+            <button class="curtain-cta" type="button" data-curtain-toggle aria-expanded="false" aria-controls="task-curtain-map"><span class="curtain-cta-action">Reveal</span> <span class="curtain-cta-purpose">the demo</span><span class="curtain-cta-arrow" aria-hidden="true">↖</span></button>
             <span>Four tasks. Twenty moments of precision.</span>
           </div>
           <details class="task-curtain-fallback"><summary>Explore the four task sequences</summary><img src="assets/paper-figures/fig2-tasks.jpg" alt="Assembly model, graphics card insertion, screw tightening, and memory stick insertion task sequences" width="1120" height="547" loading="lazy" /></details>
+        </div>
+      </section>
+
+      <section class="challenge section-shell" id="challenge" aria-labelledby="challenge-title">
+        <div class="section-intro motivation-intro reveal">
+          <div><h2 id="challenge-title">Motivation</h2></div>
+          <p>
+            Long-horizon manipulation data is rarely clean. Even successful demonstrations can contain
+            hesitations, overshoots, failed attempts, and imperfect recoveries. Intervention-assisted
+            rollouts mix autonomous mistakes with delayed expert corrections, while failed episodes can
+            still contain short segments that reconnect the system to a viable path.
+          </p>
+        </div>
+        <div class="motivation-examples" aria-label="Illustrative trajectories; click either example to replay">
+          <button class="motivation-case" type="button" data-motivation-case="success" aria-label="Replay: a successful trajectory can contain regression" title="Click to replay">
+            <span class="motivation-case-top"><span>01 / Success</span><svg class="motivation-replay" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6a5 5 0 1 1 0 4M3 2.5V6h3.5" /></svg></span>
+            <svg class="motivation-chart" viewBox="0 0 300 72" aria-hidden="true">
+              <path class="motivation-guide" d="M8 62H292" />
+              <path class="motivation-track" d="M10 54C40 54 51 30 79 30S105 24 119 28C135 33 138 52 156 51S182 25 205 24S246 15 287 11" />
+              <path class="motivation-trace" data-motivation-draw pathLength="1" d="M10 54C40 54 51 30 79 30S105 24 119 28C135 33 138 52 156 51S182 25 205 24S246 15 287 11" />
+              <g class="motivation-chunk" data-motivation-chunk>
+                <path class="motivation-selection" d="M111 19h53v40h-53z" />
+                <path class="motivation-highlight" pathLength="1" d="M119 28C135 33 138 52 156 51" />
+                <circle class="motivation-point" cx="156" cy="51" r="3.8" />
+              </g>
+              <circle class="motivation-end" data-motivation-end cx="287" cy="11" r="3.8" />
+            </svg>
+            <span class="motivation-caption">…can contain <strong>regression.</strong></span>
+          </button>
+          <button class="motivation-case" type="button" data-motivation-case="failure" aria-label="Replay: a failed trajectory can contain useful recovery" title="Click to replay">
+            <span class="motivation-case-top"><span>02 / Failure</span><svg class="motivation-replay" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6a5 5 0 1 1 0 4M3 2.5V6h3.5" /></svg></span>
+            <svg class="motivation-chart" viewBox="0 0 300 72" aria-hidden="true">
+              <path class="motivation-guide" d="M8 62H292" />
+              <path class="motivation-track" d="M10 51C37 51 47 42 68 43S96 57 116 49C132 42 140 24 160 24S188 20 204 34S248 48 287 57" />
+              <path class="motivation-trace" data-motivation-draw pathLength="1" d="M10 51C37 51 47 42 68 43S96 57 116 49C132 42 140 24 160 24S188 20 204 34S248 48 287 57" />
+              <g class="motivation-chunk" data-motivation-chunk>
+                <path class="motivation-selection" d="M108 16h60v41h-60z" />
+                <path class="motivation-highlight" pathLength="1" d="M116 49C132 42 140 24 160 24" />
+                <circle class="motivation-point" cx="160" cy="24" r="3.8" />
+              </g>
+              <circle class="motivation-end" data-motivation-end cx="287" cy="57" r="3.8" />
+            </svg>
+            <span class="motivation-caption">…can contain <strong>useful recovery.</strong></span>
+          </button>
         </div>
       </section>
 
@@ -175,8 +216,10 @@
             <h2 id="method-title">One graph. One reverse search. Better supervision.</h2>
           </div>
           <p>
-            GR-BC leaves the VLA architecture and supervised objective intact. The graph only decides how
-            strongly each observed action chunk should contribute to training.
+            GR-BC keeps the VLA architecture and supervised objective unchanged. Reverse search on a
+            task-conditioned goal-reachability graph estimates remaining steps to success and reweights
+            observed action chunks by their progress. New rollouts refresh the graph and weights for the
+            next offline round.
           </p>
         </div>
 
@@ -219,67 +262,6 @@
         </figure>
         <div class="weight-lab" id="chunk-weighting" data-weight-lab data-composition-id="weight-lab" data-start="0" data-duration="4.2" data-width="1120" data-height="620" aria-label="Interactive action-chunk weighting">
           <div class="wl-fallback"><span>Stable progress → bounded positive weight</span><span>Insufficient net progress → zero weight</span><span>Excess regression → zero weight</span></div>
-        </div>
-      </section>
-
-      <section class="abstract section-shell" id="abstract">
-        <div class="section-heading reveal">
-          <span class="kicker">Abstract</span>
-          <h2>Judge actions by their consequence, not the trajectory label.</h2>
-        </div>
-        <div class="abstract-copy reveal">
-          <p>
-            Long-horizon manipulation data is rarely clean. Even successful demonstrations can contain
-            hesitations, overshoots, failed attempts, and imperfect recoveries. Intervention-assisted
-            rollouts mix autonomous mistakes with delayed expert corrections, while failed episodes can
-            still contain short segments that reconnect the system to a viable path.
-          </p>
-          <p>
-            GR-BC builds a task-conditioned goal-reachability graph over this mixed-quality data. Reverse
-            graph search estimates the minimal remaining steps to success inside the dataset support, and
-            each physically executed action chunk is weighted by how much it reduces that state potential.
-            New rollouts are appended to the graph and reused in the next offline training round.
-          </p>
-        </div>
-      </section>
-
-      <section class="challenge section-shell" id="challenge" aria-labelledby="challenge-title">
-        <div class="motivation-copy">
-          <span class="motivation-eyebrow">Motivation</span>
-          <h2 id="challenge-title">Outcomes hide <br />the details.</h2>
-          <p>Credit belongs to each action chunk.</p>
-        </div>
-        <div class="motivation-examples" aria-label="Illustrative trajectories; click either example to replay">
-          <button class="motivation-case" type="button" data-motivation-case="success" aria-label="Replay: a successful trajectory can contain regression" title="Click to replay">
-            <span class="motivation-case-top"><span>01 / Success</span><svg class="motivation-replay" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6a5 5 0 1 1 0 4M3 2.5V6h3.5" /></svg></span>
-            <svg class="motivation-chart" viewBox="0 0 300 72" aria-hidden="true">
-              <path class="motivation-guide" d="M8 62H292" />
-              <path class="motivation-track" d="M10 54C40 54 51 30 79 30S105 24 119 28C135 33 138 52 156 51S182 25 205 24S246 15 287 11" />
-              <path class="motivation-trace" data-motivation-draw pathLength="1" d="M10 54C40 54 51 30 79 30S105 24 119 28C135 33 138 52 156 51S182 25 205 24S246 15 287 11" />
-              <g class="motivation-chunk" data-motivation-chunk>
-                <path class="motivation-selection" d="M111 19h53v40h-53z" />
-                <path class="motivation-highlight" pathLength="1" d="M119 28C135 33 138 52 156 51" />
-                <circle class="motivation-point" cx="156" cy="51" r="3.8" />
-              </g>
-              <circle class="motivation-end" data-motivation-end cx="287" cy="11" r="3.8" />
-            </svg>
-            <span class="motivation-caption">…can contain <strong>regression.</strong></span>
-          </button>
-          <button class="motivation-case" type="button" data-motivation-case="failure" aria-label="Replay: a failed trajectory can contain useful recovery" title="Click to replay">
-            <span class="motivation-case-top"><span>02 / Failure</span><svg class="motivation-replay" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6a5 5 0 1 1 0 4M3 2.5V6h3.5" /></svg></span>
-            <svg class="motivation-chart" viewBox="0 0 300 72" aria-hidden="true">
-              <path class="motivation-guide" d="M8 62H292" />
-              <path class="motivation-track" d="M10 51C37 51 47 42 68 43S96 57 116 49C132 42 140 24 160 24S188 20 204 34S248 48 287 57" />
-              <path class="motivation-trace" data-motivation-draw pathLength="1" d="M10 51C37 51 47 42 68 43S96 57 116 49C132 42 140 24 160 24S188 20 204 34S248 48 287 57" />
-              <g class="motivation-chunk" data-motivation-chunk>
-                <path class="motivation-selection" d="M108 16h60v41h-60z" />
-                <path class="motivation-highlight" pathLength="1" d="M116 49C132 42 140 24 160 24" />
-                <circle class="motivation-point" cx="160" cy="24" r="3.8" />
-              </g>
-              <circle class="motivation-end" data-motivation-end cx="287" cy="57" r="3.8" />
-            </svg>
-            <span class="motivation-caption">…can contain <strong>useful recovery.</strong></span>
-          </button>
         </div>
       </section>
 
@@ -351,27 +333,6 @@
             </tbody>
           </table>
         </div>
-      </section>
-
-      <section class="proof" id="highlights" aria-label="Headline results">
-        <div class="proof-intro">
-          <span class="kicker">Why it matters</span>
-          <p>Mixed-quality experience becomes useful supervision, without learning another model.</p>
-        </div>
-        <dl class="proof-grid">
-          <div>
-            <dt>91%</dt>
-            <dd>average final success across the four tasks in the iterative X-VLA study</dd>
-          </div>
-          <div>
-            <dt>4</dt>
-            <dd>real-world long-horizon precise manipulation tasks</dd>
-          </div>
-          <div>
-            <dt>0</dt>
-            <dd>reward models, action critics, progress labels, or VLM annotations</dd>
-          </div>
-        </dl>
       </section>
 
       <section class="results section-band" id="results" aria-labelledby="results-title">
@@ -483,12 +444,12 @@
       <img alt="" />
     </dialog>
 
-    <script type="module" src="assets/task-curtain/curtain.js?v=d3f9f50bcf32"></script>
+    <script type="module" src="assets/task-curtain/curtain.js?v=26a0d3c2f60d"></script>
     <script type="module" src="assets/framework/homepage.js?v=3bf5d7cfeee6"></script>
     <script type="module" src="assets/homepage-modules.js?v=64b8e466d66f"></script>
     <script src="progress.js?v=c1d8a8ffedd5" defer></script>
     <script type="module" src="assets/weight-lab/lab.js?v=f670cb568386"></script>
-    <script type="module" src="assets/motivation.js?v=9a36940d9827"></script>
+    <script type="module" src="assets/motivation.js?v=d12d51c0ffad"></script>
     <script>
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
