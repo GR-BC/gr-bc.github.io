@@ -6,6 +6,8 @@ The homepage places this module immediately after the learning-cycle figure. Thr
 
 Each native range control and draggable curve handle updates the curve, gain, regression depth, mask, and weight from the same calculation. The third example can be changed from rejected to accepted by reducing its dip. Keyboard range controls remain usable. At narrow widths the examples stay in a single, horizontally scrollable row.
 
+The first two charts use fixed local y-scales, magnified 2× and 5× relative to the third chart, with small view labels. Curve dragging uses the matching inverse projection. In the second chart the regression threshold lies below the zoomed view and is marked with a downward arrow; its shaded tolerance band is clipped to the visible plot. Progress samples, parameters, and the weighting calculation remain unchanged. Heavier curves, axes, measurement marks, and slider tracks keep the compact diagrams legible.
+
 The finite GSAP timeline draws the functions, reveals measurements, then retains or masks the action-chunk strips. Replay restores the three defaults; Play can replay the current parameters. Leaving the viewport or hiding the document pauses playback. Reduced motion immediately shows the resolved state. No runtime network service or external CDN is needed.
 
 ## Hyperframes
