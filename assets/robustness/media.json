@@ -1,0 +1,38 @@
+[
+  {
+    "id": "assembly",
+    "title": "Assembly model",
+    "source": "block.mp4",
+    "duration": 53.133333,
+    "bytes": 9085845,
+    "videoHash": "12ca8c328abb",
+    "posterHash": "647474f6ced7"
+  },
+  {
+    "id": "graphics",
+    "title": "Graphics card",
+    "source": "gpu\u81ea\u8fdb\u5316.mp4",
+    "duration": 35.133333,
+    "bytes": 8986948,
+    "videoHash": "ee9b2fd5f987",
+    "posterHash": "c085ee3e8dd6"
+  },
+  {
+    "id": "screw",
+    "title": "Screw tightening",
+    "source": "screw\u81ea\u8fdb\u5316.mp4",
+    "duration": 91.6,
+    "bytes": 21647407,
+    "videoHash": "62d1496e7f67",
+    "posterHash": "54c882586c23"
+  },
+  {
+    "id": "memory",
+    "title": "Memory stick",
+    "source": "ram\u81ea\u8fdb\u5316.mp4",
+    "duration": 36.566667,
+    "bytes": 8929932,
+    "videoHash": "f5de2613c734",
+    "posterHash": "3cffc0ecbe7d"
+  }
+]

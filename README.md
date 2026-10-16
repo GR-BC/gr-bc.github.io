@@ -12,6 +12,8 @@ The demo and original Frame 20 task figure share one stage. The task curtain han
 
 The main demo uses the supplied final 2:21 video and cover. Its web copy retains 1920×1080 at 60 FPS, uses H.264 video with AAC audio, and places MP4 metadata before media data for progressive playback. Content hashes on the video and poster URLs refresh cached copies when these assets change.
 
+The final Robustness section hangs four silent, automatically looping task videos from an interactive clothesline. Trackpad/touch scrolling, mouse dragging, keyboard navigation, and arrow controls browse the line; hover lifts each print. Only visible clips play, and the pause control also stops the ambient sway. See `assets/robustness/README.md` for source mapping, web encoding, and motion behavior.
+
 ## Embedded experiment figures
 
 `assets/homepage-modules.js` mounts the same native components used by `experiment-motion.html` and `progress-comparison.html`. The progress comparison replaces Figure 5; the four-task animated result panel replaces Figure 6 and the old task-tab bar chart. Method highlighting, detail-frame links, percentage bubbles, replay, keyboard controls, and reduced motion remain available. The homepage supplies section headings instead of repeating the experiment preview's heading. Static paper figures remain visible without JavaScript or if a module fails to load.
