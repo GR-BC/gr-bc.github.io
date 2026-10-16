@@ -6,6 +6,8 @@ The homepage opens with the project demo, then the animated framework. Abstract 
 
 The framework's four stage explanations follow the paper's method sections and live inside the figure. Hover or focus a part to lift it and smoothly switch the shared explanation; move away to return to the complete cycle. The former separate method cards and potential note are removed.
 
+The following chunk-weighting module shows three illustrative cases from the paper's gated weight rule in one row. Native sliders and draggable curve handles recompute the real formula; a finite GSAP/Hyperframes-compatible animation reveals how accepted chunks retain weight while stagnant or excessively regressive chunks are masked. See `assets/weight-lab/README.md` for the rule, build, and verification.
+
 The demo and original Frame 20 task figure share one stage. The task curtain hangs from a rod and eight rings, with a separate pleated hem below the complete picture, gentle irregular wind motion, and a small lifted corner that reveals the video behind it. An animated diagonal arrow guides corner dragging; labels and the corner also toggle the task map. Drawing it aside preserves the video's playback position. The former separate task section is removed, with its `#tasks` anchor moved to the combined stage. See `assets/task-curtain/README.md` for motion, accessibility, and source-fidelity checks.
 
 ## Embedded experiment figures

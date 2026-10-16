@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import {examples,parameters,evaluateChunk,sampleProgress} from '../assets/weight-lab/model.js';
+const stable=evaluateChunk([.4,.42,.46]);
+assert.equal(stable.reason,'keep');
+assert.ok(Math.abs(stable.weight-(1+.5*Math.tanh(1.2)))<1e-12);
+assert.equal(evaluateChunk([.4,.403]).weight,0,'Equality at the net-gain threshold is rejected.');
+assert.equal(evaluateChunk([.4,.37,.46]).reason,'keep','Equality at the regression limit is retained.');
+assert.equal(evaluateChunk([.4,.369,.46]).reason,'regression','A positive endpoint cannot hide an excessive setback.');
+assert.equal(evaluateChunk([.4,.39,.4]).reason,'progress');
+assert.equal(evaluateChunk([.4,NaN,.46]).weight,0);
+assert.equal(evaluateChunk([.4,.9],{...parameters,wMax:1.2}).weight,1.2,'Accepted weights respect the upper clip.');
+assert.equal(evaluateChunk([.4,.404],{...parameters,wMin:1.4}).weight,1.4,'Accepted weights respect the lower clip.');
+const cases=examples.map(e=>evaluateChunk(sampleProgress(e.id,e.value)));
+assert.deepEqual(cases.map(e=>e.reason),['keep','progress','regression']);
+assert.ok(Math.abs(cases[0].delta-cases[2].delta)<1e-12,'Stable and regressed examples have the same endpoint gain.');
+assert.equal(evaluateChunk(sampleProgress('regressed',parameters.eta)).reason,'keep');
+console.log('PASS: strict gain gate, inclusive regression gate, clipping, unreachable states, and all three illustrative cases.');

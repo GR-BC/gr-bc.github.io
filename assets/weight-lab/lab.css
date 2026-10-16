@@ -1,0 +1,64 @@
+.weight-lab { --wl-ink:#14233d; --wl-blue:#2f6fd5; --wl-cut:#985c49; --wl-rule:#a5b5c8; color:var(--wl-ink); margin:70px 0 12px; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }
+.wl-heading { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:30px; }
+.wl-eyebrow { display:block; margin-bottom:12px; color:#5c718b; font:500 10px/1.5 ui-monospace,SFMono-Regular,monospace; letter-spacing:.12em; text-transform:uppercase; }
+.weight-lab h3 { margin:0; font-size:32px; font-weight:550; line-height:1.2; letter-spacing:-.04em; }
+.wl-tools { display:flex; gap:3px; padding-bottom:2px; }
+.wl-tools button { width:30px; height:30px; display:grid; place-items:center; border:0; border-radius:50%; background:transparent; color:#6d8097; cursor:pointer; transition:color .2s,background .2s; }
+.wl-tools svg { width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:1.4; stroke-linecap:round; stroke-linejoin:round; }
+.wl-tools button:hover { color:var(--wl-blue); background:#e9f0f9; }
+.wl-viewport { overflow-x:auto; overscroll-behavior-x:contain; scrollbar-width:thin; scrollbar-color:#b5c5d8 transparent; scroll-snap-type:x mandatory; }
+.wl-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); border-top:1px solid #cbd7e5; border-bottom:1px solid #cbd7e5; }
+.wl-case { min-width:0; padding:24px 22px 26px; scroll-snap-align:start; }
+.wl-case + .wl-case { border-left:1px solid #d9e2ed; }
+.wl-case-header { display:flex; align-items:baseline; gap:10px; min-height:23px; }
+.wl-number { color:#5c718b; font:10px/1 ui-monospace,SFMono-Regular,monospace; }
+.weight-lab h4 { margin:0; font-size:15px; line-height:1.4; font-weight:550; letter-spacing:-.015em; }
+.wl-status { margin-left:auto; color:var(--wl-cut); font:9px/1 ui-monospace,SFMono-Regular,monospace; letter-spacing:.07em; }
+.wl-case[data-outcome="keep"] .wl-status { color:var(--wl-blue); }
+.wl-function { display:flex; align-items:center; min-height:62px; color:#344b67; font-size:16px; }
+.wl-function math { font-size:17px; }
+.wl-chart { display:block; width:100%; height:auto; overflow:visible; }
+.wl-chart text { fill:#5c718b; font:10px "Helvetica Neue",Helvetica,Arial,sans-serif; }
+.wl-axis { fill:none; stroke:#c6d2e1; stroke-width:1; }
+.wl-reference { fill:none; stroke:#9eafc4; stroke-width:1; stroke-dasharray:3 5; }
+.wl-tolerance { fill:#a5b5c8; opacity:.07; }
+.wl-underlay { fill:none; stroke:#b1c0d2; stroke-width:1.4; opacity:.3; }
+.wl-trace { fill:none; stroke:var(--wl-blue); stroke-width:2.3; stroke-linecap:round; stroke-linejoin:round; }
+.wl-dot { fill:var(--wl-blue); stroke:#f7faff; stroke-width:2; }
+.wl-handle { cursor:ns-resize; touch-action:none; }
+.wl-fallback { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; padding:30px 0; border-top:1px solid #cbd7e5; color:#526a87; font-size:13px; }
+.wl-bracket { fill:none; stroke:#7392b7; stroke-width:1; }
+.wl-depth-mark { stroke:var(--wl-cut); }
+.wl-depth-dot { fill:var(--wl-cut); }
+.wl-weight-ghost { fill:#c2cfdf; opacity:.25; }
+.wl-weight-bar { fill:var(--wl-blue); }
+.wl-case[data-outcome="cut"] .wl-weight-bar { fill:var(--wl-cut); }
+.wl-summary { display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:38px; margin:0 0 18px; font-variant-numeric:tabular-nums; }
+.wl-metrics { display:flex; gap:13px; color:#5c718b; font:10px/1.5 ui-monospace,SFMono-Regular,monospace; }
+.wl-metrics b { color:#425e7f; font-weight:400; }
+.wl-result { white-space:nowrap; color:var(--wl-blue); font:400 22px/1.2 ui-monospace,SFMono-Regular,monospace; letter-spacing:-.07em; }
+.wl-result small { margin-right:6px; color:#5c718b; font-size:13px; letter-spacing:0; }
+.wl-case[data-outcome="cut"] .wl-result { color:var(--wl-cut); }
+.wl-control { display:flex; align-items:center; gap:12px; }
+.wl-control label { flex:none; width:14px; color:#49617e; font-family:Georgia,"Times New Roman",serif; font-style:italic; font-size:16px; }
+.wl-control input { width:100%; min-width:0; margin:0; height:22px; appearance:none; -webkit-appearance:none; background:transparent; cursor:ew-resize; touch-action:pan-y; }
+.wl-control input::-webkit-slider-runnable-track { height:2px; background:#c5d3e4; }
+.wl-control input::-moz-range-track { height:2px; background:#c5d3e4; }
+.wl-control input::-webkit-slider-thumb { appearance:none; -webkit-appearance:none; width:10px; height:10px; border-radius:50%; border:1px solid var(--wl-blue); background:#f7faff; margin-top:-4px; transition:box-shadow .2s; }
+.wl-control input::-moz-range-thumb { width:8px; height:8px; border-radius:50%; border:1px solid var(--wl-blue); background:#f7faff; }
+.wl-control input:hover::-webkit-slider-thumb { box-shadow:0 0 0 4px #2f6fd512; }
+.wl-control output { min-width:45px; color:#58718f; text-align:right; font:10px/1.4 ui-monospace,SFMono-Regular,monospace; font-variant-numeric:tabular-nums; }
+.wl-footer { display:flex; justify-content:space-between; align-items:flex-start; gap:20px; padding:15px 0 0; color:#5c718b; font-size:10px; line-height:1.6; }
+.wl-footer > span { white-space:nowrap; }
+.wl-rule-details { flex:1; min-width:0; max-width:75%; text-align:right; }
+.wl-rule-details summary { cursor:pointer; list-style:none; color:#59728f; }
+.wl-rule-details summary::-webkit-details-marker { display:none; }
+.wl-rule-details summary::after { content:' +'; color:#8b9cb1; }
+.wl-rule-details[open] summary::after { content:' −'; }
+.wl-rule-details p { margin:10px 0 0; max-width:72ch; color:#526a87; }
+.wl-rule-details:not([open]) p { display:none; }
+.wl-rule-details a { border-bottom:1px solid #b8c9df; }
+.weight-lab button:focus-visible, .weight-lab input:focus-visible, .weight-lab summary:focus-visible { outline:2px solid #3f7cbd; outline-offset:4px; }
+@media(max-width:900px) { .wl-grid { min-width:960px; } .wl-case { padding:24px 20px; } .wl-footer { gap:12px; } }
+@media(max-width:600px) { .weight-lab { margin-top:48px; } .weight-lab h3 { font-size:27px; } .wl-heading { margin-bottom:23px; } .wl-footer { flex-direction:column; gap:8px; } .wl-rule-details { max-width:100%; text-align:left; } }
+@media(prefers-reduced-motion:reduce) { .weight-lab * { transition:none!important; } }

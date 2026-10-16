@@ -1,4 +1,4 @@
-"""Refresh content versions for the homepage curtain and experiment modules."""
+"""Refresh content versions for the homepage's interactive modules."""
 from pathlib import Path
 import hashlib
 import re
@@ -8,6 +8,13 @@ digest = lambda path: hashlib.sha256(path.read_bytes()).hexdigest()[:12]
 
 def rewrite(path, pattern, replacement):
     path.write_text(re.sub(pattern, replacement, path.read_text()))
+
+weight = ROOT / 'assets/weight-lab'
+if weight.exists():
+    rewrite(weight / 'lab.js', r"from './model.js\?v=[\w-]+'", f"from './model.js?v={digest(weight / 'model.js')}'")
+    for name in ['lab.css', 'lab.js']:
+        rewrite(ROOT / 'index.html', r'assets/weight-lab/' + re.escape(name) + r'\?v=[\w-]+', f'assets/weight-lab/{name}?v={digest(weight / name)}')
+        rewrite(weight / 'index.html', re.escape(name) + r'\?v=[\w-]+', f'{name}?v={digest(weight / name)}')
 
 curtain = ROOT / 'assets/task-curtain'
 if curtain.exists():

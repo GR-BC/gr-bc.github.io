@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="assets/task-curtain/curtain.css?v=3b189c9166db" />
     <link rel="stylesheet" href="assets/framework/framework.css?v=89ea7ca8eef2" />
     <link rel="stylesheet" href="assets/framework/homepage.css?v=e3c7ac603da9" />
+    <link rel="stylesheet" href="assets/weight-lab/lab.css?v=faeb4459637b" />
     <link rel="stylesheet" href="assets/progress-comparison/comparison.css?v=c5fcda11f31a" />
   </head>
   <body>
@@ -213,6 +214,9 @@
             </div>
           </figcaption>
         </figure>
+        <div class="weight-lab" id="chunk-weighting" data-weight-lab data-composition-id="weight-lab" data-start="0" data-duration="4.2" data-width="1120" data-height="620" aria-label="Interactive action-chunk weighting">
+          <div class="wl-fallback"><span>Stable progress → bounded positive weight</span><span>Insufficient net progress → zero weight</span><span>Excess regression → zero weight</span></div>
+        </div>
       </section>
 
       <section class="abstract section-shell" id="abstract">
@@ -470,6 +474,7 @@
     <script type="module" src="assets/framework/homepage.js?v=3bf5d7cfeee6"></script>
     <script type="module" src="assets/homepage-modules.js?v=64b8e466d66f"></script>
     <script src="progress.js?v=c1d8a8ffedd5" defer></script>
+    <script type="module" src="assets/weight-lab/lab.js?v=a9a86570334d"></script>
     <script>
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
