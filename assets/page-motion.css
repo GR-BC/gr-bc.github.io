@@ -1,0 +1,19 @@
+/* One entrance per logical part; individual translate preserves hover transforms. */
+[data-page-enter="waiting"] { opacity:0; translate:0 20px; }
+[data-page-enter="waiting"][data-page-enter-mode="fade"] { translate:none; }
+[data-page-enter="playing"] { will-change:opacity,translate; }
+[data-page-enter="done"] { will-change:auto; }
+.pm-typewriter { position:relative; }
+.pm-typewriter[data-type-state="waiting"] { clip-path:inset(0 100% 100% 0); }
+.pm-type-caret { position:absolute; display:block; width:1px; background:currentColor; opacity:.65; pointer-events:none; animation:pm-caret .7s steps(1,end) infinite; }
+@keyframes pm-caret { 0%,58% { opacity:.65; } 59%,100% { opacity:.12; } }
+@media(prefers-reduced-motion:reduce) {
+  [data-page-enter] { opacity:1!important; translate:none!important; }
+  .pm-typewriter { clip-path:none!important; }
+  .pm-type-caret { display:none!important; }
+}
+@media print {
+  [data-page-enter] { opacity:1!important; translate:none!important; }
+  .pm-typewriter { clip-path:none!important; }
+  .pm-type-caret { display:none!important; }
+}

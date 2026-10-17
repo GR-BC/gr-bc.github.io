@@ -23,7 +23,7 @@
       content="Learning task-advancing action chunks from demonstrations, failures, and human interventions."
     />
     <meta name="twitter:image" content="/og.jpg" />
-    <link rel="stylesheet" href="style.css?v=6a54320d9f89" />
+    <link rel="stylesheet" href="style.css?v=f409baa9a8e9" />
     <link rel="stylesheet" href="assets/task-curtain/curtain.css?v=55a9a2ae7c3b" />
     <link rel="stylesheet" href="assets/framework/framework.css?v=89ea7ca8eef2" />
     <link rel="stylesheet" href="assets/framework/homepage.css?v=e3c7ac603da9" />
@@ -32,6 +32,8 @@
     <link rel="stylesheet" href="assets/robustness/rack.css?v=48f6f582f883" />
     <link rel="stylesheet" href="assets/state-progress/state.css?v=4771077b8f34" />
     <link rel="stylesheet" href="assets/estimator-table.css?v=38c33bee26b6" />
+    <link rel="stylesheet" href="assets/page-motion.css?v=6c8700be3a2d" />
+    <script src="assets/page-motion.js?v=6e96035ed19c" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -634,19 +636,6 @@
     <script type="module" src="assets/estimator-table.js?v=ba66764dbf30"></script>
     <script>
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-      const revealObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("is-visible");
-              revealObserver.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.12 }
-      );
-      document.querySelectorAll(".reveal").forEach((element) => revealObserver.observe(element));
 
       const heroVideo = document.getElementById("hero-bg-video");
       if (heroVideo) {
