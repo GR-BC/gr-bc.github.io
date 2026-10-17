@@ -12,6 +12,7 @@ async function mount(section) {
   const link = section.querySelector('[data-sp-link]');
   const line = section.querySelector('[data-sp-link-line]');
   const flow = section.querySelector('[data-sp-link-flow]');
+  const linkHit = section.querySelector('[data-sp-link-hit]');
   const formula = section.querySelector('.sp-formula');
   const svgs = [];
   let paused = false;
@@ -24,6 +25,9 @@ async function mount(section) {
   let scene = [];
   let generation = 0;
   let lastSize = '';
+  let focusKey = '';
+  let focusFrame = 0;
+  let followUntil = 0;
 
   const running = () => visible && !paused && !reduced.matches && !document.hidden;
 
@@ -79,17 +83,40 @@ async function mount(section) {
   }, {threshold:0}).observe(formula);
   updateMotion();
 
-  function clearFocus(svg) {
-    svg.querySelectorAll('.is-focused').forEach(part => part.classList.remove('is-focused'));
-    svg.classList.remove('has-focus');
-    delete svg.dataset.spFocus;
-    if (svg.classList.contains('sp-frame-26')) delete section.dataset.spNodeFocus;
+  function clearFocus(follow = true) {
+    const linked = focusKey === 'node-detail';
+    for (const svg of svgs) {
+      svg.querySelectorAll('.is-focused').forEach(part => part.classList.remove('is-focused'));
+      svg.classList.remove('has-focus');
+      delete svg.dataset.spFocus;
+    }
+    focusKey = '';
+    delete section.dataset.spNodeFocus;
+    if (follow && linked) followLink();
   }
 
   function focusPart(svg, part) {
-    if (svg.dataset.spFocus === part?.dataset.spPart) return;
-    clearFocus(svg);
-    if (!part) return;
+    const name = part?.dataset.spPart;
+    const linked = (svg.classList.contains('sp-frame-26') && name === 'node') ||
+      (svg.classList.contains('sp-frame-23') && ['state-i','neighborhood-i'].includes(name));
+    const key = part ? linked ? 'node-detail' : `${svg.classList.contains('sp-frame-26') ? 'encoding' : 'connections'}:${name}` : '';
+    if (key === focusKey) return;
+    const wasLinked = focusKey === 'node-detail';
+    clearFocus(false);
+    if (!part) { if (wasLinked) followLink(); return; }
+    focusKey = key;
+    if (linked) {
+      for (const [root, names] of [['.sp-frame-26',['node']],['.sp-frame-23',['state-i','neighborhood-i']]]) {
+        const figure = section.querySelector(root);
+        if (!figure) continue;
+        figure.classList.add('has-focus');
+        figure.dataset.spFocus = names[0];
+        names.forEach(id => figure.querySelector(`[data-sp-part="${id}"]`)?.classList.add('is-focused'));
+      }
+      section.dataset.spNodeFocus = 'true';
+      followLink();
+      return;
+    }
     part.classList.add('is-focused');
     if (svg.classList.contains('sp-frame-23')) {
       const family = part.dataset.spPart.match(/^(?:state|neighborhood)-(i|j)$/)?.[1];
@@ -99,7 +126,7 @@ async function mount(section) {
     }
     svg.classList.add('has-focus');
     svg.dataset.spFocus = part.dataset.spPart;
-    if (svg.classList.contains('sp-frame-26')) section.dataset.spNodeFocus = String(part.dataset.spPart === 'node');
+    if (wasLinked) followLink();
   }
 
   function wireParts(svg) {
@@ -117,14 +144,14 @@ async function mount(section) {
       if (section.dataset.spIntro === 'playing') return;
       focusPart(svg,hit?.part);
     });
-    svg.addEventListener('pointerleave', () => clearFocus(svg));
+    svg.addEventListener('pointerleave', () => clearFocus());
     svg.addEventListener('focusin', event => {
       if (section.dataset.spIntro === 'playing') finishScene();
       focusPart(svg,event.target.closest('[data-sp-part]'));
     });
-    svg.addEventListener('focusout', () => clearFocus(svg));
+    svg.addEventListener('focusout', () => clearFocus());
     svg.addEventListener('keydown', event => {
-      if (event.key === 'Escape') { clearFocus(svg); event.target.blur(); }
+      if (event.key === 'Escape') { clearFocus(); event.target.blur(); }
     });
     const node = svg.querySelector('[data-sp-part="node"]');
     if (node) {
@@ -159,6 +186,15 @@ async function mount(section) {
   const node = encoding.querySelector('[data-sp-part="node"]');
   const sourcePoint = encoding.querySelector('[data-source="2-7"]');
   const targetPoint = connections.querySelector('[data-source="12"]');
+  const targetState = connections.querySelector('[data-sp-part="state-i"]');
+  const targetNeighborhood = connections.querySelector('[data-sp-part="neighborhood-i"]');
+  const targetRing = connections.querySelector('[data-source="7"]');
+  const highlightLink = event => {
+    if (event.pointerType === 'mouse' && section.dataset.spIntro !== 'playing') focusPart(encoding,node);
+  };
+  linkHit.addEventListener('pointerenter', highlightLink);
+  linkHit.addEventListener('pointermove', highlightLink);
+  linkHit.addEventListener('pointerleave', () => clearFocus());
 
   // Map source geometry through the root CTM, excluding any lifted child part.
   function sourceRect(svg,x,y,width,height) {
@@ -168,21 +204,23 @@ async function mount(section) {
     return {left:a.x,top:a.y,right:b.x,bottom:b.y,width:b.x-a.x,height:b.y-a.y};
   }
 
-  function measure() {
+  function measure(followFocus = false) {
     const base = stage.getBoundingClientRect();
-    const small = sourceRect(encoding,Number(sourcePoint.getAttribute('cx')),Number(sourcePoint.getAttribute('cy')),0,0);
-    const tile = sourceRect(encoding,...node.dataset.bounds.split(' ').map(Number));
-    const large = connections.getBoundingClientRect();
-    const destination = sourceRect(connections,Number(targetPoint.getAttribute('cx')),Number(targetPoint.getAttribute('cy')),0,0);
+    const originSpace = followFocus ? node : encoding;
+    const small = sourceRect(originSpace,Number(sourcePoint.getAttribute('cx')),Number(sourcePoint.getAttribute('cy')),0,0);
+    const tile = sourceRect(originSpace,...node.dataset.bounds.split(' ').map(Number));
+    const destination = sourceRect(followFocus ? targetState : connections,Number(targetPoint.getAttribute('cx')),Number(targetPoint.getAttribute('cy')),0,0);
+    const cx = Number(targetRing.getAttribute('cx')), cy = Number(targetRing.getAttribute('cy')), radius = Number(targetRing.getAttribute('r'));
+    const ring = sourceRect(followFocus ? targetNeighborhood : connections,cx-radius,cy-radius,radius*2,radius*2);
     const relative = r => ({x:r.left-base.left,y:r.top-base.top,width:r.width,height:r.height});
     const origin = relative(small);
     const goal = relative(destination);
-    const target = relative(large);
+    const boundary = relative(ring);
     const stacked = matchMedia('(max-width: 760px)').matches;
     const sx = tile.right - base.left + 5;
     const sy = origin.y;
-    const ex = stacked ? target.x + target.width * .72 : target.x - 13;
-    const ey = stacked ? target.y - 8 : goal.y;
+    const ex = goal.x + (stacked ? 1 : -1) * (boundary.width * .41 + 7);
+    const ey = goal.y - boundary.height * .285 - 4;
     const bend = Math.max(15,(ex-sx)*.36);
     const path = stacked
       ? `M${sx} ${sy}C${base.width-6} ${sy+35} ${base.width-6} ${ey-8} ${ex} ${ey}`
@@ -190,6 +228,7 @@ async function mount(section) {
     link.setAttribute('viewBox',`0 0 ${base.width} ${base.height}`);
     line.setAttribute('d',path);
     flow.setAttribute('d',path);
+    linkHit.setAttribute('d',path);
     section.querySelector('[data-sp-link-source]').setAttribute('cx',sx);
     section.querySelector('[data-sp-link-source]').setAttribute('cy',sy);
     packetRoute.setAttribute('d', stacked
@@ -197,6 +236,20 @@ async function mount(section) {
       : `M${origin.x} ${origin.y}C${origin.x+70} ${origin.y} ${goal.x-100} ${goal.y} ${goal.x} ${goal.y}`);
     lastSize = `${base.width.toFixed(1)} ${base.height.toFixed(1)}`;
     return {origin,goal};
+  }
+
+  // Follow the actual transformed parts for the duration of the spring. The
+  // loop is bounded and is never driven by the decorative ripple animations.
+  function followLink() {
+    if (!ready) return;
+    if (reduced.matches) { measure(true); return; }
+    followUntil = performance.now() + 720;
+    if (focusFrame) return;
+    const step = time => {
+      measure(true);
+      focusFrame = time < followUntil ? requestAnimationFrame(step) : 0;
+    };
+    focusFrame = requestAnimationFrame(step);
   }
 
   function animate(element,keyframes,delay,duration,easing='cubic-bezier(.22,.75,.18,1)') {
@@ -212,7 +265,9 @@ async function mount(section) {
 
   function playScene(full) {
     if (!ready) return;
-    svgs.forEach(clearFocus);
+    clearFocus(false);
+    cancelAnimationFrame(focusFrame);
+    focusFrame = 0;
     finishScene();
     if (reduced.matches) return;
     started = true;
@@ -281,7 +336,7 @@ async function mount(section) {
     const size = `${rect.width.toFixed(1)} ${rect.height.toFixed(1)}`;
     if (size !== lastSize) {
       finishScene();
-      measure();
+      measure(true);
     }
   }).observe(stage);
   replay.addEventListener('click', () => playScene(true));

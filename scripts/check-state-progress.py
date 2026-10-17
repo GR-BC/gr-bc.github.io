@@ -85,5 +85,6 @@ print('Module placement and all content hashes verified')
 module = html[html.index('id="state-progress"'):html.index('id="chunk-weighting"')]
 assert module.count('<math ') == 1, 'Only the final progress equation belongs in the compact module'
 assert 'data-sp-packet' in module and 'data-sp-link' in module
+assert 'data-sp-link-hit' in module
 assert 'data-sp-transfer' not in module
 print('Exact arrow clips, original simple node, aligned uniform rings, node-to-neighborhood motion, and single-equation layout verified')
