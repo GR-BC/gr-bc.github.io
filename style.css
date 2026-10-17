@@ -457,8 +457,6 @@ tbody .ours { background: rgba(219, 233, 251, 0.62); color: var(--blue-dark); }
 .ablation-grid span { color: var(--muted); font-size: 12px; line-height: 1.4; }
 .ablation > p { margin: 0; padding: 0 24px 26px; color: var(--ink-soft); font-size: 14px; line-height: 1.6; }
 
-.limitations .section-intro { margin-bottom: 0; }
-.limitations .section-intro > div:last-child { padding-top: 28px; }
 
 .citation-box { position: relative; overflow: hidden; border: 1px solid rgba(89, 145, 219, 0.28); border-radius: 14px; background: #10233e; box-shadow: 0 18px 50px rgba(15,44,83,.16); }
 .citation-box pre { margin: 0; padding: 34px; overflow-x: auto; color: #e5effe; font: 13px/1.65 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
