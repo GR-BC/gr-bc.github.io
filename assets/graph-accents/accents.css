@@ -1,0 +1,73 @@
+/* Real dataset graphs, kept behind the page rather than inside another card. */
+#main-content { position: relative; isolation: isolate; }
+.graph-atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: clip;
+  pointer-events: none;
+  user-select: none;
+  contain: paint;
+}
+.graph-atmosphere:not([data-cloud-ready]) { visibility: hidden; }
+.graph-cloud {
+  position: absolute;
+  width: 620px;
+  aspect-ratio: 1860 / 1780;
+  transform: rotate(-14deg);
+  mask-image: radial-gradient(ellipse at 45% 48%, #000 22%, #000b 48%, transparent 74%);
+  -webkit-mask-image: radial-gradient(ellipse at 45% 48%, #000 22%, #000b 48%, transparent 74%);
+}
+.graph-cloud--motivation { left: calc(50% - 860px); }
+.graph-cloud--evidence {
+  width: 670px;
+  aspect-ratio: 1900 / 1778;
+  right: calc(50% - 900px);
+  transform: rotate(17deg);
+}
+.graph-cloud__drift {
+  position: absolute;
+  inset: 0;
+  animation: graph-cloud-drift 15s ease-in-out infinite alternate;
+  animation-play-state: paused;
+}
+.graph-cloud--evidence .graph-cloud__drift { animation-name: graph-cloud-return; animation-duration: 18s; }
+.graph-cloud--motivation .graph-cloud__drift {
+  mask-image: linear-gradient(90deg, #000 30%, #0009 62%, transparent 90%);
+  -webkit-mask-image: linear-gradient(90deg, #000 30%, #0009 62%, transparent 90%);
+}
+.graph-cloud--evidence .graph-cloud__drift {
+  mask-image: linear-gradient(90deg, transparent, #0009 43%, #000 80%);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #0009 43%, #000 80%);
+}
+.graph-cloud__drift img { display: block; width: 100%; height: 100%; opacity: .27; }
+.graph-cloud__flow { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .68; }
+.graph-cloud[data-cloud-entrance="waiting"] .graph-cloud__drift { opacity: 0; translate: 0 30px; scale: .96; }
+.graph-cloud[data-cloud-entrance] .graph-cloud__drift {
+  transition: opacity 1.3s ease, translate 1.6s cubic-bezier(.16,.7,.25,1), scale 1.6s cubic-bezier(.16,.7,.25,1);
+}
+.graph-cloud[data-cloud-entrance="revealed"] .graph-cloud__drift { opacity: 1; translate: 0 0; scale: 1; }
+.graph-cloud[data-cloud-motion="running"] .graph-cloud__drift { animation-play-state: running; }
+@keyframes graph-cloud-drift {
+  from { transform: translate3d(-8px, 8px, 0) rotate(-1deg) scale(.99); }
+  to { transform: translate3d(9px, -12px, 0) rotate(1.3deg) scale(1.025); }
+}
+@keyframes graph-cloud-return {
+  from { transform: translate3d(9px, -7px, 0) rotate(1.5deg) scale(1.015); }
+  to { transform: translate3d(-11px, 12px, 0) rotate(-1deg) scale(.99); }
+}
+@media (min-width: 1600px) {
+  .graph-cloud--motivation { width: 710px; left: calc(50% - 970px); }
+  .graph-cloud--evidence { width: 750px; right: calc(50% - 1010px); }
+}
+@media (max-width: 700px) {
+  .graph-cloud--motivation { width: 380px; left: -230px; }
+  .graph-cloud--evidence { width: 390px; right: -245px; }
+  .graph-cloud__drift img { opacity: .2; }
+  .graph-cloud__flow { opacity: .4; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .graph-cloud__drift { animation: none !important; transition: none !important; opacity: 1 !important; translate: none !important; scale: 1 !important; }
+  .graph-cloud__flow { display: none; }
+}
+@media print { .graph-atmosphere { display: none; } }

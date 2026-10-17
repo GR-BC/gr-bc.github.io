@@ -33,7 +33,9 @@
     <link rel="stylesheet" href="assets/state-progress/state.css?v=4771077b8f34" />
     <link rel="stylesheet" href="assets/estimator-table.css?v=38c33bee26b6" />
     <link rel="stylesheet" href="assets/page-motion.css?v=6c8700be3a2d" />
+    <link rel="stylesheet" href="assets/graph-accents/accents.css?v=cdd9e8871e73" />
     <script src="assets/page-motion.js?v=6e96035ed19c" defer></script>
+    <script src="assets/graph-accents/accents.js?v=8445da6bb546" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -55,6 +57,20 @@
     </header>
 
     <main id="main-content">
+      <div class="graph-atmosphere" aria-hidden="true" data-graph-atmosphere data-cloud-map="assets/graph-accents/clouds.json?v=bd9987661b38">
+        <div class="graph-cloud graph-cloud--motivation" data-cloud-source="morandi" data-cloud-anchor="challenge" data-cloud-offset="-55">
+          <div class="graph-cloud__drift">
+            <img src="assets/graph-accents/morandi-plot.svg?v=bb4d356d6f82" alt="" width="560" height="536" decoding="async" loading="lazy" />
+            <canvas class="graph-cloud__flow"></canvas>
+          </div>
+        </div>
+        <div class="graph-cloud graph-cloud--evidence" data-cloud-source="original" data-cloud-anchor="evidence" data-cloud-offset="-100">
+          <div class="graph-cloud__drift">
+            <img src="assets/graph-accents/original-plot.svg?v=7314069d6067" alt="" width="560" height="524" decoding="async" loading="lazy" />
+            <canvas class="graph-cloud__flow"></canvas>
+          </div>
+        </div>
+      </div>
       <section class="hero" id="top" aria-labelledby="paper-title">
         <div class="hero-background" aria-hidden="true">
           <video
