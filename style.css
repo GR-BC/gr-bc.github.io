@@ -293,6 +293,10 @@ h1 span {
   align-items: start;
 }
 
+@media (min-width: 921px) {
+  .method > .section-intro { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); }
+}
+
 .section-intro h2,
 .section-heading h2,
 .results-heading h2 {
