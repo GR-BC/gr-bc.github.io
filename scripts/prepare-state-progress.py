@@ -28,6 +28,19 @@ def union(boxes):
     return [x, y, max(b[0] + b[2] for b in boxes) - x, max(b[1] + b[3] for b in boxes) - y]
 
 
+def namespace_ids(root, prefix):
+    ids = {e.get('id'): f'{prefix}{e.get("id")}' for e in root.iter() if e.get('id')}
+    for node in root.iter():
+        for key, value in list(node.attrib.items()):
+            if key == 'id':
+                node.set(key, ids[value])
+            elif not value.startswith('data:'):
+                value = re.sub(r'url\(#([^)]+)\)', lambda m: f'url(#{ids.get(m[1], m[1])})', value)
+                if value.startswith('#') and value[1:] in ids:
+                    value = '#' + ids[value[1:]]
+                node.set(key, value)
+
+
 def build(source, number, measured):
     assert hashlib.sha256(source.read_bytes()).hexdigest() == measured['sha256'], 'Remeasure changed source SVG geometry.'
     root = ET.parse(source).getroot()
@@ -55,16 +68,7 @@ def build(source, number, measured):
             image.set(XLINK, 'data:image/webp;base64,' + base64.b64encode(compressed.read_bytes()).decode())
 
     # IDs must remain independent of the main pipeline and the other frame.
-    ids = {e.get('id'): f'sp{number}-{e.get("id")}' for e in root.iter() if e.get('id')}
-    for node in root.iter():
-        for key, value in list(node.attrib.items()):
-            if key == 'id':
-                node.set(key, ids[value])
-            elif not value.startswith('data:'):
-                value = re.sub(r'url\(#([^)]+)\)', lambda m: f'url(#{ids.get(m[1], m[1])})', value)
-                if value.startswith('#') and value[1:] in ids:
-                    value = '#' + ids[value[1:]]
-                node.set(key, value)
+    namespace_ids(root, f'sp{number}-')
 
     parts = []
     def group(name, label, keys):
@@ -121,6 +125,17 @@ def build(source, number, measured):
         focus.append(element('path', d='M849 328v-8h8m24 0h8v8m0 20v8h-8m-24 0h-8v-8', fill='none', stroke='#65a4bc', stroke_width=1.5))
         focus.append(element('circle', cx=869, cy=338, r=3, fill='#72b8cb'))
         bracket.append(focus)
+        # The node contains the actual next drawing, rather than an unrelated
+        # three-dot placeholder. Keep source geometry for provenance checks.
+        for index in range(4, 15):
+            nodes[f'2-{index}'].set('opacity', '0')
+            nodes[f'2-{index}'].set('display', 'none')
+        miniature = ET.parse(source.parent / 'Frame 23.svg').getroot()
+        namespace_ids(miniature, 'sp26-mini-')
+        miniature.attrib.update({'x': '896', 'y': '328', 'width': '192', 'height': '115',
+                                 'class': 'sp-node-miniature', 'aria-hidden': 'true',
+                                 'pointer-events': 'none', 'focusable': 'false'})
+        nodes['2'].append(miniature)
     else:
         group('neighborhood-i', 'Local multi-view neighborhood around state i', [3, 6, 7])
         group('neighborhood-j', 'Local multi-view neighborhood around state j', [4, 22, 23])
@@ -155,11 +170,27 @@ def build(source, number, measured):
             root.insert(list(root).index(nodes[str(key)]) + 1, overlay)
         for key in [14, 15]:
             classed(nodes[str(key)], 'sp-arrow-head')
-        # These source arrows are outlined filled dashes, so animate a centerline
-        # over them rather than distorting their compound vector geometry.
-        for key, d, color in [(80, 'M391 99C433 69 469 78 495 101', '#dfb16e'), (81, 'M137 170C111 181 79 191 66 208', '#79b4c2'), (82, 'M506 221C528 225 548 224 565 209', '#79b4c2')]:
-            nodes[str(key)].set('opacity', '.45')
-            root.append(element('path', d=d, fill='none', stroke=color, stroke_width=3, stroke_dasharray='5 8', **{'class': 'sp-flow sp-connection-flow', 'aria-hidden': 'true'}))
+        # Filled, outlined dashes cannot use stroke-dashoffset directly. Clip a
+        # traveling highlight to the exact original silhouette, including its
+        # arrowhead. No visible animated geometry can drift beyond the source.
+        defs = root.find(f'{{{NS}}}defs')
+        if defs is None:
+            defs = element('defs')
+            root.append(defs)
+        for key, d, color in [
+            (80, 'M390.407 110.614C430 98 454 56 505.314 110.505', '#d2a15b'),
+            (81, 'M107.166 170.458C84 180 74 192 60.292 214.942', '#639dad'),
+            (82, 'M504.912 222.077C532 224 548 218 566.960 204.019', '#639dad'),
+        ]:
+            original = nodes[str(key)]
+            original.set('opacity', '.45')
+            clip_id = f'sp23-arrow-clip-{key}'
+            clip = element('clipPath', id=clip_id, clipPathUnits='userSpaceOnUse')
+            clip.append(element('path', d=original.get('d')))
+            defs.append(clip)
+            pulse = element('g', clip_path=f'url(#{clip_id})', **{'class': 'sp-arrow-pulse', 'data-arrow-source': key, 'aria-hidden': 'true'})
+            pulse.append(element('path', d=d, fill='none', stroke=color, stroke_width=30, stroke_dasharray='18 30', **{'class': 'sp-flow sp-connection-flow'}))
+            root.append(pulse)
         parents = {child: parent for parent in root.iter() for child in parent}
         for index, circle in enumerate([e for e in nodes.values() if e.tag == f'{{{NS}}}circle']):
             classed(circle, 'sp-breathing-circle')

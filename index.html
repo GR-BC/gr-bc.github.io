@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="assets/weight-lab/lab.css?v=49ac42474954" />
     <link rel="stylesheet" href="assets/progress-comparison/comparison.css?v=c5fcda11f31a" />
     <link rel="stylesheet" href="assets/robustness/rack.css?v=48f6f582f883" />
-    <link rel="stylesheet" href="assets/state-progress/state.css?v=4ecdb2d2d493" />
+    <link rel="stylesheet" href="assets/state-progress/state.css?v=4771077b8f34" />
     <link rel="stylesheet" href="assets/estimator-table.css?v=38c33bee26b6" />
   </head>
   <body>
@@ -275,43 +275,39 @@
               <button type="button" data-sp-replay aria-label="Replay state-to-progress motion" title="Replay motion"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 8a7 7 0 1 1 .7 6M4 3v5h5"/></svg></button>
             </div>
           </div>
-          <div class="sp-viewport" tabindex="0" role="region" aria-label="State encoding and adaptive connections; scroll sideways on small screens">
-            <div class="sp-grid">
-              <figure class="sp-case">
-                <div class="sp-case-heading"><span class="sp-number">01</span><h4>Encode the state</h4></div>
-                <div class="sp-art" data-sp-figure data-svg="assets/state-progress/frame-26.svg?v=ef06c8d37917">
-                  <img src="assets/state-progress/frame-26.svg?v=ef06c8d37917" width="516" height="309" loading="lazy" alt="Three synchronized cameras pass through a frozen MCR encoder. Their embeddings and a separate binary gripper state form a graph node." />
-                </div>
-                <figcaption class="sp-art-caption">
-                  <div class="sp-formula"><math aria-label="z c of v equals frozen MCR applied to camera c observation"><mrow><msub><mi>z</mi><mi>c</mi></msub><mo stretchy="false">(</mo><mi>v</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi>f</mi><mtext>MCR</mtext></msub><mo stretchy="false">(</mo><msub><mi>o</mi><mi>c</mi></msub><mo stretchy="false">(</mo><mi>v</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow></math></div>
-                  <p>Three views. Frozen features. Gripper state kept separate.</p>
-                </figcaption>
-              </figure>
-              <figure class="sp-case">
-                <div class="sp-case-heading"><span class="sp-number">02</span><h4>Connect compatible states</h4></div>
-                <div class="sp-art" data-sp-figure data-svg="assets/state-progress/frame-23.svg?v=b8b6bd4121e9">
-                  <img src="assets/state-progress/frame-23.svg?v=b8b6bd4121e9" width="516" height="309" loading="lazy" alt="Cross-trajectory feature distance is normalized by each state's local temporal neighborhood scale." />
-                </div>
-                <figcaption class="sp-art-caption">
-                  <div class="sp-formula sp-edge-formula"><math aria-label="Adaptive edge length is the maximum across cameras of feature distance divided by the average local temporal scale plus epsilon"><mrow><mi>ℓ</mi><mo stretchy="false">(</mo><msub><mi>v</mi><mi>i</mi></msub><mo>,</mo><msub><mi>v</mi><mi>j</mi></msub><mo stretchy="false">)</mo><mo>=</mo><munder><mo>max</mo><mi>c</mi></munder><mfrac><mrow><mo>‖</mo><msub><mi>z</mi><mi>c</mi></msub><mo stretchy="false">(</mo><msub><mi>v</mi><mi>i</mi></msub><mo stretchy="false">)</mo><mo>−</mo><msub><mi>z</mi><mi>c</mi></msub><mo stretchy="false">(</mo><msub><mi>v</mi><mi>j</mi></msub><mo stretchy="false">)</mo><msub><mo>‖</mo><mn>2</mn></msub></mrow><mrow><msub><mi>ε</mi><mi>c</mi></msub><mo>+</mo><mfrac><mrow><msub><mi>σ</mi><mi>c</mi></msub><mo stretchy="false">(</mo><msub><mi>v</mi><mi>i</mi></msub><mo stretchy="false">)</mo><mo>+</mo><msub><mi>σ</mi><mi>c</mi></msub><mo stretchy="false">(</mo><msub><mi>v</mi><mi>j</mi></msub><mo stretchy="false">)</mo></mrow><mn>2</mn></mfrac></mrow></mfrac></mrow></math></div>
-                  <p>Mutual K-NN in all views · same gripper · ℓ ≤ α<sub>edge</sub></p>
-                </figcaption>
-              </figure>
-            </div>
+          <div class="sp-grid" data-sp-stage>
+            <figure class="sp-case sp-case-encoding">
+              <div class="sp-case-heading"><span class="sp-number">01</span><h4>Three views, one node.</h4></div>
+              <div class="sp-art" data-sp-figure data-svg="assets/state-progress/frame-26.svg?v=8b758735a8c2">
+                <img src="assets/state-progress/frame-26.svg?v=8b758735a8c2" width="410" height="245" loading="lazy" alt="Three camera views and a separate gripper state become a graph node. Inside the node is a miniature of the connection diagram on the right." />
+              </div>
+              <figcaption>Frozen visual features. Gripper state kept separate.</figcaption>
+            </figure>
+            <figure class="sp-case sp-case-detail">
+              <div class="sp-case-heading"><span class="sp-number">02</span><h4>Inside the connections.</h4></div>
+              <div class="sp-art" data-sp-figure data-svg="assets/state-progress/frame-23.svg?v=b5e93a8acbe9">
+                <img src="assets/state-progress/frame-23.svg?v=b5e93a8acbe9" width="385" height="230" loading="lazy" alt="An enlarged view of neighboring states and their locally normalized cross-trajectory connections." />
+              </div>
+              <figcaption>Agreement across views. Matching gripper states.</figcaption>
+            </figure>
+            <svg class="sp-link" data-sp-link aria-hidden="true">
+              <defs><marker id="sp-detail-arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="m1 1 6 3.5L1 8"/></marker></defs>
+              <path class="sp-link-line" data-sp-link-line marker-end="url(#sp-detail-arrow)"/>
+              <path class="sp-link-flow" data-sp-link-flow/>
+              <circle class="sp-link-source" data-sp-link-source r="2.5"/>
+              <g class="sp-link-lens" data-sp-link-lens>
+                <circle r="13"/><circle class="sp-lens-glass" r="4.5" cx="-1.5" cy="-1.5"/><path d="m2 2 4.5 4.5"/>
+                <text y="-23" text-anchor="middle">NODE DETAIL</text>
+              </g>
+            </svg>
+            <div class="sp-zoom-transfer" data-sp-transfer aria-hidden="true"><img src="assets/state-progress/frame-23.svg?v=b5e93a8acbe9" width="385" height="230" alt="" /><i></i><i></i><i></i><i></i></div>
           </div>
           <div class="sp-retrieval">
-            <div class="sp-retrieval-title"><span class="sp-number">03</span><h4>Retrieve progress</h4></div>
-            <div>
-              <div class="sp-formula"><math aria-label="Remaining cost is the minimum path cost to the success sink"><mrow><msub><mi>R</mi><mtext>rec</mtext></msub><mo stretchy="false">(</mo><mi>v</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo>min</mo><mrow><mi>π</mi><mo>:</mo><mi>v</mi><mo>→</mo><msup><mi>g</mi><mo>⋆</mo></msup></mrow></munder><munder><mo>∑</mo><mrow><mi>e</mi><mo>∈</mo><mi>π</mi></mrow></munder><mi>c</mi><mo stretchy="false">(</mo><mi>e</mi><mo stretchy="false">)</mo></mrow></math></div>
-              <p>Reverse search, then interpolate to every frame.</p>
-            </div>
-            <svg class="sp-retrieval-arrow" viewBox="0 0 30 18" aria-hidden="true"><path d="M1 9h26m-6-6 6 6-6 6"/></svg>
-            <div>
-              <div class="sp-formula"><math aria-label="Progress equals one minus interpolated remaining cost divided by R max, clipped between zero and one"><mrow><mi>p</mi><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><mi mathvariant="normal">clip</mi><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mfrac><mrow><msub><mover><mi>R</mi><mo>^</mo></mover><mtext>rec</mtext></msub><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo></mrow><msub><mi>R</mi><mtext>max</mtext></msub></mfrac><mo>,</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></math></div>
-              <p>Less remaining cost. More progress.</p>
-            </div>
+            <div class="sp-retrieval-copy"><span class="sp-number">03</span><p>Search back from success.<br /><strong>Less remaining cost. More progress.</strong></p></div>
+            <div class="sp-formula"><math aria-label="Progress equals one minus interpolated remaining cost divided by R max, clipped between zero and one"><mrow><mi>p</mi><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><mi mathvariant="normal">clip</mi><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mfrac><mrow><msub><mover><mi>R</mi><mo>^</mo></mover><mtext>rec</mtext></msub><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo></mrow><msub><mi>R</mi><mtext>max</mtext></msub></mfrac><mo>,</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></math></div>
+            <a class="sp-paper" href="https://arxiv.org/pdf/2610.20504#page=4" target="_blank" rel="noopener">Paper §4.1–4.3 ↗</a>
           </div>
-          <div class="sp-footer"><span>Hover a part to lift it · swipe to explore</span><a href="https://arxiv.org/pdf/2610.20504#page=4" target="_blank" rel="noopener">Paper §4.1–4.3 ↗</a></div>
+          <p class="sp-footer">Hover to explore · Select the graph node to magnify it again</p>
         </section>
         <div class="weight-lab" id="chunk-weighting" data-weight-lab data-composition-id="weight-lab" data-start="0" data-duration="4.2" data-width="1120" data-height="620" aria-label="Interactive action-chunk weighting">
           <div class="wl-fallback"><span>Stable progress → bounded positive weight</span><span>Insufficient net progress → zero weight</span><span>Excess regression → zero weight</span></div>
@@ -631,7 +627,7 @@
     <script type="module" src="assets/framework/homepage.js?v=3bf5d7cfeee6"></script>
     <script type="module" src="assets/homepage-modules.js?v=64b8e466d66f"></script>
     <script src="progress.js?v=c1d8a8ffedd5" defer></script>
-    <script type="module" src="assets/state-progress/state.js?v=6a1056ece392"></script>
+    <script type="module" src="assets/state-progress/state.js?v=1a742d12f1c0"></script>
     <script type="module" src="assets/weight-lab/lab.js?v=f670cb568386"></script>
     <script type="module" src="assets/motivation.js?v=d12d51c0ffad"></script>
     <script type="module" src="assets/robustness/rack.js?v=1515707b579f"></script>

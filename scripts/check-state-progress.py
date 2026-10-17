@@ -50,8 +50,20 @@ for n in [26, 23]:
     if n == 23:
         assert count_class('sp-breathing-circle') == 16
         assert count_class('sp-ripple') == 32
+        pulses = [node for node in built.iter() if node.get('data-arrow-source')]
+        assert len(pulses) == 3
+        for pulse in pulses:
+            key = pulse.get('data-arrow-source')
+            clip_id = pulse.get('clip-path')[5:-1]
+            clip = next(node for node in built.iter() if node.get('id') == clip_id)
+            assert clip[0].get('d') == expected[key].get('d'), 'Flow must stay inside its exact source arrow'
     else:
         assert count_class('sp-bracket-laser') == 2
+        miniature = next(node for node in built.iter() if node.get('class') == 'sp-node-miniature')
+        source_detail = ET.parse(args.sources / 'Frame 23.svg').getroot()
+        assert miniature.get('viewBox') == source_detail.get('viewBox')
+        assert [p.get('d') for p in miniature.iter() if p.tag.endswith('path')] == [p.get('d') for p in source_detail.iter() if p.tag.endswith('path')]
+        assert all(actual[f'2-{i}'].get('display') == 'none' for i in range(4,15))
     print(f'Frame {n}: {len(actual)} source elements preserved; parts and animation geometry verified')
 
 html = (ROOT / 'index.html').read_text()
@@ -60,3 +72,7 @@ for rel in ['style.css', 'assets/state-progress/state.css', 'assets/state-progre
     digest = hashlib.sha256((ROOT / rel).read_bytes()).hexdigest()[:12]
     assert rel + '?v=' + digest in html, f'Stale asset URL: {rel}'
 print('Module placement and all content hashes verified')
+module = html[html.index('id="state-progress"'):html.index('id="chunk-weighting"')]
+assert module.count('<math ') == 1, 'Only the final progress equation belongs in the compact module'
+assert 'data-sp-transfer' in module and 'data-sp-link' in module
+print('Exact arrow clips, matching node miniature, zoom connector, and single-equation layout verified')
