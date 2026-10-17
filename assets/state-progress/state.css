@@ -40,13 +40,16 @@
 .sp-link-packet circle:last-child { fill:#6c9fac; stroke:var(--paper); stroke-width:1; }
 .state-progress[data-sp-node-focus="true"] .sp-link { opacity:1; }
 .state-progress[data-sp-node-focus="true"] .sp-case-detail h4 { color:#2a649e; }
-.sp-retrieval { display:flex; justify-content:space-between; align-items:center; gap:18px; padding:8px 8px 0; }
-.sp-retrieval-copy { display:flex; align-items:center; gap:12px; }
+.sp-retrieval { display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); align-items:center; gap:18px; padding:8px 8px 0; }
+.sp-retrieval-copy { display:flex; align-items:center; gap:12px; min-width:0; }
 .sp-retrieval-copy p { margin:0; color:#74879e; font-size:10px; line-height:1.7; }
 .sp-retrieval-copy strong { color:#526b87; font-weight:400; }
-.sp-formula { display:flex; align-items:center; min-height:32px; color:#405b79; }
+.sp-formula { position:relative; display:flex; align-items:center; justify-self:center; min-height:32px; padding:0 4px 3px; color:#405b79; }
 .sp-formula math { font-size:16px; }
-.sp-paper { flex:none; color:#71869e; font-size:10px; }
+.sp-formula::after { content:""; position:absolute; inset:auto 4px 1px; height:1px; background:linear-gradient(90deg,transparent,#91bacb 25%,#417eb0 75%,transparent); transform-origin:left center; opacity:0; animation:sp-equation-scan 5s ease-in-out infinite; pointer-events:none; }
+.sp-equation-cost { animation:sp-equation-cost 5s ease-in-out infinite; }
+.sp-equation-output { animation:sp-equation-output 5s ease-in-out infinite; }
+.sp-paper { justify-self:end; color:#71869e; font-size:10px; }
 .sp-paper:hover { color:var(--blue); }
 .sp-flow { animation:sp-arrow-flow 1s linear infinite; }
 .sp-flow-reverse { animation-direction:reverse; }
@@ -64,7 +67,9 @@
 .state-progress[data-sp-intro="waiting"] .sp-retrieval { opacity:0; }
 .state-progress[data-sp-intro="playing"] .sp-part { transition:none; }
 .state-progress:not([data-sp-running="true"]) .sp-svg *, .state-progress:not([data-sp-running="true"]) .sp-link-flow { animation-play-state:paused; }
+.state-progress[data-sp-formula-running="false"] .sp-formula::after, .state-progress[data-sp-formula-running="false"] .sp-formula * { animation-play-state:paused; }
 .state-progress[data-sp-reduced="true"] .sp-svg * { animation:none!important; }
+.state-progress[data-sp-reduced="true"] .sp-formula::after, .state-progress[data-sp-reduced="true"] .sp-formula * { animation:none!important; }
 .state-progress[data-sp-reduced="true"] .sp-ripple { display:none; }
 .state-progress[data-sp-reduced="true"] .sp-link-packet { display:none; }
 .state-progress button:focus-visible, .sp-paper:focus-visible { outline:2px solid #3f7cbd; outline-offset:4px; }
@@ -77,6 +82,9 @@
 @keyframes sp-ripple { 0% { opacity:0; transform:scale(.98); } 14% { opacity:.55; } 90%,100% { opacity:0; transform:scale(1.28); } }
 @keyframes sp-neighborhood-dash { to { stroke-dashoffset:-12; } }
 @keyframes sp-node-emission { 0%,100% { opacity:0; transform:scale(.75); } 18% { opacity:.65; } 85% { opacity:0; transform:scale(1.3); } }
+@keyframes sp-equation-scan { 0%,12% { opacity:0; transform:scaleX(0); } 24% { opacity:.65; transform:scaleX(.3); } 65% { opacity:.65; transform:scaleX(1); } 78%,100% { opacity:0; transform:scaleX(1); } }
+@keyframes sp-equation-cost { 0%,12%,52%,100% { color:#405b79; } 24%,38% { color:#2f6fd5; } }
+@keyframes sp-equation-output { 0%,40%,84%,100% { color:#405b79; } 54%,68% { color:#2f6fd5; } }
 @media(max-width:1000px) {
   .sp-grid { gap:30px; padding-inline:8px; }
   .sp-case { padding-inline:4px; }
@@ -87,9 +95,8 @@
   .sp-case { padding-inline:6px; }
   .sp-art { max-width:310px; }
   .sp-case-detail .sp-art { max-width:280px; }
-  .sp-retrieval { flex-wrap:wrap; gap:4px 12px; }
-  .sp-retrieval-copy { flex:1; }
-  .sp-formula { order:3; width:100%; justify-content:center; }
+  .sp-retrieval { grid-template-columns:minmax(0,1fr) auto; gap:4px 12px; }
+  .sp-formula { grid-column:1/-1; grid-row:2; justify-content:center; }
 }
 @media(max-width:600px) {
   .state-progress { margin-top:22px; }
@@ -101,6 +108,7 @@
 }
 @media(prefers-reduced-motion:reduce) {
   .state-progress * { animation:none!important; transition:none!important; }
+  .sp-formula::after { animation:none!important; }
   .sp-ripple { display:none; }
   .sp-part.is-focused, .sp-frame-23 .sp-part.is-focused { transform:none; }
 }

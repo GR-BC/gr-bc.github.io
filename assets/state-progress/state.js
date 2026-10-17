@@ -12,6 +12,7 @@ async function mount(section) {
   const link = section.querySelector('[data-sp-link]');
   const line = section.querySelector('[data-sp-link-line]');
   const flow = section.querySelector('[data-sp-link-flow]');
+  const formula = section.querySelector('.sp-formula');
   const svgs = [];
   let paused = false;
   let visible = false;
@@ -19,6 +20,7 @@ async function mount(section) {
   let started = false;
   let detailVisible = false;
   let detailSeen = false;
+  let formulaVisible = false;
   let scene = [];
   let generation = 0;
   let lastSize = '';
@@ -34,6 +36,7 @@ async function mount(section) {
 
   function updateMotion() {
     section.dataset.spRunning = String(running());
+    section.dataset.spFormulaRunning = String((visible || formulaVisible) && !paused && !reduced.matches && !document.hidden);
     section.dataset.spReduced = String(reduced.matches);
     toggle.disabled = reduced.matches;
     toggle.setAttribute('aria-pressed', String(paused));
@@ -70,6 +73,10 @@ async function mount(section) {
     if (detailVisible && !matchMedia('(max-width:760px)').matches) detailSeen = true;
     updateMotion();
   }, {threshold:.25}).observe(detail);
+  new IntersectionObserver(entries => {
+    formulaVisible = entries[0].isIntersecting;
+    updateMotion();
+  }, {threshold:0}).observe(formula);
   updateMotion();
 
   function clearFocus(svg) {
@@ -260,7 +267,8 @@ async function mount(section) {
       if (path) animate(path,[{opacity:0},{opacity:source==='80'||source==='81'||source==='82' ? .85 : 1}],rightAt+offset,300);
     }
     connections.querySelectorAll('.sp-arrow-pulse').forEach((path,i) => reveal(path,rightAt+300+i*140,380));
-    const completion = animate(section.querySelector('.sp-retrieval'),[{opacity:full ? 0 : 1},{opacity:1}],full ? 2350 : 1490,150);
+    animate(formula,[{opacity:0,transform:'translateY(6px) scale(.98)'},{opacity:1,transform:'translateY(0) scale(1)'}],full ? 2150 : 1280,350);
+    const completion = animate(section.querySelector('.sp-retrieval'),[{opacity:full ? 0 : 1},{opacity:1}],full ? 2150 : 1490,full ? 350 : 150);
     completion.finished.then(() => {
       if (token === generation) section.dataset.spIntro = 'complete';
     }).catch(() => {});
