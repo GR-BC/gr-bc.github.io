@@ -90,6 +90,39 @@ def build(source, number, measured):
     def classed(node, name):
         node.set('class', (node.get('class', '') + ' ' + name).strip())
 
+    normalized = {}
+    if number == 23:
+        # Each camera neighborhood is centered on its actual camera embedding.
+        # SVG circle rotations are redundant and interfere with CSS transforms.
+        for outer, inner in [(3, 10), (6, 11), (7, 12), (4, 26), (22, 27), (23, 28)]:
+            ring, point = nodes[str(outer)], nodes[str(inner)]
+            attrs = {'cx': point.get('cx'), 'cy': point.get('cy'), 'r': '90.6751', 'transform': None}
+            normalized[str(outer)] = attrs
+            for key, value in attrs.items():
+                if value is None:
+                    ring.attrib.pop(key, None)
+                else:
+                    ring.set(key, value)
+            cx, cy, radius = float(ring.get('cx')), float(ring.get('cy')), float(ring.get('r'))
+            boxes[str(outer)] = [cx-radius-2, cy-radius-2, radius*2+4, radius*2+4]
+        bridge = {'cx': '305.014', 'cy': '192.527', 'rx': '137.8', 'ry': '137.8'}
+        normalized['5'] = bridge
+        nodes['5'].attrib.update(bridge)
+        boxes['5'] = [165.214, 52.727, 279.6, 279.6]
+        for key, color in [('7', '#618b98'), ('23', '#618b98'), ('5', '#bd965e')]:
+            nodes[key].attrib.update({'stroke': color, 'stroke-opacity': '.86',
+                'stroke-width': '2', 'stroke-dasharray': '6 6', 'stroke-linecap': 'round',
+                'vector-effect': 'non-scaling-stroke'})
+        for point in [e for e in nodes.values() if e.tag == f'{{{NS}}}circle' and float(e.get('r')) < 40]:
+            point.set('stroke-width', '1.15')
+            point.set('vector-effect', 'non-scaling-stroke')
+        for key, circle in nodes.items():
+            if circle.tag == f'{{{NS}}}circle' and circle.get('transform'):
+                # A circle rotated about itself is unchanged geometrically, but
+                # a CSS transform-origin would apply that pivot a second time.
+                normalized.setdefault(key, {})['transform'] = None
+                circle.attrib.pop('transform')
+
     if number == 26:
         group('views', 'Synchronized RGB views', ['3-0', '3-1', '3-2'])
         for camera, keys in [(1, ['3-3', '3-6']), (2, ['3-4', '3-8']), (3, ['3-5', '3-7'])]:
@@ -125,17 +158,11 @@ def build(source, number, measured):
         focus.append(element('path', d='M849 328v-8h8m24 0h8v8m0 20v8h-8m-24 0h-8v-8', fill='none', stroke='#65a4bc', stroke_width=1.5))
         focus.append(element('circle', cx=869, cy=338, r=3, fill='#72b8cb'))
         bracket.append(focus)
-        # The node contains the actual next drawing, rather than an unrelated
-        # three-dot placeholder. Keep source geometry for provenance checks.
-        for index in range(4, 15):
-            nodes[f'2-{index}'].set('opacity', '0')
-            nodes[f'2-{index}'].set('display', 'none')
-        miniature = ET.parse(source.parent / 'Frame 23.svg').getroot()
-        namespace_ids(miniature, 'sp26-mini-')
-        miniature.attrib.update({'x': '896', 'y': '328', 'width': '192', 'height': '115',
-                                 'class': 'sp-node-miniature', 'aria-hidden': 'true',
-                                 'pointer-events': 'none', 'focusable': 'false'})
-        nodes['2'].append(miniature)
+        # Keep the original simple graph node, without a nested diagram image.
+        halo = element('circle', cx=993, cy=368, r=22, fill='none', stroke='#729ca9',
+                       stroke_width=1.4, vector_effect='non-scaling-stroke',
+                       **{'class': 'sp-node-origin-halo', 'aria-hidden': 'true'})
+        nodes['2'].insert(4, halo)
     else:
         group('neighborhood-i', 'Local multi-view neighborhood around state i', [3, 6, 7])
         group('neighborhood-j', 'Local multi-view neighborhood around state j', [4, 22, 23])
@@ -167,6 +194,8 @@ def build(source, number, measured):
             overlay.set('stroke', '#79a5b3')
             overlay.set('stroke-dasharray', '7 15')
             overlay.set('class', 'sp-flow sp-trajectory-flow' + (' sp-flow-reverse' if key == 24 else ''))
+            overlay.set('vector-effect', 'non-scaling-stroke')
+            overlay.set('stroke-width', '1.7')
             root.insert(list(root).index(nodes[str(key)]) + 1, overlay)
         for key in [14, 15]:
             classed(nodes[str(key)], 'sp-arrow-head')
@@ -183,7 +212,7 @@ def build(source, number, measured):
             (82, 'M504.912 222.077C532 224 548 218 566.960 204.019', '#639dad'),
         ]:
             original = nodes[str(key)]
-            original.set('opacity', '.45')
+            original.set('opacity', '.85')
             clip_id = f'sp23-arrow-clip-{key}'
             clip = element('clipPath', id=clip_id, clipPathUnits='userSpaceOnUse')
             clip.append(element('path', d=original.get('d')))
@@ -192,18 +221,22 @@ def build(source, number, measured):
             pulse.append(element('path', d=d, fill='none', stroke=color, stroke_width=30, stroke_dasharray='18 30', **{'class': 'sp-flow sp-connection-flow'}))
             root.append(pulse)
         parents = {child: parent for parent in root.iter() for child in parent}
-        for index, circle in enumerate([e for e in nodes.values() if e.tag == f'{{{NS}}}circle']):
+        for index, (key, circle) in enumerate([(key, e) for key, e in nodes.items() if e.tag == f'{{{NS}}}circle']):
             classed(circle, 'sp-breathing-circle')
             circle.set('style', f'--sp-delay: {-index * .19:.2f}s')
+            if key not in ['7', '23', '9', '12', '13', '25', '28', '29']:
+                continue
             for phase in [0, 1]:
                 ring = copy.deepcopy(circle)
                 ring.attrib.pop('data-source', None)
                 ring.set('fill', 'none')
                 ring.set('stroke', circle.get('stroke') or circle.get('fill'))
-                ring.set('stroke-opacity', '.5')
-                ring.set('stroke-width', '1.5')
+                ring.set('stroke-opacity', '.7')
+                ring.set('stroke-width', '1.25')
+                ring.set('stroke-dasharray', 'none')
+                ring.set('vector-effect', 'non-scaling-stroke')
                 ring.set('class', 'sp-ripple')
-                ring.set('style', f'--sp-delay: {-index * .19 - phase * 1.8:.2f}s')
+                ring.set('style', f'--sp-delay: {-index * .19 - phase * 1.4:.2f}s')
                 ring.set('aria-hidden', 'true')
                 parent = parents[circle]
                 parent.insert(list(parent).index(circle), ring)
@@ -218,7 +251,7 @@ def build(source, number, measured):
     root.set('aria-label', 'Multi-view state encoding' if number == 26 else 'Locally normalized cross-trajectory connections')
     root.set('overflow', 'visible')
     ET.ElementTree(root).write(OUT / f'frame-{number}.svg', encoding='utf-8', xml_declaration=True)
-    return {'source': source.name, 'sha256': measured['sha256'], 'parts': parts}
+    return {'source': source.name, 'sha256': measured['sha256'], 'parts': parts, 'normalizedGeometry': normalized}
 
 
 if __name__ == '__main__':

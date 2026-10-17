@@ -226,7 +226,8 @@
           "29"
         ]
       }
-    ]
+    ],
+    "normalizedGeometry": {}
   },
   "23": {
     "source": "Frame 23.svg",
@@ -236,10 +237,10 @@
         "id": "neighborhood-i",
         "label": "Local multi-view neighborhood around state i",
         "bounds": [
-          101.43489837646484,
-          0,
-          219.1301040649414,
-          219.13111114501953
+          99.43490000000001,
+          5.556299999999993,
+          205.50019999999995,
+          200.4628
         ],
         "sources": [
           "3",
@@ -251,10 +252,10 @@
         "id": "neighborhood-j",
         "label": "Local multi-view neighborhood around state j",
         "bounds": [
-          280.3966369628906,
-          158.680419921875,
-          236.76193237304688,
-          232.3199462890625
+          303.8949,
+          179.0349,
+          206.69820000000004,
+          198.71720000000005
         ],
         "sources": [
           "4",
@@ -266,10 +267,10 @@
         "id": "cross-distance",
         "label": "Compare two states using their local neighborhood scales",
         "bounds": [
-          166.9219970703125,
-          75.56199645996094,
-          256.9119873046875,
-          259.4320068359375
+          165.214,
+          52.727,
+          279.6,
+          279.6
         ],
         "sources": [
           "5"
@@ -452,6 +453,65 @@
           "79"
         ]
       }
-    ]
+    ],
+    "normalizedGeometry": {
+      "3": {
+        "cx": "212.26",
+        "cy": "98.2314",
+        "r": "90.6751",
+        "transform": null
+      },
+      "6": {
+        "cx": "202.185",
+        "cy": "105.788",
+        "r": "90.6751",
+        "transform": null
+      },
+      "7": {
+        "cx": "192.11",
+        "cy": "113.344",
+        "r": "90.6751",
+        "transform": null
+      },
+      "4": {
+        "cx": "396.57",
+        "cy": "285.077",
+        "r": "90.6751",
+        "transform": null
+      },
+      "22": {
+        "cx": "407.244",
+        "cy": "278.394",
+        "r": "90.6751",
+        "transform": null
+      },
+      "23": {
+        "cx": "417.918",
+        "cy": "271.71",
+        "r": "90.6751",
+        "transform": null
+      },
+      "5": {
+        "cx": "305.014",
+        "cy": "192.527",
+        "rx": "137.8",
+        "ry": "137.8"
+      },
+      "25": {
+        "transform": null
+      },
+      "26": {
+        "transform": null
+      },
+      "27": {
+        "transform": null
+      },
+      "28": {
+        "transform": null
+      },
+      "29": {
+        "transform": null
+      }
+    }
   }
 }
